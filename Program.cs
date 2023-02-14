@@ -1,10 +1,15 @@
-﻿using SharpDX.Direct3D11;
+﻿using System.Numerics;
+using SharpDX.D3DCompiler;
+using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.Windows;
 using System;
+
+using Buffer = SharpDX.Direct3D11.Buffer;
 using Device = SharpDX.Direct3D11.Device;
 using Device1 = SharpDX.Direct3D11.Device1;
+using SharpDX.Direct3D;
 
 namespace LearnDirectX
 {
@@ -24,6 +29,8 @@ namespace LearnDirectX
 
         #region Properties
 
+        public readonly string ShadersPath = "../../src/Shaders/";
+
         public int Width { get; private set; }
         public int Height { get; private set; }
         public RawColor4 BackGroundColor { get; private set; } = new RawColor4(0.8f, 0.8f, 0.8f, 1f);
@@ -34,7 +41,9 @@ namespace LearnDirectX
 
         public Application(string title, int width, int height)
         {
-            Width= width;
+            #region App init
+
+            Width = width;
             Height= height;
 
             _window = new RenderForm()
@@ -50,6 +59,50 @@ namespace LearnDirectX
 
             _backBuffer = Texture2D.FromSwapChain<Texture2D>(_swapChain, 0);
             _renderTargetView = new RenderTargetView(_device, _backBuffer);
+
+            #endregion
+
+            #region Shaders
+
+            var context = _device.ImmediateContext;
+
+            var vertexShaderByteCode = ShaderBytecode.CompileFromFile($"{ShadersPath}vertex.hlsl", "VS", "vs_4_0", ShaderFlags.None, EffectFlags.None);
+            var vertexShader = new VertexShader(_device, vertexShaderByteCode);
+
+            var pixelShaderByteCode = ShaderBytecode.CompileFromFile($"{ShadersPath}pixel.hlsl", "PS", "ps_4_0", ShaderFlags.None, EffectFlags.None);
+            var pixelShader = new PixelShader(_device, pixelShaderByteCode);
+
+            var layout = new InputLayout(
+                _device,
+                ShaderSignature.GetInputSignature(vertexShaderByteCode),
+                new[]
+                {
+                    new InputElement("POSITION", 0, Format.R32G32B32A32_Float, 0, 0),
+                    new InputElement("COLOR", 0, Format.R32G32B32A32_Float, 16, 0),
+                }
+                );
+
+            var vertices = Buffer.Create(_device, BindFlags.VertexBuffer, new[]
+                {
+                    new Vector4(0.0f, 0.5f, 0.5f, 1.0f), new Vector4(1.0f, 0.0f, 0.0f, 1.0f),
+                    new Vector4(0.5f, -0.5f, 0.5f, 1.0f), new Vector4(0.0f, 1.0f, 0.0f, 1.0f),
+                    new Vector4(-0.5f, -0.5f, 0.5f, 1.0f), new Vector4(0.0f, 0.0f, 1.0f, 1.0f)
+                });
+
+            context.InputAssembler.InputLayout = layout;
+            context.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
+            context.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(vertices, 32, 0));
+            context.VertexShader.Set(vertexShader);
+            context.Rasterizer.State = new RasterizerState(_device, new RasterizerStateDescription
+            {
+                CullMode = CullMode.None,
+                FillMode = FillMode.Solid,
+            });
+            context.Rasterizer.SetViewport(0, 0, Width, Height, 0f, 1f);
+            context.PixelShader.Set(pixelShader);
+            context.OutputMerger.SetTargets(_renderTargetView);
+
+            #endregion
         }
 
         #endregion
@@ -64,6 +117,8 @@ namespace LearnDirectX
         public void RenderCallback()
         {
             _device.ImmediateContext.ClearRenderTargetView(_renderTargetView, BackGroundColor);
+
+            _device.ImmediateContext.Draw(3, 0);
 
             _swapChain.Present(0, PresentFlags.None, new PresentParameters());
         }
