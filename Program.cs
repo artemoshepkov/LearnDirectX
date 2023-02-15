@@ -1,15 +1,17 @@
-﻿using System.Numerics;
+﻿using LearnDirectX.src.Common.Components;
+using LearnDirectX.src.Common.EngineSystem;
+using LearnDirectX.src.Common.EngineSystem.Rendering;
 using SharpDX.D3DCompiler;
+using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.Windows;
 using System;
-
+using System.Numerics;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Device = SharpDX.Direct3D11.Device;
 using Device1 = SharpDX.Direct3D11.Device1;
-using SharpDX.Direct3D;
 
 namespace LearnDirectX
 {
@@ -44,7 +46,7 @@ namespace LearnDirectX
             #region App init
 
             Width = width;
-            Height= height;
+            Height = height;
 
             _window = new RenderForm()
             {
@@ -71,6 +73,8 @@ namespace LearnDirectX
 
             var pixelShaderByteCode = ShaderBytecode.CompileFromFile($"{ShadersPath}pixel.hlsl", "PS", "ps_4_0", ShaderFlags.None, EffectFlags.None);
             var pixelShader = new PixelShader(_device, pixelShaderByteCode);
+
+
 
             var layout = new InputLayout(
                 _device,
@@ -146,7 +150,7 @@ namespace LearnDirectX
                                             SharpDX.Direct3D.FeatureLevel.Level_11_0,
                 }
                 ))
-                        {
+            {
                 _device = device11.QueryInterfaceOrNull<Device1>();
                 if (_device == null)
                 {
@@ -196,11 +200,35 @@ namespace LearnDirectX
     {
         static void Main(string[] args)
         {
-            var core = new Application("Game", 640, 480);
+            Engine.Init("Game", 640, 480);
 
-            core.Run();
+            Engine.GetInstance().AddRenderLayer(new DirectXSceneRenderer(InitializeScene()));
 
-            core.Dispose();
+            Engine.Run();
+        }
+
+        static Scene InitializeScene()
+        {
+            string ShadersPath = "../../src/Shaders/";
+
+            var scene = new Scene();
+            GameObject gObj = new GameObject();
+
+            gObj.AddComponent(new Mesh(
+                new Vector4[]
+                {
+                    new Vector4(0.0f, 0.5f, 0.5f, 1.0f), new Vector4(1.0f, 0.0f, 0.0f, 1.0f),
+                    new Vector4(0.5f, -0.5f, 0.5f, 1.0f), new Vector4(0.0f, 1.0f, 0.0f, 1.0f),
+                    new Vector4(-0.5f, -0.5f, 0.5f, 1.0f), new Vector4(0.0f, 0.0f, 1.0f, 1.0f)
+                }));
+            var vsbc = ShaderBytecode.CompileFromFile($"{ShadersPath}vertex.hlsl", "VS", "vs_4_0", ShaderFlags.None, EffectFlags.None);
+            var psbc = ShaderBytecode.CompileFromFile($"{ShadersPath}pixel.hlsl", "PS", "ps_4_0", ShaderFlags.None, EffectFlags.None);
+            gObj.AddComponent(new MeshRenderer(new Shader(vsbc, psbc)));
+            gObj.GetComponent<MeshRenderer>().Initialize();
+
+            scene.AddObject(gObj);
+
+            return scene;
         }
     }
 }

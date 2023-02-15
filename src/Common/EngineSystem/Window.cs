@@ -10,27 +10,45 @@ using Device1 = SharpDX.Direct3D11.Device1;
 
 namespace LearnDirectX.src.Common.EngineSystem
 {
-    public class Window
+    public sealed class Window : IDisposable
     {
         #region Fields
 
         private static Window _instance;
 
-        private RenderForm _window;
-        private Device1 _device;
+        private RenderForm _renderForm;
         private SwapChain1 _swapChain;
-        private RenderTargetView _renderTargetView;
+        public RenderTargetView _renderTargetView;
         private Texture2D _backBuffer;
+
+        private bool _updateViewport = true;
 
         #endregion
 
         #region Properties
 
+        public static Window Instance 
+        { 
+            get
+            {
+                if (_instance == null)
+                    _instance = new Window();
+                return _instance;
+            }
+            set
+            {
+                _instance = value;
+            }
+        }
+
+        public static int Width { get => Instance._renderForm.Width; }
+        public static int Height { get => Instance._renderForm.Height; }
+
+        public RenderForm RenderForm { get => Instance._renderForm; }
+        public Device1 Device { get; private set; }
+
         public RawColor4 BackGroundColor { get; private set; } = new RawColor4(0.8f, 0.8f, 0.8f, 1f);
         
-        static int Widht { get => _instance._window.Width; }
-        static int Height { get => _instance._window.Height; }
-
         #endregion
 
         #region Constructor
@@ -41,39 +59,56 @@ namespace LearnDirectX.src.Common.EngineSystem
 
         #region Public methods
 
-        public static Window GetInstance()
-        {
-            if (_instance == null)
-                _instance = new Window();
-            return _instance;
-        }
-
         public static void Init(string title, int width, int height)
         {
-            _instance._window = new RenderForm
+            Instance._renderForm = new RenderForm
             {
                 Text = title,
                 Width = width,
                 Height = height
             };
 
-            _instance.InitializeDevice();
-            _instance.InitializeSwapChain();
+            Instance.InitializeDevice();
+            Instance.InitializeSwapChain();
 
-            _instance._backBuffer = Texture2D.FromSwapChain<Texture2D>(_instance._swapChain, 0);
-            _instance._renderTargetView = new RenderTargetView(_instance._device, _instance._backBuffer);
+            Instance._backBuffer = Texture2D.FromSwapChain<Texture2D>(Instance._swapChain, 0);
+            Instance._renderTargetView = new RenderTargetView(Instance.Device, Instance._backBuffer);
+
+            Instance.Device.ImmediateContext.Rasterizer.State = new RasterizerState(Instance.Device, new RasterizerStateDescription
+            {
+                CullMode = CullMode.None,
+                FillMode = SharpDX.Direct3D11.FillMode.Solid,
+            });
+            Instance.Device.ImmediateContext.Rasterizer.SetViewport(0, 0, Width, Height, 0f, 1f);
+            Instance.Device.ImmediateContext.OutputMerger.SetTargets(Instance._renderTargetView);
         }
 
-        public void UpdateWindow()
+        public static void UpdateWindow()
         {
+            if (Instance._updateViewport)
+            {
+                Instance.Device.ImmediateContext.Rasterizer.SetViewport(0, 0, Instance._renderForm.Width, Instance._renderForm.Height, 0f, 1f);
+                Instance._updateViewport = false;
+            }
+        }
 
+        public static void OnUpdate()
+        {
+            Instance._swapChain.Present(0, PresentFlags.None, new PresentParameters());
         }
 
         public static void Clear()
         {
-            _instance._device.ImmediateContext.ClearRenderTargetView(_instance._renderTargetView, _instance.BackGroundColor);
+            Instance.Device.ImmediateContext.ClearRenderTargetView(Instance._renderTargetView, Instance.BackGroundColor);
         }
 
+        public void Dispose()
+        {
+            Device.Dispose();
+            _swapChain.Dispose();
+            _renderTargetView.Dispose();
+            _backBuffer.Dispose();
+        }
         #endregion
 
         #region Private methods
@@ -90,8 +125,8 @@ namespace LearnDirectX.src.Common.EngineSystem
                     }
                 ))
             {
-                _device = device11.QueryInterfaceOrNull<Device1>();
-                if (_device == null)
+                Device = device11.QueryInterfaceOrNull<Device1>();
+                if (Device == null)
                 {
                     throw new NotSupportedException("SharpDX.Derice3D11.Device1 is not supported");
                 }
@@ -100,14 +135,14 @@ namespace LearnDirectX.src.Common.EngineSystem
 
         private void InitializeSwapChain()
         {
-            using (var dxgi = _device.QueryInterface<SharpDX.DXGI.Device2>())
+            using (var dxgi = Device.QueryInterface<SharpDX.DXGI.Device2>())
             using (var adapter = dxgi.Adapter)
             using (var factory = adapter.GetParent<Factory2>())
             {
                 var desc1 = new SwapChainDescription1()
                 {
-                    Width = _window.Width,
-                    Height = _window.Height,
+                    Width = _renderForm.Width,
+                    Height = _renderForm.Height,
                     Format = Format.R8G8B8A8_UNorm,
                     Stereo = false,
                     SampleDescription = new SampleDescription(1, 0),
@@ -119,8 +154,8 @@ namespace LearnDirectX.src.Common.EngineSystem
 
                 _swapChain = new SwapChain1(
                     factory,
-                    _device,
-                    _window.Handle,
+                    Device,
+                    _renderForm.Handle,
                     ref desc1,
                     new SwapChainFullScreenDescription()
                     {

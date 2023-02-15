@@ -1,9 +1,9 @@
-﻿namespace LearnDirectX.src.Common
+﻿using LearnDirectX.src.Common.Components;
+
+namespace LearnDirectX.src.Common
 {
     public class Component
     {
-        public virtual void Initialize() { }
-        public virtual void Update() { }
-        public virtual void Render() { }
+        public GameObject Owner { get; set; } = null;
     }
 }
