@@ -48,14 +48,17 @@ namespace LearnDirectX.src.Common.EngineSystem
                     Window.UpdateWindow();
                     Window.Clear();
 
-
-                    if (Input.GetKeyDown(SharpDX.DirectInput.Key.Escape))
-                        Console.WriteLine("2");
+                    Profiler.StartFrame();
 
                     GetInstance()._layersSet.Render();
 
+
                     Input.Instance.Update();
                     Window.OnUpdate();
+
+
+                    Profiler.EndFrame();
+                    Console.WriteLine(Profiler.CurrentFrameTime());
                 });
         }
 

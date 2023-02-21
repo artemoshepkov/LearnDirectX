@@ -76,6 +76,7 @@
     <Compile Include="src\Common\Components\MeshRenderer.cs" />
     <Compile Include="src\Common\Components\Transform.cs" />
     <Compile Include="src\Common\EngineSystem\Input.cs" />
+    <Compile Include="src\Common\EngineSystem\Profiler.cs" />
     <Compile Include="src\Common\EngineSystem\Rendering\DirectXSceneRenderer.cs" />
     <Compile Include="src\Common\EngineSystem\Rendering\RenderLayer.cs" />
     <Compile Include="src\Common\EngineSystem\Rendering\RenderLayersSet.cs" />
