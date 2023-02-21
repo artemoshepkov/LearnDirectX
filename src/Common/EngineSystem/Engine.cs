@@ -1,5 +1,6 @@
 ﻿using LearnDirectX.src.Common.EngineSystem.Rendering;
 using SharpDX.Windows;
+using System;
 
 namespace LearnDirectX.src.Common.EngineSystem
 {
@@ -47,8 +48,13 @@ namespace LearnDirectX.src.Common.EngineSystem
                     Window.UpdateWindow();
                     Window.Clear();
 
+
+                    if (Input.GetKeyDown(SharpDX.DirectInput.Key.Escape))
+                        Console.WriteLine("2");
+
                     GetInstance()._layersSet.Render();
 
+                    Input.Instance.Update();
                     Window.OnUpdate();
                 });
         }

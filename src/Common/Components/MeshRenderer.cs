@@ -1,10 +1,8 @@
 ﻿using LearnDirectX.src.Common.EngineSystem;
-using SharpDX.D3DCompiler;
+using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
-using SharpDX.DXGI;
 using System.Numerics;
-using System.Runtime.Remoting.Contexts;
 
 namespace LearnDirectX.src.Common.Components
 {
@@ -15,6 +13,7 @@ namespace LearnDirectX.src.Common.Components
         private Shader _shader;
         private Mesh _mesh;
         private Buffer _vertexBuffer;
+        private VertexBufferBinding _vertexBufferBinding;
 
         #endregion
 
@@ -44,6 +43,7 @@ namespace LearnDirectX.src.Common.Components
                 Window.Instance.Device,
                 BindFlags.VertexBuffer,
                 _mesh.Vertexes);
+            _vertexBufferBinding = new VertexBufferBinding(_vertexBuffer, Utilities.SizeOf<Vector4>() * 2, 0);
         }
         public void Render()
         {
@@ -51,12 +51,12 @@ namespace LearnDirectX.src.Common.Components
 
             context.InputAssembler.InputLayout = _shader.InputLayout;
             context.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
-            context.InputAssembler.SetVertexBuffers(0, new VertexBufferBinding(_vertexBuffer, 32, 0));
+            context.InputAssembler.SetVertexBuffers(0, _vertexBufferBinding);
             _shader.Use();
 
             context.Draw(3, 0);
         }
-        
+
         #endregion
     }
 }

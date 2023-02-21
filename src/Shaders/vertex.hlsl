@@ -1,18 +1,18 @@
-﻿struct VS_IN
+﻿struct VertexShaderInput
 {
     float4 pos : POSITION;
     float4 col : COLOR;
 };
 
-struct PS_IN
+struct PixelShaderInput
 {
     float4 pos : SV_POSITION;
     float4 col : COLOR;
 };
 
-PS_IN VS(VS_IN input)
+PixelShaderInput VS(VertexShaderInput input)
 {
-    PS_IN output = (PS_IN) 0;
+    PixelShaderInput output = (PixelShaderInput) 0;
 	
     output.pos = input.pos;
     output.col = input.col;
@@ -20,7 +20,7 @@ PS_IN VS(VS_IN input)
     return output;
 }
 
-float4 PS(PS_IN input) : SV_Target
+float4 PS(PixelShaderInput input) : SV_Target
 {
     return input.col;
 }
@@ -29,8 +29,8 @@ technique10 Render
 {
     pass P0
     {
-        SetGeometryShader(0);
         SetVertexShader(CompileShader(vs_4_0, VS()));
+        SetGeometryShader(0);
         SetPixelShader(CompileShader(ps_4_0, PS()));
     }
 }
