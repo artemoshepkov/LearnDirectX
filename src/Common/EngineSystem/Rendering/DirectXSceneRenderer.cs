@@ -23,12 +23,19 @@ namespace LearnDirectX.src.Common.EngineSystem.Rendering
 
         public override void OnDraw()
         {
+            CameraContext cameraContext;
+            cameraContext.Camera = _associatedScene.Camera.GetComponent<Camera>();
+            cameraContext.Transform = _associatedScene.Camera.GetComponent<Transform>();
+
+            RendererContext rendererContext;
+            rendererContext.CameraContext = cameraContext;
+
             foreach (var gameObject in _associatedScene.GameObjects)
             {
                 var meshRenderer = gameObject.GetComponent<MeshRenderer>();
                 if (meshRenderer != null)
                 {
-                    meshRenderer.Render();
+                    meshRenderer.Render(rendererContext);
                 }
             }
         }

@@ -5,6 +5,7 @@ namespace LearnDirectX.src.Common.EngineSystem
 {
     public class Scene
     {
+        public GameObject Camera;
         public List<GameObject> GameObjects { get; private set; }
 
         public Scene() 

@@ -58,7 +58,6 @@ namespace LearnDirectX.src.Common.EngineSystem
 
 
                     Profiler.EndFrame();
-                    Console.WriteLine(Profiler.CurrentFrameTime());
                 });
         }
 

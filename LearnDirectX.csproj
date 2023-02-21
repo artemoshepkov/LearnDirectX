@@ -77,11 +77,15 @@
     <Compile Include="src\Common\Components\Transform.cs" />
     <Compile Include="src\Common\EngineSystem\Input.cs" />
     <Compile Include="src\Common\EngineSystem\Profiler.cs" />
+    <Compile Include="src\Common\EngineSystem\Rendering\BasicEffectVertexConstants.cs" />
+    <Compile Include="src\Common\EngineSystem\Rendering\CameraContext.cs" />
     <Compile Include="src\Common\EngineSystem\Rendering\DirectXSceneRenderer.cs" />
+    <Compile Include="src\Common\EngineSystem\Rendering\RendererContext.cs" />
     <Compile Include="src\Common\EngineSystem\Rendering\RenderLayer.cs" />
     <Compile Include="src\Common\EngineSystem\Rendering\RenderLayersSet.cs" />
     <Compile Include="src\Common\EngineSystem\Scene.cs" />
-    <Compile Include="src\Common\EngineSystem\Shader.cs" />
+    <Compile Include="src\Common\EngineSystem\Shaders\ConstantBuffer.cs" />
+    <Compile Include="src\Common\EngineSystem\Shaders\Shader.cs" />
     <Compile Include="src\Common\Entity\GameObject.cs" />
     <Compile Include="src\Common\EngineSystem\Engine.cs" />
     <Compile Include="src\Common\EngineSystem\OnEventCallback.cs" />

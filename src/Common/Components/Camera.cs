@@ -7,11 +7,12 @@ namespace LearnDirectX.src.Common.Components
 {
     public class Camera : Component
     {
-        public float Yaw { get; private set; } = -90f;
-        public float Pitch { get; private set; } = 0f;
+        public float Yaw { get; set; } = -90f;
+        public float Pitch { get; set; } = 0f;
         public Vector3 Front { get; private set; } = new Vector3(0f, 0f, 1f);
         public Vector3 Right { get; private set; } = new Vector3(1f, 0f, 0f);
         public Vector3 Up { get; private set; } = new Vector3(0f, 1f, 1f);
+        public float AspectRatio { get; set; } = 1f;
 
         public float Fov { get; private set; } = 60f;
         public Camera()
@@ -42,6 +43,11 @@ namespace LearnDirectX.src.Common.Components
         {
             var position = Owner.GetComponent<Transform>().Position;
             return Matrix4x4.CreateLookAt(position, position + Front, Up);
+        }
+
+        public Matrix4x4 GetProjectionMatrix()
+        {
+            return Matrix4x4.CreatePerspectiveFieldOfView(ConvertToRadians(Fov), AspectRatio, 0.01f, 1000f); ;
         }
 
         private float ConvertToRadians(float angle)

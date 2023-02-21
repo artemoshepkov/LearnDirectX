@@ -10,11 +10,23 @@ struct PixelShaderInput
     float4 col : COLOR;
 };
 
+
+cbuffer Object : register(b0)
+{
+    float4x4 WorldViewProjection;
+}
+
+
 PixelShaderInput VS(VertexShaderInput input)
 {
     PixelShaderInput output = (PixelShaderInput) 0;
 	
-    output.pos = input.pos;
+    input.pos.w = 1;
+    
+    output.pos = mul(input.pos, WorldViewProjection);
+    
+    //output.pos = input.pos;
+    
     output.col = input.col;
 	
     return output;

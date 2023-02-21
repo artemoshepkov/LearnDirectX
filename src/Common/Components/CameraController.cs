@@ -38,14 +38,19 @@ namespace LearnDirectX.src.Common.Components
                 return;
             }
 
-            foreach (var key in _controlBinds.Keys)
+            foreach (KeyValuePair<Key, Vector3> bind in _controlBinds)
             {
-                if (Input.GetKeyDown(key))
+                if (Input.GetKeyDown(bind.Key))
                 {
-                    //transform.Position;
+                    transform.Position += (camera.Front * bind.Value.Z + camera.Right * bind.Value.X + camera.Up * bind.Value.Y) * _speed * Profiler.DeltaTime;
+                    Console.WriteLine(bind.Key);
                 }
             }
 
+            camera.Yaw += Input.Instance.MouseX * mouseSensitivity * Profiler.DeltaTime;
+            camera.Pitch += Input.Instance.MouseY * mouseSensitivity * Profiler.DeltaTime;
+
+            camera.UpdateCameraVectors();
         }
     }
 }

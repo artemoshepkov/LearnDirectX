@@ -18,9 +18,16 @@ namespace LearnDirectX.src.Common.EngineSystem
         private int _screenWidth;
         private int _screenHeight;
 
-        private int _mouseX;
-        private int _mouseY;
-
+        public int MouseX
+        {
+            get;
+            private set;
+        }
+        public int MouseY
+        {
+            get;
+            private set;
+        }
         private Input() { }
 
         public static Input Instance
@@ -45,7 +52,7 @@ namespace LearnDirectX.src.Common.EngineSystem
             _screenHeight = Window.Height;
             _screenWidth = Window.Width;
 
-            _mouseX = Instance._mouseY = 0;
+            MouseX = Instance.MouseY = 0;
 
             _directInput = new DirectInput();
 

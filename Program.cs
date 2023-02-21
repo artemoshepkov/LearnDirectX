@@ -17,13 +17,26 @@ namespace LearnDirectX
             Engine.Run();
         }
 
-        static Scene InitializeScene()
+        private static GameObject CreateCamera()
+        {
+            var gObj = new GameObject();
+
+            gObj.AddComponent(new Transform(new Vector3(0f, 0f, -10f)));
+            gObj.AddComponent(new Camera());
+            gObj.AddComponent(new CameraController());
+
+            return gObj;
+        }
+
+        private static Scene InitializeScene()
         {
             string ShadersPath = "../../src/Shaders/";
 
             var scene = new Scene();
+
             GameObject gObj = new GameObject();
 
+            gObj.AddComponent(new Transform(new Vector3(1f, 1f, 1f)));
             gObj.AddComponent(new Mesh(
                 new Vector4[]
                 {
@@ -37,6 +50,8 @@ namespace LearnDirectX
             gObj.GetComponent<MeshRenderer>().Initialize();
 
             scene.AddObject(gObj);
+
+            scene.Camera = CreateCamera();
 
             return scene;
         }
