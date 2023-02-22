@@ -3,7 +3,7 @@ using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.Windows;
 using System;
-
+using System.Linq.Expressions;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using Device = SharpDX.Direct3D11.Device;
 using Device1 = SharpDX.Direct3D11.Device1;
@@ -111,6 +111,18 @@ namespace LearnDirectX.src.Common.EngineSystem
             _renderTargetView.Dispose();
             _backBuffer.Dispose();
         }
+
+        public static void ChangeCursorMode()
+        {
+            //Instance._renderForm.Cursor.Hide() = true;
+            Console.WriteLine("Change cursor mode");
+        }
+
+        public static void Exit()
+        {
+            Console.WriteLine("Exit app");
+        }
+
         #endregion
 
         #region Private methods
