@@ -12,7 +12,7 @@ namespace LearnDirectX
         {
             Engine.Init("Game", 640, 480);
 
-            Engine.GetInstance().AddRenderLayer(new DirectXSceneRenderer(InitializeScene()));
+            Engine.AddRenderLayer(new DirectXSceneRenderer(InitializeScene()));
 
             Engine.Run();
         }

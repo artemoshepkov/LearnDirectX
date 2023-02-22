@@ -1,8 +1,8 @@
 ﻿using LearnDirectX.src.Common.EngineSystem;
+using LearnDirectX.src.Common.EngineSystem.Input;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
-
 using Key = SharpDX.DirectInput.Key;
 
 namespace LearnDirectX.src.Common.Components
@@ -19,10 +19,15 @@ namespace LearnDirectX.src.Common.Components
             { Key.Space, Vector3.UnitY },
         };
 
-        private float _speed = 0.1f;
-        private float mouseSensitivity = 0.1f;
+        private float _speed = 0.01f;
+        private float mouseSensitivity = 1f;
 
         public bool IsEnabled = true;
+
+        public CameraController()
+        {
+            Engine.AddEventUpdate(Update);
+        }
 
         public void Update()
         {
@@ -40,17 +45,16 @@ namespace LearnDirectX.src.Common.Components
 
             foreach (KeyValuePair<Key, Vector3> bind in _controlBinds)
             {
-                if (Input.GetKeyDown(bind.Key))
+                if (KeyboardInput.GetKeyDown(bind.Key))
                 {
                     transform.Position += (camera.Front * bind.Value.Z + camera.Right * bind.Value.X + camera.Up * bind.Value.Y) * _speed * Profiler.DeltaTime;
-                    Console.WriteLine(bind.Key);
                 }
             }
 
-            camera.Yaw += Input.Instance.MouseX * mouseSensitivity * Profiler.DeltaTime;
-            camera.Pitch += Input.Instance.MouseY * mouseSensitivity * Profiler.DeltaTime;
+            camera.Yaw += MouseInput.MousePos.X * mouseSensitivity * Profiler.DeltaTime;
+            camera.Pitch += -MouseInput.MousePos.Y * mouseSensitivity * Profiler.DeltaTime;
 
-            camera.UpdateCameraVectors();
+            camera.UpdateVectors();
         }
     }
 }

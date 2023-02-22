@@ -81,6 +81,8 @@ namespace LearnDirectX.src.Common.EngineSystem
             });
             Instance.Device.ImmediateContext.Rasterizer.SetViewport(0, 0, Width, Height, 0f, 1f);
             Instance.Device.ImmediateContext.OutputMerger.SetTargets(Instance._renderTargetView);
+
+            Engine.AddEventUpdate(Update); // Create another class for event
         }
 
         public static void UpdateWindow()
@@ -92,7 +94,7 @@ namespace LearnDirectX.src.Common.EngineSystem
             }
         }
 
-        public static void OnUpdate()
+        public static void Update()
         {
             Instance._swapChain.Present(0, PresentFlags.None, new PresentParameters());
         }

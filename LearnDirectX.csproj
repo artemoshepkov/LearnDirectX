@@ -75,7 +75,9 @@
     <Compile Include="src\Common\Components\Mesh.cs" />
     <Compile Include="src\Common\Components\MeshRenderer.cs" />
     <Compile Include="src\Common\Components\Transform.cs" />
-    <Compile Include="src\Common\EngineSystem\Input.cs" />
+    <Compile Include="src\Common\EngineSystem\Input\BaseInput.cs" />
+    <Compile Include="src\Common\EngineSystem\Input\KeyboardInput.cs" />
+    <Compile Include="src\Common\EngineSystem\Input\MouseInput.cs" />
     <Compile Include="src\Common\EngineSystem\Profiler.cs" />
     <Compile Include="src\Common\EngineSystem\Rendering\BasicEffectVertexConstants.cs" />
     <Compile Include="src\Common\EngineSystem\Rendering\CameraContext.cs" />
@@ -88,7 +90,6 @@
     <Compile Include="src\Common\EngineSystem\Shaders\Shader.cs" />
     <Compile Include="src\Common\Entity\GameObject.cs" />
     <Compile Include="src\Common\EngineSystem\Engine.cs" />
-    <Compile Include="src\Common\EngineSystem\OnEventCallback.cs" />
     <Compile Include="src\Common\EngineSystem\Window.cs" />
   </ItemGroup>
   <ItemGroup>

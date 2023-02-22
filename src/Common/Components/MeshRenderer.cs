@@ -54,9 +54,12 @@ namespace LearnDirectX.src.Common.Components
 
             Window.Instance.Device.ImmediateContext.VertexShader.SetConstantBuffer(0, _constVertexBuffer);
         }
+
         public void Render(RendererContext context)
         {
             var immediateContext = Window.Instance.Device.ImmediateContext;
+
+            _shader.Use();
 
             var Model = Owner.GetComponent<Transform>().Model;
             var View = context.CameraContext.Camera.GetViewMatrix();
@@ -65,15 +68,10 @@ namespace LearnDirectX.src.Common.Components
             var worldViewProjection = Matrix4x4.Transpose(Model * View * Projection);
 
             immediateContext.UpdateSubresource(ref worldViewProjection, _constVertexBuffer);
+
             immediateContext.InputAssembler.InputLayout = _shader.InputLayout;
             immediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
             immediateContext.InputAssembler.SetVertexBuffers(0, _vertexBufferBinding);
-
-
-
-
-            _shader.Use();
-
 
             immediateContext.Draw(3, 0);
         }

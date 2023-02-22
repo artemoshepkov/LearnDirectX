@@ -1,9 +1,15 @@
-﻿using LearnDirectX.src.Common.EngineSystem.Rendering;
+﻿using LearnDirectX.src.Common.Components;
+using LearnDirectX.src.Common.EngineSystem.Rendering;
+using SharpDX.DirectInput;
 using SharpDX.Windows;
 using System;
+using System.Collections.Generic;
+using System.Numerics;
 
 namespace LearnDirectX.src.Common.EngineSystem
 {
+    public delegate void UpdateEvent();
+
     public sealed class Engine
     {
         #region Fields
@@ -11,10 +17,21 @@ namespace LearnDirectX.src.Common.EngineSystem
         private static Engine _instance;
 
         private RenderLayersSet _layersSet;
+        private event UpdateEvent _updateEvent;
 
         #endregion
 
         #region Properties
+
+        public static Engine Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new Engine();
+                return _instance;
+            }
+        }
 
         #endregion
 
@@ -25,18 +42,11 @@ namespace LearnDirectX.src.Common.EngineSystem
         #endregion
 
         #region Public methods
-        
-        public static Engine GetInstance()
-        {
-            if (_instance == null )
-                _instance = new Engine();
-            return _instance;
-        }
 
         public static void Init(string title, int width, int height)
         {
             Window.Init(title, width, height);
-            GetInstance()._layersSet = new RenderLayersSet();
+            Instance._layersSet = new RenderLayersSet();
         }
 
         public static void Run()
@@ -50,18 +60,23 @@ namespace LearnDirectX.src.Common.EngineSystem
 
                     Profiler.StartFrame();
 
-                    GetInstance()._layersSet.Render();
+                    Instance._layersSet.Render();
 
-
-                    Input.Instance.Update();
-                    Window.OnUpdate();
-
+                    Update();
 
                     Profiler.EndFrame();
                 });
         }
 
-        public void AddRenderLayer(RenderLayer layer) => GetInstance()._layersSet.Add(layer);
+        public static void AddRenderLayer(RenderLayer layer) => Instance._layersSet.Add(layer);
+
+        public static void AddEventUpdate(UpdateEvent updateEvent) => Instance._updateEvent += updateEvent;
+
+        #endregion
+
+        #region Private methods
+
+        private static void Update() => Instance._updateEvent?.Invoke();
 
         #endregion
     }

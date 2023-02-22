@@ -9,9 +9,9 @@ namespace LearnDirectX.src.Common.Components
     {
         public float Yaw { get; set; } = -90f;
         public float Pitch { get; set; } = 0f;
-        public Vector3 Front { get; private set; } = new Vector3(0f, 0f, 1f);
-        public Vector3 Right { get; private set; } = new Vector3(1f, 0f, 0f);
-        public Vector3 Up { get; private set; } = new Vector3(0f, 1f, 1f);
+        public Vector3 Front { get; private set; }
+        public Vector3 Right { get; private set; }
+        public Vector3 Up { get; private set; }
         public float AspectRatio { get; set; } = 1f;
 
         public float Fov { get; private set; } = 60f;
@@ -27,7 +27,7 @@ namespace LearnDirectX.src.Common.Components
             Fov = fov;
         }
 
-        public void UpdateCameraVectors()
+        public void UpdateVectors()
         {
             Vector3 front = new Vector3();
             front.X = (float)(Math.Cos(ConvertToRadians(Yaw)) * Math.Cos(ConvertToRadians(Pitch)));
@@ -47,12 +47,12 @@ namespace LearnDirectX.src.Common.Components
 
         public Matrix4x4 GetProjectionMatrix()
         {
-            return Matrix4x4.CreatePerspectiveFieldOfView(ConvertToRadians(Fov), AspectRatio, 0.01f, 1000f); ;
+            return Matrix4x4.CreatePerspectiveFieldOfView((float)ConvertToRadians(Fov), AspectRatio, 0.01f, 1000f); ;
         }
 
-        private float ConvertToRadians(float angle)
+        private double ConvertToRadians(float angle)
         {
-            return (float)(Math.PI / 180) * angle;
+            return (Math.PI / 180) * angle;
         }
     }
 }
