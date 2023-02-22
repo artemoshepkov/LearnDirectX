@@ -73,7 +73,7 @@ namespace LearnDirectX.src.Common.Components
             immediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
             immediateContext.InputAssembler.SetVertexBuffers(0, _vertexBufferBinding);
 
-            immediateContext.Draw(3, 0);
+            immediateContext.Draw(36, 0);
         }
 
         #endregion

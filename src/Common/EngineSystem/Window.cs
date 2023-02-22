@@ -3,8 +3,6 @@ using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.Windows;
 using System;
-using System.Linq.Expressions;
-using Buffer = SharpDX.Direct3D11.Buffer;
 using Device = SharpDX.Direct3D11.Device;
 using Device1 = SharpDX.Direct3D11.Device1;
 
@@ -20,6 +18,8 @@ namespace LearnDirectX.src.Common.EngineSystem
         private SwapChain1 _swapChain;
         public RenderTargetView _renderTargetView;
         private Texture2D _backBuffer;
+        private Texture2D _depthBuffer;
+        private DepthStencilView _depthView;
 
         private bool _updateViewport = true;
 
@@ -27,8 +27,8 @@ namespace LearnDirectX.src.Common.EngineSystem
 
         #region Properties
 
-        public static Window Instance 
-        { 
+        public static Window Instance
+        {
             get
             {
                 if (_instance == null)
@@ -48,7 +48,7 @@ namespace LearnDirectX.src.Common.EngineSystem
         public Device1 Device { get; private set; }
 
         public RawColor4 BackGroundColor { get; private set; } = new RawColor4(0.8f, 0.8f, 0.8f, 1f);
-        
+
         #endregion
 
         #region Constructor
@@ -73,6 +73,23 @@ namespace LearnDirectX.src.Common.EngineSystem
 
             Instance._backBuffer = Texture2D.FromSwapChain<Texture2D>(Instance._swapChain, 0);
             Instance._renderTargetView = new RenderTargetView(Instance.Device, Instance._backBuffer);
+            Instance._depthBuffer = new Texture2D(
+                Instance.Device,
+                new Texture2DDescription
+                {
+                    Format = Format.D32_Float_S8X24_UInt,
+                    ArraySize = 1,
+                    MipLevels = 1,
+                    Width = Instance.RenderForm.Width,
+                    Height = Instance.RenderForm.Height,
+                    SampleDescription = new SampleDescription(1, 0),
+                    Usage = ResourceUsage.Default,
+                    BindFlags = BindFlags.DepthStencil,
+                    CpuAccessFlags = CpuAccessFlags.None,
+                    OptionFlags = ResourceOptionFlags.None,
+                });
+
+            Instance._depthView = new DepthStencilView(Instance.Device, Instance._depthBuffer);
 
             Instance.Device.ImmediateContext.Rasterizer.State = new RasterizerState(Instance.Device, new RasterizerStateDescription
             {
@@ -80,7 +97,7 @@ namespace LearnDirectX.src.Common.EngineSystem
                 FillMode = SharpDX.Direct3D11.FillMode.Solid,
             });
             Instance.Device.ImmediateContext.Rasterizer.SetViewport(0, 0, Width, Height, 0f, 1f);
-            Instance.Device.ImmediateContext.OutputMerger.SetTargets(Instance._renderTargetView);
+            Instance.Device.ImmediateContext.OutputMerger.SetTargets(Instance._depthView, Instance._renderTargetView);
 
             Engine.AddEventUpdate(Update); // Create another class for event
         }
@@ -101,6 +118,7 @@ namespace LearnDirectX.src.Common.EngineSystem
 
         public static void Clear()
         {
+            Instance.Device.ImmediateContext.ClearDepthStencilView(Instance._depthView, DepthStencilClearFlags.Depth, 1f, 0);
             Instance.Device.ImmediateContext.ClearRenderTargetView(Instance._renderTargetView, Instance.BackGroundColor);
         }
 
