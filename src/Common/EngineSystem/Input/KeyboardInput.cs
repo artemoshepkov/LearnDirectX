@@ -36,7 +36,13 @@ namespace LearnDirectX.src.Common.EngineSystem
             _keyBoard.Properties.BufferSize = 256;
             _keyBoard.SetCooperativeLevel(Window.Instance.RenderForm.Handle, CooperativeLevel.Foreground | CooperativeLevel.NonExclusive);
 
-            _keyBoard.Acquire(); // danger place
+            try
+            {
+                _keyBoard.Acquire(); // danger place
+            }
+            catch
+            {
+            }
 
             Engine.AddEventUpdate(Update); // To another class
         }

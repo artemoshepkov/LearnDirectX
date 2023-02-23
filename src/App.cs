@@ -52,7 +52,7 @@ namespace LearnDirectX.src
 
             GameObject gObj = new GameObject();
 
-            gObj.AddComponent(new Transform(new Vector3(1f, 1f, 1f)));
+            gObj.AddComponent(new Transform(new Vector3(0f, 0f, 0f)));
             gObj.AddComponent(
                 new Mesh(
                 new Vertex[]
@@ -106,7 +106,7 @@ namespace LearnDirectX.src
         {
             var gObj = new GameObject();
 
-            gObj.AddComponent(new Transform(new Vector3(0f, 0f, -10f)));
+            gObj.AddComponent(new Transform(new Vector3(0f, 0f, 10f)));
             gObj.AddComponent(new Camera());
             gObj.AddComponent(new CameraController());
 

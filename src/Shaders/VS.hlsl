@@ -26,14 +26,16 @@ cbuffer PerFrame : register(b1)
     float3 CameraPosition;
 };
 
-PixelShaderInput VSMain(VertexShaderInput vertex)
+PixelShaderInput VSMain(VertexShaderInput input)
 {
+    input.position.w = 1;
+    
     PixelShaderInput output = (PixelShaderInput) 0;
     
-    output.position = mul(vertex.position, WorldViewProjection);
-    output.color = vertex.color;
-    output.worldNormal = mul(vertex.normal, (float3x3) WorldInverseTranspose);
-    output.worldPosition = mul(vertex.position, World).xyz;
+    output.position = mul(input.position, WorldViewProjection);
+    output.color = input.color;
+    output.worldNormal = mul(input.normal, (float3x3) WorldInverseTranspose);
+    output.worldPosition = mul(input.position, World).xyz;
     
     return output;        
 }
