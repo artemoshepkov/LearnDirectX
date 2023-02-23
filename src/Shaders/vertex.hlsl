@@ -1,6 +1,7 @@
 ﻿struct VertexShaderInput
 {
     float4 pos : POSITION;
+    float4 normal : NORMAL;
     float4 col : COLOR;
 };
 
@@ -27,7 +28,7 @@ PixelShaderInput VS(VertexShaderInput input)
     
     //output.pos = input.pos;
     
-    output.col = input.col;
+    output.col = float4(input.col.xyz, 1);
 	
     return output;
 }

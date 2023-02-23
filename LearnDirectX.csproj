@@ -73,6 +73,7 @@
     <Compile Include="src\Common\Components\CameraController.cs" />
     <Compile Include="src\Common\Components\Component.cs" />
     <Compile Include="src\Common\Components\ComponentManager.cs" />
+    <Compile Include="src\Common\Components\Material.cs" />
     <Compile Include="src\Common\Components\Mesh.cs" />
     <Compile Include="src\Common\Components\MeshRenderer.cs" />
     <Compile Include="src\Common\Components\Transform.cs" />
@@ -83,12 +84,14 @@
     <Compile Include="src\Common\EngineSystem\Rendering\BasicEffectVertexConstants.cs" />
     <Compile Include="src\Common\EngineSystem\Rendering\CameraContext.cs" />
     <Compile Include="src\Common\EngineSystem\Rendering\DirectXSceneRenderer.cs" />
+    <Compile Include="src\Common\EngineSystem\Rendering\DirectXUploader.cs" />
     <Compile Include="src\Common\EngineSystem\Rendering\RendererContext.cs" />
     <Compile Include="src\Common\EngineSystem\Rendering\RenderLayer.cs" />
     <Compile Include="src\Common\EngineSystem\Rendering\RenderLayersSet.cs" />
     <Compile Include="src\Common\EngineSystem\Scene.cs" />
     <Compile Include="src\Common\EngineSystem\Shaders\ConstantBuffer.cs" />
     <Compile Include="src\Common\EngineSystem\Shaders\Shader.cs" />
+    <Compile Include="src\Common\EngineSystem\Shaders\Vertex.cs" />
     <Compile Include="src\Common\Entity\GameObject.cs" />
     <Compile Include="src\Common\EngineSystem\Engine.cs" />
     <Compile Include="src\Common\EngineSystem\Window.cs" />

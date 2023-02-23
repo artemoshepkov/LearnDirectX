@@ -138,7 +138,7 @@ namespace LearnDirectX.src.Common.EngineSystem
 
         public static void Exit()
         {
-            Console.WriteLine("Exit app");
+            Instance.RenderForm.Close();
         }
 
         #endregion

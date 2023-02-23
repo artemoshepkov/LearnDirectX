@@ -4,7 +4,7 @@ using System;
 
 namespace LearnDirectX.src.Common.EngineSystem
 {
-    public sealed class KeyboardInput : BaseInput, IDisposable
+    public sealed class KeyboardInput : BaseInput
     {
         private static KeyboardInput _instance;
 
@@ -48,14 +48,13 @@ namespace LearnDirectX.src.Common.EngineSystem
 
         public static bool GetKeyDown(Key key) => Instance._keyBoardState != null && Instance._keyBoardState.PressedKeys.Contains(key);
 
-        public void Dispose()
+        public new void Dispose()
         {
+            base.Dispose();
+
             _keyBoard?.Unacquire();
             _keyBoard?.Dispose();
             _keyBoard = null;
-
-            _directInput?.Dispose();
-            _directInput = null;
         }
 
         private bool ReadKeyBoard()

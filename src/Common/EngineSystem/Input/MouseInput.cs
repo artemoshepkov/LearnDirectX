@@ -4,7 +4,7 @@ using System.Numerics;
 
 namespace LearnDirectX.src.Common.EngineSystem.Input
 {
-    public sealed class MouseInput : BaseInput, IDisposable
+    public sealed class MouseInput : BaseInput
     {
         private static MouseInput _instance;
 
@@ -46,8 +46,10 @@ namespace LearnDirectX.src.Common.EngineSystem.Input
             Engine.AddEventUpdate(Update); // To another class
         }
 
-        public void Dispose()
+        public new void Dispose()
         {
+            base.Dispose();
+
             _mouse?.Unacquire();
             _mouse?.Dispose();
             _mouse = null;

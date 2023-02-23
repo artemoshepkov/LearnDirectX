@@ -1,6 +1,7 @@
 ﻿struct VertexShaderInput
 {
     float4 pos : POSITION;
+    float4 normal : NORMAL;
     float4 col : COLOR;
 };
 
@@ -13,7 +14,7 @@ struct PixelShaderInput
 
 cbuffer Object : register(b0)
 {
-    float4 WorldViewProjection;
+    float4x4 WorldViewProjection;
 }
 
 
