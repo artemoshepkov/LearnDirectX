@@ -1,11 +1,13 @@
 ﻿using LearnDirectX.src.Common.EngineSystem;
 using LearnDirectX.src.Common.EngineSystem.Rendering;
 using LearnDirectX.src.Common.EngineSystem.Shaders;
+using LearnDirectX.src.Common.EngineSystem.Shaders.Structures;
 using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using System.Numerics;
 using Buffer = SharpDX.Direct3D11.Buffer;
+using VertexShader = LearnDirectX.src.Common.EngineSystem.Shaders.VertexShader;
 
 namespace LearnDirectX.src.Common.Components
 {
@@ -13,22 +15,23 @@ namespace LearnDirectX.src.Common.Components
     {
         #region Fields
 
-        private Shader _shader;
+        private Shader[] _shaders;
         private Mesh _mesh;
         private Buffer _vertexBuffer;
         private Buffer _indexBuffer;
-        private Buffer _constVertexBuffer;
         private VertexBufferBinding _vertexBufferBinding;
 
+        private ConstantBuffer<PerObject> _perObjectBuffer;
+        private ConstantBuffer<PerFrame> _perFrameBuffer;
         #endregion
 
         #region Constructors
 
         public MeshRenderer() { }
 
-        public MeshRenderer(Shader shader)
+        public MeshRenderer(Shader[] shader)
         {
-            _shader = shader;
+            _shaders = shader;
         }
 
         #endregion
@@ -37,7 +40,10 @@ namespace LearnDirectX.src.Common.Components
 
         public void Initialize()
         {
-            _shader.Initialize();
+            foreach (var shader in _shaders)
+            {
+                shader.Initialize();
+            }
             _mesh = Owner.GetComponent<Mesh>();
             GenBuffers();
         }
@@ -56,16 +62,27 @@ namespace LearnDirectX.src.Common.Components
 
             _vertexBufferBinding = new VertexBufferBinding(_vertexBuffer, Utilities.SizeOf<Vertex>(), 0);
 
-            _constVertexBuffer = new Buffer(Window.Instance.Device, Utilities.SizeOf<Matrix4x4>(), ResourceUsage.Default, BindFlags.ConstantBuffer, CpuAccessFlags.None, ResourceOptionFlags.None, 0);
+            _perObjectBuffer = new ConstantBuffer<PerObject>();
+            _perFrameBuffer = new ConstantBuffer<PerFrame>();
 
-            Window.Instance.Device.ImmediateContext.VertexShader.SetConstantBuffer(0, _constVertexBuffer);
+            Window.Instance.Device.ImmediateContext.VertexShader.SetConstantBuffer(0, _perObjectBuffer.Buffer);
+            Window.Instance.Device.ImmediateContext.VertexShader.SetConstantBuffer(1, _perFrameBuffer.Buffer);
+
+            Window.Instance.Device.ImmediateContext.PixelShader.SetConstantBuffer(1, _perFrameBuffer.Buffer);
         }
 
         public void Render(RendererContext context)
         {
             var immediateContext = Window.Instance.Device.ImmediateContext;
 
-            _shader.Use();
+            foreach (var shader in _shaders)
+            {
+                shader.Use();
+            }
+
+            immediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
+            immediateContext.InputAssembler.SetIndexBuffer(_indexBuffer, SharpDX.DXGI.Format.R16_UInt, 0);
+            immediateContext.InputAssembler.SetVertexBuffers(0, _vertexBufferBinding);
 
             #region Load worldViewProjection
 
@@ -73,16 +90,25 @@ namespace LearnDirectX.src.Common.Components
             var View = context.CameraContext.Camera.GetViewMatrix();
             var Projection = context.CameraContext.Camera.GetProjectionMatrix();
 
-            var worldViewProjection = Matrix4x4.Transpose(Model * View * Projection);
+            var perObject = new PerObject()
+            {
+                WorldViewProjection = Matrix4x4.Transpose(Model * View * Projection),
+            };
 
-            immediateContext.UpdateSubresource(ref worldViewProjection, _constVertexBuffer);
+            _perObjectBuffer.UpdateValue(perObject);
 
             #endregion
 
-            immediateContext.InputAssembler.InputLayout = _shader.InputLayout;
-            immediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
-            immediateContext.InputAssembler.SetIndexBuffer(_indexBuffer, SharpDX.DXGI.Format.R16_UInt, 0);
-            immediateContext.InputAssembler.SetVertexBuffers(0, _vertexBufferBinding);
+            #region Load cameraPosition
+
+            var perFrame = new PerFrame()
+            {
+                CameraPosition = context.CameraContext.Transform.Position,
+            };
+
+            _perFrameBuffer.UpdateValue(perFrame);
+
+            #endregion
 
             immediateContext.DrawIndexed(_mesh.Indexes.Length, 0, 0);
         }

@@ -81,7 +81,6 @@
     <Compile Include="src\Common\EngineSystem\Input\KeyboardInput.cs" />
     <Compile Include="src\Common\EngineSystem\Input\MouseInput.cs" />
     <Compile Include="src\Common\EngineSystem\Profiler.cs" />
-    <Compile Include="src\Common\EngineSystem\Rendering\BasicEffectVertexConstants.cs" />
     <Compile Include="src\Common\EngineSystem\Rendering\CameraContext.cs" />
     <Compile Include="src\Common\EngineSystem\Rendering\DirectXSceneRenderer.cs" />
     <Compile Include="src\Common\EngineSystem\Rendering\DirectXUploader.cs" />
@@ -89,9 +88,15 @@
     <Compile Include="src\Common\EngineSystem\Rendering\RenderLayer.cs" />
     <Compile Include="src\Common\EngineSystem\Rendering\RenderLayersSet.cs" />
     <Compile Include="src\Common\EngineSystem\Scene.cs" />
-    <Compile Include="src\Common\EngineSystem\Shaders\ConstantBuffer.cs" />
+    <Compile Include="src\Common\EngineSystem\Shaders\Buffers\ConstantBuffer.cs" />
+    <Compile Include="src\Common\EngineSystem\Shaders\Buffers\ConstantBuffers.cs" />
+    <Compile Include="src\Common\EngineSystem\Shaders\DepthShader.cs" />
+    <Compile Include="src\Common\EngineSystem\Shaders\PixelShader.cs" />
     <Compile Include="src\Common\EngineSystem\Shaders\Shader.cs" />
-    <Compile Include="src\Common\EngineSystem\Shaders\Vertex.cs" />
+    <Compile Include="src\Common\EngineSystem\Shaders\Structures\PerFrame.cs" />
+    <Compile Include="src\Common\EngineSystem\Shaders\Structures\PerObject.cs" />
+    <Compile Include="src\Common\EngineSystem\Shaders\Structures\Vertex.cs" />
+    <Compile Include="src\Common\EngineSystem\Shaders\VertexShader.cs" />
     <Compile Include="src\Common\Entity\GameObject.cs" />
     <Compile Include="src\Common\EngineSystem\Engine.cs" />
     <Compile Include="src\Common\EngineSystem\Window.cs" />
@@ -102,8 +107,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
-    <Content Include="src\Shaders\pixel.hlsl" />
-    <Content Include="src\Shaders\vertex.hlsl" />
+    <Content Include="src\Shaders\Common.hlsl" />
+    <Content Include="src\Shaders\DepthPS.hlsl" />
+    <Content Include="src\Common\Entity\pixel.hlsl" />
+    <Content Include="src\Shaders\PS.hlsl" />
+    <Content Include="src\Common\Entity\vertex.hlsl" />
+    <Content Include="src\Shaders\VS.hlsl" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
