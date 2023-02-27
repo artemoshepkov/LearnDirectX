@@ -94,7 +94,8 @@ namespace LearnDirectX.src.Common.EngineSystem
             Instance.Device.ImmediateContext.Rasterizer.State = new RasterizerState(Instance.Device, new RasterizerStateDescription
             {
                 CullMode = CullMode.None,
-                FillMode = SharpDX.Direct3D11.FillMode.Solid,
+                FillMode = FillMode.Solid,
+                IsFrontCounterClockwise = false,
             });
             Instance.Device.ImmediateContext.Rasterizer.SetViewport(0, 0, Width, Height, 0f, 1f);
             Instance.Device.ImmediateContext.OutputMerger.SetTargets(Instance._depthView, Instance._renderTargetView);

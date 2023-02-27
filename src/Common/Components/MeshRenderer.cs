@@ -6,6 +6,7 @@ using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
 using System.Numerics;
+using LearnDirectX.src.Common.EngineSystem.Shaders.Structures.Lights;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using VertexShader = LearnDirectX.src.Common.EngineSystem.Shaders.VertexShader;
 
@@ -23,6 +24,8 @@ namespace LearnDirectX.src.Common.Components
 
         private ConstantBuffer<PerObject> _perObjectBuffer;
         private ConstantBuffer<PerFrame> _perFrameBuffer;
+        private ConstantBuffer<PerMaterial> _perMaterialBuffer;
+
         #endregion
 
         #region Constructors
@@ -64,11 +67,14 @@ namespace LearnDirectX.src.Common.Components
 
             _perObjectBuffer = new ConstantBuffer<PerObject>();
             _perFrameBuffer = new ConstantBuffer<PerFrame>();
+            _perMaterialBuffer = new ConstantBuffer<PerMaterial>();
 
             Window.Instance.Device.ImmediateContext.VertexShader.SetConstantBuffer(0, _perObjectBuffer.Buffer);
             Window.Instance.Device.ImmediateContext.VertexShader.SetConstantBuffer(1, _perFrameBuffer.Buffer);
+            Window.Instance.Device.ImmediateContext.VertexShader.SetConstantBuffer(2, _perMaterialBuffer.Buffer);
 
             Window.Instance.Device.ImmediateContext.PixelShader.SetConstantBuffer(1, _perFrameBuffer.Buffer);
+            Window.Instance.Device.ImmediateContext.PixelShader.SetConstantBuffer(2, _perMaterialBuffer.Buffer);
         }
 
         public void Render(RendererContext context)
@@ -99,14 +105,34 @@ namespace LearnDirectX.src.Common.Components
 
             #endregion
 
-            #region Load cameraPosition
+
+            #region Load PerFrame
 
             var perFrame = new PerFrame()
             {
                 CameraPosition = context.CameraContext.Transform.Position,
+                Light = new DirectionalLight()
+                {
+                    Color = new Vector4(1f),
+                    Direction = new Vector3(1f, -1f, -1f),
+                },
             };
 
             _perFrameBuffer.UpdateValue(perFrame);
+
+            #endregion
+
+            #region Load PerMaterial
+
+            var perMaterial = new PerMaterial()
+            {
+                Ambient = new Vector4(0.2f),
+                Diffuse = new Vector4(0.7f),
+                Specular = new Vector4(1f),
+                Shininess = 20f,
+            };
+
+            _perMaterialBuffer.UpdateValue(perMaterial);
 
             #endregion
 

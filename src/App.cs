@@ -3,10 +3,17 @@ using LearnDirectX.src.Common.EngineSystem;
 using LearnDirectX.src.Common.EngineSystem.Rendering;
 using LearnDirectX.src.Common.EngineSystem.Shaders;
 using SharpDX.D3DCompiler;
-using SharpDX.DirectInput;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using Key = SharpDX.DirectInput.Key;
+using VertexShader = LearnDirectX.src.Common.EngineSystem.Shaders.VertexShader;
+using PixelShader = LearnDirectX.src.Common.EngineSystem.Shaders.PixelShader;
+
+using SharpDX.Direct3D11;
+using System.IO;
+using SharpDX.Direct3D;
+using System.Runtime.Remoting.Contexts;
 
 namespace LearnDirectX.src
 {
@@ -17,6 +24,8 @@ namespace LearnDirectX.src
 
         public List<Scene> Scenes;
 
+        private bool isPoligon = false;
+
         public App() 
         {
             _renderer = new DirectXSceneRenderer(InitializeScene());
@@ -25,10 +34,40 @@ namespace LearnDirectX.src
             {
                 { Key.Escape, Window.Exit },
                 { Key.R, Window.ChangeCursorMode },
+                { Key.F, SetPoligonMode },
             };
 
             Engine.AddRenderLayer(_renderer);
             Engine.AddEventUpdate(Update);
+        }
+
+        private void SetPoligonMode()
+        {
+            RasterizerStateDescription rasterDesc;
+            var context = Window.Instance.Device.ImmediateContext;
+
+            if (context.Rasterizer.State != null)
+                rasterDesc = context.Rasterizer.State.Description;
+            else
+                rasterDesc = new RasterizerStateDescription()
+                {
+                    CullMode = CullMode.Back,
+                    FillMode = FillMode.Solid
+                };
+
+            if (isPoligon)
+            {
+                rasterDesc.FillMode = FillMode.Solid;
+                context.Rasterizer.State = new RasterizerState(context.Device, rasterDesc);
+            }
+
+
+            if (!isPoligon)
+            {
+                rasterDesc.FillMode = FillMode.Wireframe;
+                context.Rasterizer.State = new RasterizerState(context.Device, rasterDesc);
+            }
+
         }
 
         private void Update()
@@ -57,15 +96,15 @@ namespace LearnDirectX.src
                 new Mesh(
                 new Vertex[]
                 {
-                    new Vertex(new Vector3(-0.5f, 0.5f, -0.5f), new Vector3(1f, 0.5f, 0.5f)),  // 0-Top-left
-                    new Vertex(new Vector3(0.5f, 0.5f, -0.5f),  new Vector3(1f, 0.5f, 0.5f)),  // 1-Top-right
-                    new Vertex(new Vector3(0.5f, -0.5f, -0.5f),  new Vector3(1f, 0.5f, 0.5f)), // 2-Base-right
-                    new Vertex(new Vector3(-0.5f, -0.5f, -0.5f), new Vector3(1f, 0.5f, 0.5f)), // 3-Base-left
+                    new Vertex(new Vector3(-0.5f, 0.5f, -0.5f), new Vector3(0.5f, 0f, 0f)),  // 0-Top-left
+                    new Vertex(new Vector3(0.5f, 0.5f, -0.5f),  new Vector3(0.5f, 0f, 0f)),  // 1-Top-right
+                    new Vertex(new Vector3(0.5f, -0.5f, -0.5f),  new Vector3(0.5f, 0f, 0f)), // 2-Base-right
+                    new Vertex(new Vector3(-0.5f, -0.5f, -0.5f), new Vector3(0.5f, 0f, 0f)), // 3-Base-left
 
-                    new Vertex(new Vector3(-0.5f, 0.5f, 0.5f),  new Vector3(0.5f, 0.5f, 0.5f)),  // 4-Top-left
-                    new Vertex(new Vector3(0.5f, 0.5f, 0.5f),   new Vector3(0.5f, 0.5f, 0.5f)),  // 5-Top-right
-                    new Vertex(new Vector3(0.5f, -0.5f, 0.5f),  new Vector3(0.5f, 0.5f, 0.5f)),  // 6-Base-right
-                    new Vertex(new Vector3(-0.5f, -0.5f, 0.5f), new Vector3(0.5f, 0.5f, 0.5f)),
+                    new Vertex(new Vector3(-0.5f, 0.5f, 0.5f),  new Vector3(0.5f, 0f, 0f)),  // 4-Top-left
+                    new Vertex(new Vector3(0.5f, 0.5f, 0.5f),   new Vector3(0.5f, 0f, 0f)),  // 5-Top-right
+                    new Vertex(new Vector3(0.5f, -0.5f, 0.5f),  new Vector3(0.5f, 0f, 0f)),  // 6-Base-right
+                    new Vertex(new Vector3(-0.5f, -0.5f, 0.5f), new Vector3(0.5f, 0f, 0f)),
                 },
                 new ushort[]
                 {
@@ -85,10 +124,9 @@ namespace LearnDirectX.src
 
             var shaders = new Shader[]
             {
-                new VertexShader(ShaderBytecode.CompileFromFile($"{ShadersPath}VS.hlsl", "VSMain", "vs_5_0")),
+                new VertexShader(ShaderBytecode.CompileFromFile($"{ShadersPath}VS.hlsl", "VSMain", "vs_5_0")), 
                 new PixelShader(ShaderBytecode.CompileFromFile($"{ShadersPath}PS.hlsl", "PSMain", "ps_5_0")),
-                //new DepthShader(ShaderBytecode.CompileFromFile($"{ShadersPath}VS.hlsl", "VSMain", "vs_5_0", ShaderFlags.None, EffectFlags.None)),
-            };
+        };
 
             gObj.AddComponent(new MeshRenderer(shaders));
             gObj.GetComponent<MeshRenderer>().Initialize();

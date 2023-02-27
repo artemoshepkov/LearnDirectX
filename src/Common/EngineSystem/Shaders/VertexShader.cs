@@ -21,7 +21,7 @@ namespace LearnDirectX.src.Common.EngineSystem.Shaders
                     {
                         new InputElement("POSITION", 0, Format.R32G32B32A32_Float, 0, 0),
                         new InputElement("NORMAL", 0, Format.R32G32B32A32_Float, Marshal.SizeOf<Vector3>(), 0),
-                        new InputElement("COLOR", 0, Format.R8G8B8A8_UNorm, Marshal.SizeOf<Vector3>() * 2, 0),
+                        new InputElement("COLOR", 0, Format.R32G32B32A32_Float, Marshal.SizeOf<Vector3>() * 2, 0),
                     }
                 );
         }

@@ -1,11 +1,4 @@
-﻿struct VertexShaderInput
-{
-    float4 position : POSITION;
-    float3 normal : NORMAL;
-    float4 color : COLOR;
-};
-
-struct PixelShaderInput
+﻿struct PixelShaderInput
 {
     float4 position : SV_POSITION;
     float4 color : COLOR;
@@ -14,19 +7,45 @@ struct PixelShaderInput
     float3 worldNormal : NORMAL;
 };
 
-cbuffer PerObject : register(b0)
+struct DirectionalLight
 {
-    float4x4 WorldViewProjection; // replace to PerFrame and change to ViewProj
-    float4x4 World;
-    float4x4 WorldInverseTranspose;
+    float4 Color;
+    float3 Direction;
 };
 
 cbuffer PerFrame : register(b1)
 {
     float3 CameraPosition;
+    DirectionalLight Light;
 };
+
+cbuffer PerMaterial : register(b2)
+{
+    float4 Ambient;
+    float4 Diffuse;
+    float4 Specular;
+    float Shininess;
+};
+
+float3 Lambert(float4 pixelDiffuse, float3 normal, float3 toLight)
+{
+    float3 diffuseAmount = saturate(dot(normal, toLight));
+    
+    return pixelDiffuse.rgb * diffuseAmount;
+}
 
 float4 PSMain(PixelShaderInput pixel) : SV_Target
 {
-    return pixel.color;
-}
+    float3 normal = normalize(pixel.worldNormal);
+    float3 toCamera = normalize(CameraPosition - pixel.worldPosition);
+    float3 toLight = normalize(-Light.Direction);
+    
+    float4 sample = (float4) 1.0f;
+    
+    float3 diffuse = Lambert(pixel.color, normal, toLight);
+    float3 color = (saturate(Ambient + Diffuse) * sample.rgb) * Light.Color.rgb;
+    
+    float alpha = pixel.color.a + sample.a;
+    
+    return float4(color, alpha);
+};
