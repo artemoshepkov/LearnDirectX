@@ -9,6 +9,7 @@ using System.Numerics;
 using LearnDirectX.src.Common.EngineSystem.Shaders.Structures.Lights;
 using Buffer = SharpDX.Direct3D11.Buffer;
 using VertexShader = LearnDirectX.src.Common.EngineSystem.Shaders.VertexShader;
+using System;
 
 namespace LearnDirectX.src.Common.Components
 {

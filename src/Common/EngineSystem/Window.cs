@@ -14,7 +14,7 @@ namespace LearnDirectX.src.Common.EngineSystem
 
         private static Window _instance;
 
-        private RenderForm _renderForm;
+        private Form _renderForm;
         private SwapChain1 _swapChain;
         public RenderTargetView _renderTargetView;
         private Texture2D _backBuffer;
@@ -45,7 +45,7 @@ namespace LearnDirectX.src.Common.EngineSystem
         public static int Width { get => Instance._renderForm.Width; }
         public static int Height { get => Instance._renderForm.Height; }
 
-        public RenderForm RenderForm { get => Instance._renderForm; }
+        public Form RenderForm { get => Instance._renderForm; }
         public Device1 Device { get; private set; }
 
         public RawColor4 BackGroundColor { get; private set; } = new RawColor4(0.8f, 0.8f, 0.8f, 1f);
@@ -62,7 +62,7 @@ namespace LearnDirectX.src.Common.EngineSystem
 
         public static void Init(string title, int width, int height)
         {
-            Instance._renderForm = new RenderForm
+            Instance._renderForm = new Form
             {
                 Text = title,
                 Width = width,
@@ -94,7 +94,7 @@ namespace LearnDirectX.src.Common.EngineSystem
 
             Instance.Device.ImmediateContext.Rasterizer.State = new RasterizerState(Instance.Device, new RasterizerStateDescription
             {
-                CullMode = CullMode.Back,
+                CullMode = CullMode.None,
                 FillMode = FillMode.Solid,
                 IsFrontCounterClockwise = false,
             });

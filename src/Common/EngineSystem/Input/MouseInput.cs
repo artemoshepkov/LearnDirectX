@@ -41,7 +41,14 @@ namespace LearnDirectX.src.Common.EngineSystem.Input
             _mouse.Properties.AxisMode = DeviceAxisMode.Relative;
             _mouse.SetCooperativeLevel(Window.Instance.RenderForm.Handle, CooperativeLevel.Foreground | CooperativeLevel.NonExclusive);
 
-            _mouse.Acquire();
+            try
+            {
+
+                _mouse.Acquire();
+            }
+            catch
+            {
+            }
 
             Engine.AddEventUpdate(Update); // To another class
         }

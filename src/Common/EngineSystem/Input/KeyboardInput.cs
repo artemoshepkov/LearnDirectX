@@ -52,7 +52,11 @@ namespace LearnDirectX.src.Common.EngineSystem
             ReadKeyBoard();
         }
 
-        public static bool GetKeyDown(Key key) => Instance._keyBoardState != null && Instance._keyBoardState.PressedKeys.Contains(key);
+        public static bool GetKeyDown(Key key) =>
+            Instance._keyBoardState != null && Instance._keyBoardState.PressedKeys.Contains(key);
+
+        public static bool GetKeyPressed(Key key) =>
+            Instance._keyBoardState != null && Instance._keyBoardState.PressedKeys.Contains(key);
 
         public new void Dispose()
         {
