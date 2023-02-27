@@ -36,16 +36,18 @@ float3 Lambert(float4 pixelDiffuse, float3 normal, float3 toLight)
 
 float4 PSMain(PixelShaderInput pixel) : SV_Target
 {
-    float3 normal = normalize(pixel.worldNormal);
-    float3 toCamera = normalize(CameraPosition - pixel.worldPosition);
-    float3 toLight = normalize(-Light.Direction);
+    //float3 normal = normalize(pixel.worldNormal);
+    //float3 toCamera = normalize(CameraPosition - pixel.worldPosition);
+    //float3 toLight = normalize(-Light.Direction);
     
-    float4 sample = (float4) 1.0f;
+    //float4 sample = (float4) 1.0f;
     
-    float3 diffuse = Lambert(pixel.color, normal, toLight);
-    float3 color = (saturate(Ambient + Diffuse) * sample.rgb) * Light.Color.rgb;
+    //float3 diffuse = Lambert(pixel.color, normal, toLight);
+    //float3 color = (saturate(Ambient + Diffuse) * sample.rgb) * Light.Color.rgb;
     
-    float alpha = pixel.color.a + sample.a;
+    //float alpha = pixel.color.a + sample.a;
     
-    return float4(color, alpha);
+    //return float4(color, alpha);
+    
+    return pixel.color;
 };

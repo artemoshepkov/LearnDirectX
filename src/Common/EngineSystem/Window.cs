@@ -22,6 +22,7 @@ namespace LearnDirectX.src.Common.EngineSystem
         private DepthStencilView _depthView;
 
         private bool _updateViewport = true;
+        private int _countSamples = 8;
 
         #endregion
 
@@ -82,7 +83,7 @@ namespace LearnDirectX.src.Common.EngineSystem
                     MipLevels = 1,
                     Width = Instance.RenderForm.Width,
                     Height = Instance.RenderForm.Height,
-                    SampleDescription = new SampleDescription(1, 0),
+                    SampleDescription = new SampleDescription(Instance._countSamples, 0),
                     Usage = ResourceUsage.Default,
                     BindFlags = BindFlags.DepthStencil,
                     CpuAccessFlags = CpuAccessFlags.None,
@@ -93,7 +94,7 @@ namespace LearnDirectX.src.Common.EngineSystem
 
             Instance.Device.ImmediateContext.Rasterizer.State = new RasterizerState(Instance.Device, new RasterizerStateDescription
             {
-                CullMode = CullMode.None,
+                CullMode = CullMode.Back,
                 FillMode = FillMode.Solid,
                 IsFrontCounterClockwise = false,
             });
@@ -178,11 +179,12 @@ namespace LearnDirectX.src.Common.EngineSystem
                     Height = _renderForm.Height,
                     Format = Format.R8G8B8A8_UNorm,
                     Stereo = false,
-                    SampleDescription = new SampleDescription(1, 0),
+                    SampleDescription = new SampleDescription(_countSamples, 0),
                     Usage = Usage.BackBuffer | Usage.RenderTargetOutput,
                     BufferCount = 1,
                     Scaling = Scaling.Stretch,
                     SwapEffect = SwapEffect.Discard,
+                    Flags = SwapChainFlags.AllowModeSwitch
                 };
 
                 _swapChain = new SwapChain1(

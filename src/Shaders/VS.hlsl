@@ -48,7 +48,7 @@ PixelShaderInput VSMain(VertexShaderInput input)
     PixelShaderInput output = (PixelShaderInput) 0;
     
     output.position = mul(input.position, WorldViewProjection);
-    output.color = input.color * Diffuse;
+    output.color = input.color; //  * Diffuse
     output.worldNormal = mul(input.normal, (float3x3) WorldInverseTranspose);
     output.worldPosition = mul(input.position, World).xyz;
     
