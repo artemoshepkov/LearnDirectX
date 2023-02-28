@@ -9,9 +9,10 @@ namespace LearnDirectX.src.Common.EngineSystem
         public List<GameObject> GameObjects { get; private set; }
         public List<GameObject> Lights { get; private set; }
 
-        public Scene() 
-        { 
+        public Scene()
+        {
             GameObjects = new List<GameObject>();
+            Lights = new List<GameObject>();
         }
 
         public void AddObject(GameObject gameObject)
@@ -22,6 +23,16 @@ namespace LearnDirectX.src.Common.EngineSystem
         public void RemoveObject(GameObject gameObject)
         {
             GameObjects.Remove(gameObject);
+        }
+
+        public void AddLight(GameObject gameObject)
+        {
+            Lights.Add(gameObject);
+        }
+
+        public void RemoveLight(GameObject gameObject)
+        {
+            Lights.Remove(gameObject);
         }
     }
 }

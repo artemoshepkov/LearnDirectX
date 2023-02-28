@@ -4,10 +4,13 @@ using System.Runtime.InteropServices;
 namespace LearnDirectX.src.Common.EngineSystem.Shaders.Structures
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct PerMaterial
+    public struct Material
     {
-        public Material Mat;
-        public float Shininess;
-        private Vector3 _padding0;
+        public Vector3 Ambient;
+        float _padding0;
+        public Vector3 Diffuse;
+        float _padding1;
+        public Vector3 Specular;
+        float _padding2;
     }
 }

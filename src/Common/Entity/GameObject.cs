@@ -1,4 +1,6 @@
-﻿namespace LearnDirectX.src.Common.Components
+﻿using DevExpress.Data.WcfLinq.Helpers;
+
+namespace LearnDirectX.src.Common.Components
 {
     public class GameObject
     {
@@ -17,5 +19,10 @@
         }
 
         public T GetComponent<T>() where T : Component, new() => ComponentManager.GetComponent<T>();
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

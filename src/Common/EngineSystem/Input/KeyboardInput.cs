@@ -1,6 +1,5 @@
 ﻿using LearnDirectX.src.Common.EngineSystem.Input;
 using SharpDX.DirectInput;
-using System;
 
 namespace LearnDirectX.src.Common.EngineSystem
 {
@@ -52,8 +51,10 @@ namespace LearnDirectX.src.Common.EngineSystem
             ReadKeyBoard();
         }
 
-        public static bool GetKeyDown(Key key) =>
-            Instance._keyBoardState != null && Instance._keyBoardState.PressedKeys.Contains(key);
+        public static bool GetKeyDown(Key key)
+        {
+            return GetKeyPressed(key);
+        }
 
         public static bool GetKeyPressed(Key key) =>
             Instance._keyBoardState != null && Instance._keyBoardState.PressedKeys.Contains(key);

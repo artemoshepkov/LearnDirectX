@@ -7,7 +7,7 @@ namespace LearnDirectX
     {
         static void Main()
         {
-            Engine.Init("Game", 640, 480);
+            Engine.Init("Game", 1280, 800);
 
             var app = new App();
 

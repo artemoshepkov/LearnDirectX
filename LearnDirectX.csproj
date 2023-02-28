@@ -35,10 +35,17 @@
   <ItemGroup>
     <Reference Include="DevExpress.Data.Desktop.v22.2, Version=22.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Data.v22.2, Version=22.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Drawing.v22.2, Version=22.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.Printing.v22.2.Core, Version=22.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.TreeMap.v22.2.Core, Version=22.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.Utils.v22.2, Version=22.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraBars.v22.2, Version=22.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraEditors.v22.2, Version=22.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraLayout.v22.2, Version=22.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraPrinting.v22.2, Version=22.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraTreeList.v22.2, Version=22.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraTreeMap.v22.2, Version=22.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraTreeMap.v22.2.UI, Version=22.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <HintPath>packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
     </Reference>
@@ -73,6 +80,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\Common\Components\DirectLight.cs" />
+    <Compile Include="src\Common\Components\ObjectMaterial.cs" />
+    <Compile Include="src\Common\EngineSystem\SceneRenderer.cs" />
+    <Compile Include="src\Common\EngineSystem\Shaders\Structures\Material.cs" />
     <Compile Include="src\View\Form.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -95,15 +106,10 @@
     <Compile Include="src\Common\EngineSystem\Input\MouseInput.cs" />
     <Compile Include="src\Common\EngineSystem\Profiler.cs" />
     <Compile Include="src\Common\EngineSystem\Rendering\CameraContext.cs" />
-    <Compile Include="src\Common\EngineSystem\Rendering\DirectXSceneRenderer.cs" />
-    <Compile Include="src\Common\EngineSystem\Rendering\DirectXUploader.cs" />
     <Compile Include="src\Common\EngineSystem\Rendering\RendererContext.cs" />
-    <Compile Include="src\Common\EngineSystem\Rendering\RenderLayer.cs" />
-    <Compile Include="src\Common\EngineSystem\Rendering\RenderLayersSet.cs" />
     <Compile Include="src\Common\EngineSystem\Scene.cs" />
     <Compile Include="src\Common\EngineSystem\Shaders\Buffers\ConstantBuffer.cs" />
     <Compile Include="src\Common\EngineSystem\Shaders\Buffers\ConstantBuffers.cs" />
-    <Compile Include="src\Common\EngineSystem\Shaders\DepthShader.cs" />
     <Compile Include="src\Common\EngineSystem\Shaders\PixelShader.cs" />
     <Compile Include="src\Common\EngineSystem\Shaders\Shader.cs" />
     <Compile Include="src\Common\EngineSystem\Shaders\Structures\Lights\DirectionalLight.cs" />
@@ -122,15 +128,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
-    <Content Include="src\Shaders\Common.hlsl" />
-    <Content Include="src\Shaders\DepthPS.hlsl" />
     <Content Include="src\Shaders\PS.hlsl" />
     <Content Include="src\Shaders\VS.hlsl" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="src\View\Form.resx">
       <DependentUpon>Form.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\View\Controls\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

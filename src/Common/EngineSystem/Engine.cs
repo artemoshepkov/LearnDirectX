@@ -1,10 +1,7 @@
-﻿using LearnDirectX.src.Common.Components;
-using LearnDirectX.src.Common.EngineSystem.Rendering;
-using SharpDX.DirectInput;
+﻿using DevExpress.XtraEditors.Internal;
 using SharpDX.Windows;
 using System;
 using System.Collections.Generic;
-using System.Numerics;
 
 namespace LearnDirectX.src.Common.EngineSystem
 {
@@ -12,11 +9,16 @@ namespace LearnDirectX.src.Common.EngineSystem
 
     public sealed class Engine
     {
+        private event Action _selectedSceneChanged;
+
         #region Fields
 
         private static Engine _instance;
 
-        private RenderLayersSet _layersSet;
+        private List<Scene> _scenes;
+
+        private Scene _selectedScene;
+
         private event UpdateEvent _updateEvent;
 
         #endregion
@@ -33,6 +35,19 @@ namespace LearnDirectX.src.Common.EngineSystem
             }
         }
 
+        public static Scene SelectedScene
+        {
+            get
+            {
+                return Instance._selectedScene;
+            }
+            private set 
+            { 
+                Instance._selectedScene = value;
+                Instance._selectedSceneChanged?.Invoke();
+            }
+        }
+
         #endregion
 
         #region Constructor
@@ -45,8 +60,8 @@ namespace LearnDirectX.src.Common.EngineSystem
 
         public static void Init(string title, int width, int height)
         {
+            Instance._scenes = new List<Scene>();
             Window.Init(title, width, height);
-            Instance._layersSet = new RenderLayersSet();
         }
 
         public static void Run()
@@ -60,23 +75,43 @@ namespace LearnDirectX.src.Common.EngineSystem
 
                     Profiler.StartFrame();
 
-                    Instance._layersSet.Render();
+                    Render();
 
-                    Update();
+                    Update(); // Window; KeyboardInput; MouseInput
 
                     Profiler.EndFrame();
                 });
         }
 
-        public static void AddRenderLayer(RenderLayer layer) => Instance._layersSet.Add(layer);
+        public static void AddScene(Scene scene)
+        {
+            Instance._scenes.Add(scene);
+            SelectedScene = scene;
+        }
 
         public static void AddEventUpdate(UpdateEvent updateEvent) => Instance._updateEvent += updateEvent;
+
+        public static void AddEventSceneChanged(Action sceneChangedEvent) =>
+            Instance._selectedSceneChanged += sceneChangedEvent;
+
 
         #endregion
 
         #region Private methods
 
         private static void Update() => Instance._updateEvent?.Invoke();
+
+        private static void Render()
+        {
+            try
+            {
+                SceneRenderer.Render(Instance._selectedScene);
+            }
+            catch (System.NullReferenceException)
+            {
+                Console.WriteLine("You need to add scene to engine");
+            }
+        }
 
         #endregion
     }

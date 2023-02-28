@@ -6,22 +6,35 @@ namespace LearnDirectX.src.Common.Components
     {
         public Matrix4x4 Model { get; set; }
         public Vector3 Position { get; set; }
+        public Vector3 Rotation { get; set; }
+
 
         public Transform() { }
 
         public Transform(Vector3 position)
         {
-            Position= position;
-            Model = Matrix4x4.Identity;
+            Position = position;
+            Model = Matrix4x4.Identity * Matrix4x4.CreateTranslation(Position);
+        }
+        public Transform(Vector3 position, Vector3 rotation)
+        {
+            Position = position;
+            Rotation = rotation;
+            Model = Matrix4x4.Identity * Matrix4x4.CreateTranslation(Position);
         }
 
         public void Translate(Vector3 translation)
         {
-            Position += translation;
+            Position = translation;
 
-            var matrix = Matrix4x4.Identity;
-            matrix = Matrix4x4.CreateTranslation(translation);
-            Model *= matrix;
+            Model = Matrix4x4.Identity * Matrix4x4.CreateTranslation(Position);
+        }
+
+        public void Rotate(Vector3 rotation)
+        {
+            Rotation = rotation;
+
+            Model = Matrix4x4.Identity * Matrix4x4.CreateFromYawPitchRoll(Rotation.X, Rotation.Y, Rotation.Z);
         }
     }
 }

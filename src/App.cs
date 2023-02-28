@@ -19,17 +19,14 @@ namespace LearnDirectX.src
 {
     public sealed class App
     {
-        private DirectXSceneRenderer _renderer;
         private Dictionary<Key, Action> _controlBinds;
-
-        public List<Scene> Scenes;
 
         private bool isPoligon = false;
 
+        public List<Scene> Scenes;
+
         public App() 
         {
-            _renderer = new DirectXSceneRenderer(InitializeScene());
-
             _controlBinds = new Dictionary<Key, Action>()
             {
                 { Key.Escape, Window.Exit },
@@ -37,37 +34,28 @@ namespace LearnDirectX.src
                 { Key.F, SetPoligonMode },
             };
 
-            Engine.AddRenderLayer(_renderer);
+            Engine.AddScene(InitializeScene());
             Engine.AddEventUpdate(Update);
         }
 
         private void SetPoligonMode()
         {
-            RasterizerStateDescription rasterDesc;
             var context = Window.Instance.Device.ImmediateContext;
+            var rasterDesc = context.Rasterizer.State.Description;
 
-            if (context.Rasterizer.State != null)
-                rasterDesc = context.Rasterizer.State.Description;
-            else
+            if (context.Rasterizer.State == null)
+            {
                 rasterDesc = new RasterizerStateDescription()
                 {
                     CullMode = CullMode.Back,
                     FillMode = FillMode.Solid
                 };
-
-            if (isPoligon)
-            {
-                rasterDesc.FillMode = FillMode.Solid;
-                context.Rasterizer.State = new RasterizerState(context.Device, rasterDesc);
             }
 
+            rasterDesc.FillMode = isPoligon ? FillMode.Solid : FillMode.Wireframe;
 
-            if (!isPoligon)
-            {
-                rasterDesc.FillMode = FillMode.Wireframe;
-                context.Rasterizer.State = new RasterizerState(context.Device, rasterDesc);
-            }
-
+            context.Rasterizer.State = new RasterizerState(context.Device, rasterDesc);
+            isPoligon = !isPoligon;
         }
 
         private void Update()
@@ -83,13 +71,21 @@ namespace LearnDirectX.src
 
         private static Scene InitializeScene()
         {
+            var scene = new Scene();
+
             string ShadersPath = "../../src/Shaders/";
 
-            var scene = new Scene();
+            var shadersObjects = new Shader[]
+            {
+                new VertexShader(ShaderBytecode.CompileFromFile($"{ShadersPath}VS.hlsl", "VSMain", "vs_5_0")),
+                new PixelShader(ShaderBytecode.CompileFromFile($"{ShadersPath}PS.hlsl", "PSMain", "ps_5_0")),
+            };
+
+            GameObject gObj;
 
             #region Add cube
 
-            GameObject gObj = new GameObject();
+            gObj = new GameObject();
 
             gObj.AddComponent(new Transform(new Vector3(0f, 0f, 0f)));
             gObj.AddComponent(
@@ -122,16 +118,18 @@ namespace LearnDirectX.src
                     3, 6, 7, // Bottom B
                 }));
 
-            var shaders = new Shader[]
-            {
-                new VertexShader(ShaderBytecode.CompileFromFile($"{ShadersPath}VS.hlsl", "VSMain", "vs_5_0")), 
-                new PixelShader(ShaderBytecode.CompileFromFile($"{ShadersPath}PS.hlsl", "PSMain", "ps_5_0")),
-        };
-
-            gObj.AddComponent(new MeshRenderer(shaders));
+            gObj.AddComponent(new MeshRenderer(shadersObjects));
             gObj.GetComponent<MeshRenderer>().Initialize();
 
             scene.AddObject(gObj);
+
+            #endregion
+
+            #region Add light
+
+            gObj = new GameObject();
+            gObj.AddComponent(new DirectLight() { Color = new Vector4(1f), Direction = new Vector3(-0.2f, -1.0f, -0.3f) });
+            scene.AddLight(gObj);
 
             #endregion
 
@@ -144,7 +142,7 @@ namespace LearnDirectX.src
         {
             var gObj = new GameObject();
 
-            gObj.AddComponent(new Transform(new Vector3(0f, 0f, 10f)));
+            gObj.AddComponent(new Transform(new Vector3(0f, 3f, 10f)));
             gObj.AddComponent(new Camera());
             gObj.AddComponent(new CameraController());
 

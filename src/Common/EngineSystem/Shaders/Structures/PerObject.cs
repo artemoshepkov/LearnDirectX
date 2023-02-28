@@ -6,9 +6,9 @@ namespace LearnDirectX.src.Common.EngineSystem.Shaders.Structures
     [StructLayout(LayoutKind.Sequential)]
     public struct PerObject
     {
-        public Matrix4x4 WorldViewProjection; // change to ViewProjection
-        public Matrix4x4 World;
-        public Matrix4x4 WorldInverseTranspose;
+        public Matrix4x4 ViewProjection;
+        public Matrix4x4 Model;
+        public Matrix4x4 WorldInverseTransope;
 
         //internal void Transpose()
         //{

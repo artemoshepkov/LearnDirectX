@@ -24,57 +24,5 @@ namespace LearnDirectX.src.Common.EngineSystem
         {
             _shaderByteCode.Dispose();
         }
-
     }
-    //public sealed class Shader : IDisposable
-    //{
-    //    private VertexShader _vertexShader;
-    //    private PixelShader _pixelShader;
-
-    //    public readonly ShaderBytecode VertexShaderByteCode;
-    //    public readonly ShaderBytecode PixelShaderByteCode;
-    //    public readonly InputLayout InputLayout;
-
-    //    public Shader(ShaderBytecode vertexShaderByteCode, ShaderBytecode pixelShaderByteCode)
-    //    {
-    //        VertexShaderByteCode = vertexShaderByteCode;
-    //        PixelShaderByteCode = pixelShaderByteCode;
-
-    //        InputLayout = new InputLayout(
-    //            Window.Instance.Device,
-    //            ShaderSignature.GetInputSignature(VertexShaderByteCode),
-    //                new[]
-    //                {
-    //                    new InputElement("POSITION", 0, Format.R32G32B32A32_Float, 0, 0),
-    //                    new InputElement("NORMAL", 0, Format.R32G32B32A32_Float, Marshal.SizeOf<Vector3>(), 0),
-    //                    new InputElement("COLOR", 0, Format.R8G8B8A8_UNorm, Marshal.SizeOf<Vector3>() * 2, 0),
-    //                }
-    //            );
-    //    }
-
-    //    public void Initialize()
-    //    {
-    //        var device = Window.Instance.Device;
-    //        _vertexShader = new VertexShader(device, VertexShaderByteCode);
-    //        _pixelShader = new PixelShader(device, PixelShaderByteCode);
-    //    }
-
-    //    public void Use()
-    //    {
-    //        var context = Window.Instance.Device.ImmediateContext;
-    //        if (context == null)
-    //        {
-    //            return;
-    //        }
-
-    //        context.VertexShader.Set(_vertexShader);
-    //        context.PixelShader.Set(_pixelShader);
-    //    }
-
-    //    public void Dispose()
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-
-    //}
 }

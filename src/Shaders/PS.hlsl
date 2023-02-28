@@ -3,14 +3,14 @@
     float4 position : SV_POSITION;
     float4 color : COLOR;
     
-    float3 worldPosition : WORLDPOS;
-    float3 worldNormal : NORMAL;
+    float4 fragPosition : FRAGPOS;
+    float3 normal : NORMAL;
 };
 
 struct DirectionalLight
 {
-    float4 Color;
-    float3 Direction;
+    float4 color;
+    float3 direction;
 };
 
 cbuffer PerFrame : register(b1)
@@ -19,35 +19,18 @@ cbuffer PerFrame : register(b1)
     DirectionalLight Light;
 };
 
-cbuffer PerMaterial : register(b2)
-{
-    float4 Ambient;
-    float4 Diffuse;
-    float4 Specular;
-    float Shininess;
-};
-
-float3 Lambert(float4 pixelDiffuse, float3 normal, float3 toLight)
-{
-    float3 diffuseAmount = saturate(dot(normal, toLight));
-    
-    return pixelDiffuse.rgb * diffuseAmount;
-}
-
 float4 PSMain(PixelShaderInput pixel) : SV_Target
-{
-    //float3 normal = normalize(pixel.worldNormal);
-    //float3 toCamera = normalize(CameraPosition - pixel.worldPosition);
-    //float3 toLight = normalize(-Light.Direction);
+{    
+    float3 normal = normalize(pixel.normal);
+    float3 lightDir = normalize(-Light.direction);
     
-    //float4 sample = (float4) 1.0f;
+    float ambientStrength = 0.4;
+    float3 ambient = ambientStrength * Light.color;
     
-    //float3 diffuse = Lambert(pixel.color, normal, toLight);
-    //float3 color = (saturate(Ambient + Diffuse) * sample.rgb) * Light.Color.rgb;
+    float diff = max(dot(normal, lightDir), 0);
+    float3 diffuse = diff * Light.color;
     
-    //float alpha = pixel.color.a + sample.a;
+    float3 result = (ambient + diffuse) * pixel.color.xyz;
     
-    //return float4(color, alpha);
-    
-    return pixel.color;
+    return float4(result, 1);
 };
