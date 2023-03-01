@@ -11,10 +11,15 @@ namespace LearnDirectX.src.Common.EngineSystem.Input
         private Mouse _mouse;
         private MouseState _mouseState;
 
-        public static Vector3 MousePos => 
+        public static Vector2 MousePos => 
             Instance._mouseState != null 
-            ? new Vector3(Instance._mouseState.X, Instance._mouseState.Y, Instance._mouseState.Z) 
-            : new Vector3();
+            ? new Vector2(Instance._mouseState.X, Instance._mouseState.Y) 
+            : new Vector2();
+
+        public static int MouseWheelAxis => 
+            Instance._mouseState != null 
+                ? Instance._mouseState.Z
+                : 0;
 
         private MouseInput() { }
 
@@ -43,7 +48,6 @@ namespace LearnDirectX.src.Common.EngineSystem.Input
 
             try
             {
-
                 _mouse.Acquire();
             }
             catch

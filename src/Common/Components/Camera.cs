@@ -1,4 +1,6 @@
-﻿using SharpDX.DirectWrite;
+﻿using DevExpress.Data.Linq.Helpers;
+using LearnDirectX.src.Common.Extensions;
+using SharpDX.DirectWrite;
 using System;
 using System.Data;
 using System.Numerics;
@@ -7,14 +9,46 @@ namespace LearnDirectX.src.Common.Components
 {
     public class Camera : Component
     {
-        public float Yaw { get; set; } = -90f;
-        public float Pitch { get; set; } = 0f;
+
+        private float _fov = 60f;
+        private float _pitch = 0f;
+
+        public readonly float MinFov = 30f;
+        public readonly float MaxFov = 120f;
+
+        public readonly float MinPitch = -90f;
+        public readonly float MaxPitch = 90f;
+
         public Vector3 Front { get; private set; }
         public Vector3 Right { get; private set; }
         public Vector3 Up { get; private set; }
         public float AspectRatio { get; set; } = 1f;
+        public float Yaw { get; set; } = 90f;
+        public float Pitch
+        {
+            get
+            {
+                return _pitch;
+            }
+            set
+            {
+                _pitch = value;
+                _pitch = _pitch.Clamp(MinPitch, MaxPitch);
+            }
+        }
+        public float Fov 
+        {
+            get
+            {
+                return _fov;
+            }
+            set
+            {
+                _fov = value;
+                _fov = _fov.Clamp(MinFov, MaxFov);
+            }
+        }
 
-        public float Fov { get; private set; } = 60f;
         public Camera()
         {
         }
@@ -30,9 +64,9 @@ namespace LearnDirectX.src.Common.Components
         public void UpdateVectors()
         {
             Vector3 front = new Vector3();
-            front.X = (float)(Math.Cos(ConvertToRadians(Yaw)) * Math.Cos(ConvertToRadians(Pitch)));
-            front.Y = (float)Math.Sin(ConvertToRadians(Pitch));
-            front.Z = (float)(Math.Sin(ConvertToRadians(Yaw)) * Math.Cos(ConvertToRadians(Pitch)));
+            front.X = (float)(Math.Cos(Yaw.ConvertToRadians()) * Math.Cos(Pitch.ConvertToRadians()));
+            front.Y = (float)Math.Sin(Pitch.ConvertToRadians());
+            front.Z = (float)(Math.Sin(Yaw.ConvertToRadians()) * Math.Cos(Pitch.ConvertToRadians()));
 
             Front = Vector3.Normalize(front);
             Right = Vector3.Normalize(Vector3.Cross(Front, Vector3.UnitY));
@@ -47,12 +81,7 @@ namespace LearnDirectX.src.Common.Components
 
         public Matrix4x4 GetProjectionMatrix()
         {
-            return Matrix4x4.CreatePerspectiveFieldOfView((float)ConvertToRadians(Fov), AspectRatio, 0.01f, 1000f); ;
-        }
-
-        private double ConvertToRadians(float angle)
-        {
-            return (Math.PI / 180) * angle;
+            return Matrix4x4.CreatePerspectiveFieldOfView(Fov.ConvertToRadians(), AspectRatio, 0.01f, 1000f); ;
         }
     }
 }

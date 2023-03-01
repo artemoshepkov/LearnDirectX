@@ -142,7 +142,7 @@ namespace LearnDirectX.src
         {
             var gObj = new GameObject();
 
-            gObj.AddComponent(new Transform(new Vector3(0f, 3f, 10f)));
+            gObj.AddComponent(new Transform(new Vector3(0f, 2f, -5f)));
             gObj.AddComponent(new Camera());
             gObj.AddComponent(new CameraController());
 

@@ -84,6 +84,7 @@
     <Compile Include="src\Common\Components\ObjectMaterial.cs" />
     <Compile Include="src\Common\EngineSystem\SceneRenderer.cs" />
     <Compile Include="src\Common\EngineSystem\Shaders\Structures\Material.cs" />
+    <Compile Include="src\Common\Extensions\MathExtension.cs" />
     <Compile Include="src\View\Form.cs">
       <SubType>Form</SubType>
     </Compile>

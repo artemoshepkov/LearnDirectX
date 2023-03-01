@@ -20,7 +20,8 @@ namespace LearnDirectX.src.Common.Components
         };
 
         private float _speed = 0.01f;
-        private float mouseSensitivity = 1f;
+        private float _mouseSensitivity = 1f;
+        private float _fovSensitivity = 0.1f;
 
         public bool IsEnabled = true;
 
@@ -51,8 +52,10 @@ namespace LearnDirectX.src.Common.Components
                 }
             }
 
-            camera.Yaw += MouseInput.MousePos.X * mouseSensitivity * Profiler.DeltaTime;
-            camera.Pitch += -MouseInput.MousePos.Y * mouseSensitivity * Profiler.DeltaTime;
+            camera.Yaw += MouseInput.MousePos.X * _mouseSensitivity * Profiler.DeltaTime;
+            camera.Pitch += -MouseInput.MousePos.Y * _mouseSensitivity * Profiler.DeltaTime;
+
+            camera.Fov += (float)MouseInput.MouseWheelAxis * _fovSensitivity * Profiler.DeltaTime;
 
             camera.UpdateVectors();
         }
