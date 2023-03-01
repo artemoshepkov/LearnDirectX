@@ -8,6 +8,7 @@ namespace LearnDirectX.src.Common.EngineSystem
         private static KeyboardInput _instance;
 
         private Keyboard _keyBoard;
+        private KeyboardState _prevKeyboardState;
         private KeyboardState _keyBoardState;
 
         private KeyboardInput() { }
@@ -53,6 +54,11 @@ namespace LearnDirectX.src.Common.EngineSystem
 
         public static bool GetKeyDown(Key key)
         {
+            if (Instance._prevKeyboardState != null)
+            {
+                return GetKeyPressed(key) && !Instance._prevKeyboardState.PressedKeys.Contains(key);
+            }
+
             return GetKeyPressed(key);
         }
 
@@ -71,6 +77,7 @@ namespace LearnDirectX.src.Common.EngineSystem
         private bool ReadKeyBoard()
         {
             var resultCode = ResultCode.Ok;
+            _prevKeyboardState = _keyBoardState;
             _keyBoardState = new KeyboardState();
 
             try

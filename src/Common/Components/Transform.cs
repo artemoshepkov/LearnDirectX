@@ -20,21 +20,21 @@ namespace LearnDirectX.src.Common.Components
         {
             Position = position;
             Rotation = rotation;
-            Model = Matrix4x4.Identity * Matrix4x4.CreateTranslation(Position);
+            Model = Matrix4x4.Identity * Matrix4x4.CreateTranslation(Position) * Matrix4x4.CreateFromYawPitchRoll(Rotation.X, Rotation.Y, Rotation.Z);
         }
 
         public void Translate(Vector3 translation)
         {
             Position = translation;
 
-            Model = Matrix4x4.Identity * Matrix4x4.CreateTranslation(Position);
+            Model = Matrix4x4.CreateTranslation(Position) * Matrix4x4.CreateFromYawPitchRoll(Rotation.X, Rotation.Y, Rotation.Z);
         }
 
         public void Rotate(Vector3 rotation)
         {
             Rotation = rotation;
 
-            Model = Matrix4x4.Identity * Matrix4x4.CreateFromYawPitchRoll(Rotation.X, Rotation.Y, Rotation.Z);
+            Model = Matrix4x4.CreateTranslation(Position) * Matrix4x4.CreateFromYawPitchRoll(Rotation.X, Rotation.Y, Rotation.Z);
         }
     }
 }

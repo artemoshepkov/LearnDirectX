@@ -143,20 +143,5 @@ namespace LearnDirectX
         {
             LimitTextBoxInputOfDigits(sender, e);
         }
-
-        private void labelControl4_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelControl5_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void labelControl6_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }

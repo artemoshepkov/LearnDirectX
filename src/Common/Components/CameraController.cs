@@ -45,7 +45,7 @@ namespace LearnDirectX.src.Common.Components
 
             foreach (KeyValuePair<Key, Vector3> bind in _controlBinds)
             {
-                if (KeyboardInput.GetKeyDown(bind.Key))
+                if (KeyboardInput.GetKeyPressed(bind.Key))
                 {
                     transform.Position += (camera.Front * bind.Value.Z + camera.Right * bind.Value.X + camera.Up * bind.Value.Y) * _speed * Profiler.DeltaTime;
                 }
