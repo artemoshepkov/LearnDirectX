@@ -8,13 +8,6 @@ namespace LearnDirectX.src.Common.EngineSystem.Shaders.Structures
     {
         public Matrix4x4 ViewProjection;
         public Matrix4x4 Model;
-        public Matrix4x4 WorldInverseTransope;
-
-        //internal void Transpose()
-        //{
-        //    World = Matrix4x4.Transpose(World);
-        //    WorldInverseTranspose = Matrix4x4.Transpose(WorldInverseTranspose);
-        //    WorldViewProjection = Matrix4x4.Transpose(WorldViewProjection);
-        //}
+        public Matrix4x4 WorldInverseTranspose;
     }
 }

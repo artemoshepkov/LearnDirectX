@@ -18,7 +18,7 @@ cbuffer PerObject : register(b0)
 {
     float4x4 ViewProjection;
     float4x4 Model;
-    float4x4 WorldInverseTransope;
+    float4x4 WorldInverseTranspose;
 };
 
 cbuffer PerMaterial : register(b2)
@@ -36,8 +36,8 @@ PixelShaderInput VSMain(VertexShaderInput input)
     output.position = mul(mul(ViewProjection, Model), float4(input.position, 1));
     output.color = input.color;
     
-    output.fragPosition = mul(float4(input.position, 1), Model);
-    output.normal = mul(input.normal, (float3x3) WorldInverseTransope);
+    output.fragPosition = mul(Model, float4(input.position, 1));
+    output.normal = mul((float3x3) WorldInverseTranspose, input.normal);
     
     return output;        
 }

@@ -1,7 +1,5 @@
 ﻿using LearnDirectX.src.Common.Components;
 using LearnDirectX.src.Common.EngineSystem;
-using LearnDirectX.src.Common.EngineSystem.Rendering;
-using LearnDirectX.src.Common.EngineSystem.Shaders;
 using SharpDX.D3DCompiler;
 using System;
 using System.Collections.Generic;
@@ -11,10 +9,6 @@ using VertexShader = LearnDirectX.src.Common.EngineSystem.Shaders.VertexShader;
 using PixelShader = LearnDirectX.src.Common.EngineSystem.Shaders.PixelShader;
 
 using SharpDX.Direct3D11;
-using System.IO;
-using SharpDX.Direct3D;
-using System.Runtime.Remoting.Contexts;
-using System.Linq;
 using LearnDirectX.src.Common;
 
 namespace LearnDirectX.src
@@ -34,8 +28,6 @@ namespace LearnDirectX.src
                 { Key.Escape, Window.Exit },
                 { Key.R, () => { Window.ChangeCursorMode(); Engine.SwitchCameraOnOff(); } },
                 { Key.F, SetPoligonMode },
-                //{ Key.T, Engine.GAME1 },
-                //{ Key.Y, Engine.GAME2 },
             };
 
             Engine.AddScene(InitializeScene());
@@ -94,8 +86,8 @@ namespace LearnDirectX.src
             gObj = new GameObject();
 
             gObj.Name = "gObj1";
-            gObj.AddComponent(new Transform(new Vector3(0f, 1f, 0f)));
-            gObj.AddComponent(CubeMeshGenerator.GenerateMesh(4f, 8));
+            gObj.AddComponent(new Transform(new Vector3(0f, 0f, 0f)));
+            gObj.AddComponent(CubeMeshGenerator.GenerateMesh(2f, 8));
             gObj.AddComponent(new MeshRenderer(shadersObjects));
             gObj.GetComponent<MeshRenderer>().Initialize();
 
@@ -105,9 +97,9 @@ namespace LearnDirectX.src
 
             #region Add light
 
-            //gObj = new GameObject();
-            //gObj.AddComponent(new DirectLight() { Color = new Vector4(1f), Direction = new Vector3(-0.2f, -1.0f, -0.3f) });
-            //scene.AddLight(gObj);
+            gObj = new GameObject();
+            gObj.AddComponent(new DirectLight() { Color = new Vector4(1f), Direction = new Vector3(-0.2f, -1.0f, -0.3f) });
+            scene.AddLight(gObj);
 
             #endregion
 

@@ -6,6 +6,7 @@ using LearnDirectX.src.Common.EngineSystem.Shaders.Structures.Lights;
 using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
+using System.Linq;
 using System.Numerics;
 using Buffer = SharpDX.Direct3D11.Buffer;
 
@@ -88,10 +89,15 @@ namespace LearnDirectX.src.Common.Components
             var View = context.CameraContext.Camera.GetViewMatrix();
             var Projection = context.CameraContext.Camera.GetProjectionMatrix();
 
+            Matrix4x4 InverseTransposeModel;
+            Matrix4x4.Invert(Model, out InverseTransposeModel);
+            InverseTransposeModel = Matrix4x4.Transpose(InverseTransposeModel);
+
             var perObject = new PerObject()
             {
                 ViewProjection = Matrix4x4.Multiply(View, Projection),
                 Model = Model,
+                WorldInverseTranspose = InverseTransposeModel,
             };
 
             _perObjectBuffer.UpdateValue(perObject);
@@ -101,19 +107,19 @@ namespace LearnDirectX.src.Common.Components
 
             #region Load PerFrame
 
-            //var light = context.Lights.First().GetComponent<DirectLight>();
+            var light = context.Lights.First().GetComponent<DirectLight>();
 
-            //var perFrame = new PerFrame()
-            //{
-            //    CameraPosition = context.CameraContext.Transform.Position,
-            //    Light = new DirectionalLight()
-            //    {
-            //        Color = light.Color,
-            //        Direction = light.Direction,
-            //    },
-            //};
+            var perFrame = new PerFrame()
+            {
+                CameraPosition = context.CameraContext.Transform.Position,
+                Light = new DirectionalLight()
+                {
+                    Color = light.Color,
+                    Direction = light.Direction,
+                },
+            };
 
-            //_perFrameBuffer.UpdateValue(perFrame);
+            _perFrameBuffer.UpdateValue(perFrame);
 
             #endregion
 
