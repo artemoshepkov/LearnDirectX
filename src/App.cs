@@ -87,7 +87,7 @@ namespace LearnDirectX.src
 
             gObj.Name = "gObj1";
             gObj.AddComponent(new Transform(new Vector3(0f, 0f, 0f)));
-            gObj.AddComponent(CubeMeshGenerator.GenerateMesh(2f, 8));
+            gObj.AddComponent(CubeMeshGenerator.GenerateMesh(3f, 8));
             gObj.AddComponent(new MeshRenderer(shadersObjects));
             gObj.GetComponent<MeshRenderer>().Initialize();
 
@@ -97,8 +97,18 @@ namespace LearnDirectX.src
 
             #region Add light
 
+            //gObj = new GameObject();
+            //gObj.AddComponent(new DirectLight() { Color = new Vector4(1f), Direction = new Vector3(0f, -1f, 0f) });
+            //scene.AddLight(gObj);
+
             gObj = new GameObject();
-            gObj.AddComponent(new DirectLight() { Color = new Vector4(1f), Direction = new Vector3(-0.2f, -1.0f, -0.3f) });
+            gObj.AddComponent(new Transform(new Vector3(0f, 2f, 0f)));
+            gObj.AddComponent(
+                new PointLight() 
+                { 
+                    Color = new Vector4(1f),
+                    Attenuation = new Common.EngineSystem.Shaders.Structures.Lights.Attenuation(1f, 0.7f, 1.8f)
+                });
             scene.AddLight(gObj);
 
             #endregion

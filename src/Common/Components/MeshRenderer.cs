@@ -107,15 +107,24 @@ namespace LearnDirectX.src.Common.Components
 
             #region Load PerFrame
 
-            var light = context.Lights.First().GetComponent<DirectLight>();
+            //var directLight = context.Lights.First().GetComponent<DirectLight>();
+
+            var pointLight= context.Lights.First().GetComponent<PointLight>();
+            var pointLightPosition = context.Lights.First().GetComponent<Transform>().Position;
 
             var perFrame = new PerFrame()
             {
                 CameraPosition = context.CameraContext.Transform.Position,
-                Light = new DirectionalLight()
+                //DirectLight = new DirectionalLight()
+                //{
+                //    Color = light.Color,
+                //    Direction = light.Direction,
+                //},
+                PointLight = new EngineSystem.Shaders.Structures.Lights.PointLight()
                 {
-                    Color = light.Color,
-                    Direction = light.Direction,
+                    Color = pointLight.Color,
+                    Position = pointLightPosition,
+                    Attenuation = pointLight.Attenuation,
                 },
             };
 

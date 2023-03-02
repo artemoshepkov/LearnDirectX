@@ -9,6 +9,7 @@ namespace LearnDirectX.src.Common.EngineSystem.Shaders.Structures
     {
         public Vector3 CameraPosition;
         private float _padding0;
-        public DirectionalLight Light;
+        public DirectionalLight DirectLight;
+        public PointLight PointLight;
     }
 }

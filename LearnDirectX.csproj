@@ -85,8 +85,11 @@
   <ItemGroup>
     <Compile Include="src\Common\Components\DirectLight.cs" />
     <Compile Include="src\Common\Components\ObjectMaterial.cs" />
+    <Compile Include="src\Common\Components\PointLight.cs" />
     <Compile Include="src\Common\CubeMeshGenerator.cs" />
     <Compile Include="src\Common\EngineSystem\SceneRenderer.cs" />
+    <Compile Include="src\Common\EngineSystem\Shaders\Structures\Lights\Attenuation.cs" />
+    <Compile Include="src\Common\EngineSystem\Shaders\Structures\Lights\PointLight.cs" />
     <Compile Include="src\Common\EngineSystem\Shaders\Structures\Material.cs" />
     <Compile Include="src\Common\Extensions\MathExtension.cs" />
     <Compile Include="src\View\Form.cs">
