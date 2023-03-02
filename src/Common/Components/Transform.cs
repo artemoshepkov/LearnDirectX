@@ -12,7 +12,6 @@ namespace LearnDirectX.src.Common.Components
         public Vector3 Position { get; set; }
         public Vector3 Rotation { get; set; }
 
-
         public Transform() { }
 
         public Transform(Vector3 position)
@@ -24,7 +23,11 @@ namespace LearnDirectX.src.Common.Components
         {
             Position = position;
             Rotation = rotation;
-            Model = Matrix4x4.Identity * Matrix4x4.CreateTranslation(Position) * Matrix4x4.CreateFromYawPitchRoll(Rotation.X, Rotation.Y, Rotation.Z);
+
+            RotationMat = Matrix4x4.CreateFromYawPitchRoll(Rotation.Y.ConvertToRadians(), Rotation.X.ConvertToRadians(), Rotation.Z.ConvertToRadians());
+            TranslationMat = Matrix4x4.CreateTranslation(Position);
+
+            UpdateModel();
         }
 
         public void Translate(Vector3 translation)
@@ -33,7 +36,7 @@ namespace LearnDirectX.src.Common.Components
 
             TranslationMat = Matrix4x4.CreateTranslation(Position);
 
-            Model = RotationMat * TranslationMat;
+            UpdateModel();
         }
 
         public void Rotate(Vector3 rotation)
@@ -42,7 +45,9 @@ namespace LearnDirectX.src.Common.Components
 
             RotationMat = Matrix4x4.CreateFromYawPitchRoll(Rotation.Y.ConvertToRadians(), Rotation.X.ConvertToRadians(), Rotation.Z.ConvertToRadians());
 
-            Model = RotationMat * TranslationMat;
+            UpdateModel();
         }
+
+        private void UpdateModel() => Model = Matrix4x4.Multiply(RotationMat, TranslationMat);
     }
 }

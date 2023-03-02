@@ -21,14 +21,17 @@ cbuffer PerFrame : register(b1)
 
 float4 PSMain(PixelShaderInput pixel) : SV_Target
 {    
+    float3 dir = float3(0, 10, 0);
+    float3 color = float3(1, 1, 1);
+    
     float3 normal = normalize(pixel.normal);
-    float3 lightDir = normalize(-Light.direction);
+    float3 lightDir = normalize(-dir);
     
     float ambientStrength = 0.4;
-    float3 ambient = ambientStrength * Light.color;
+    float3 ambient = ambientStrength * color;
     
     float diff = max(dot(normal, lightDir), 0);
-    float3 diffuse = diff * Light.color;
+    float3 diffuse = diff * color;
     
     float3 result = (ambient + diffuse) * pixel.color.xyz;
     

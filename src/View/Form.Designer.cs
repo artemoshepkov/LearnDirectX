@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.SidePanelGameObjects = new DevExpress.XtraEditors.SidePanel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.RotationZ = new System.Windows.Forms.TextBox();
             this.RotationY = new System.Windows.Forms.TextBox();
             this.RotationX = new System.Windows.Forms.TextBox();
@@ -42,8 +44,6 @@
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.GameObjectList = new System.Windows.Forms.ListBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.SidePanelGameObjects.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -70,6 +70,24 @@
             this.SidePanelGameObjects.Size = new System.Drawing.Size(183, 465);
             this.SidePanelGameObjects.TabIndex = 0;
             this.SidePanelGameObjects.Text = "RotationX";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(54, 242);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(48, 13);
+            this.label2.TabIndex = 17;
+            this.label2.Text = "Rotation";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(54, 180);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(44, 13);
+            this.label1.TabIndex = 16;
+            this.label1.Text = "Position";
             // 
             // RotationZ
             // 
@@ -182,24 +200,6 @@
             this.GameObjectList.TabIndex = 0;
             this.GameObjectList.SelectedIndexChanged += new System.EventHandler(this.GameObjectList_SelectedIndexChanged);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(54, 180);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(44, 13);
-            this.label1.TabIndex = 16;
-            this.label1.Text = "Position";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(54, 242);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(48, 13);
-            this.label2.TabIndex = 17;
-            this.label2.Text = "Rotation";
-            // 
             // Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -208,6 +208,7 @@
             this.Controls.Add(this.SidePanelGameObjects);
             this.Name = "Form";
             this.Text = "Form";
+            this.MouseEnter += new System.EventHandler(this.Form_MouseEnter);
             this.SidePanelGameObjects.ResumeLayout(false);
             this.SidePanelGameObjects.PerformLayout();
             this.ResumeLayout(false);

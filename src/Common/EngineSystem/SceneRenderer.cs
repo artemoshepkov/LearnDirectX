@@ -1,5 +1,6 @@
 ﻿using LearnDirectX.src.Common.Components;
 using LearnDirectX.src.Common.EngineSystem.Rendering;
+using System;
 
 namespace LearnDirectX.src.Common.EngineSystem
 {

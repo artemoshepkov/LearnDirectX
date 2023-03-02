@@ -6,8 +6,6 @@ using LearnDirectX.src.Common.EngineSystem.Shaders.Structures.Lights;
 using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
-using System;
-using System.Linq;
 using System.Numerics;
 using Buffer = SharpDX.Direct3D11.Buffer;
 
@@ -67,10 +65,6 @@ namespace LearnDirectX.src.Common.Components
 
             _perObjectBuffer = new ConstantBuffer<PerObject>();
             _perFrameBuffer = new ConstantBuffer<PerFrame>();
-
-            Window.Instance.Device.ImmediateContext.VertexShader.SetConstantBuffer(0, _perObjectBuffer.Buffer);
-
-            Window.Instance.Device.ImmediateContext.PixelShader.SetConstantBuffer(1, _perFrameBuffer.Buffer);
         }
 
         public void Render(RendererContext context)
@@ -81,6 +75,8 @@ namespace LearnDirectX.src.Common.Components
             {
                 shader.Use();
             }
+            immediateContext.VertexShader.SetConstantBuffer(0, _perObjectBuffer.Buffer);
+            immediateContext.PixelShader.SetConstantBuffer(1, _perFrameBuffer.Buffer);
 
             immediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
             immediateContext.InputAssembler.SetIndexBuffer(_indexBuffer, SharpDX.DXGI.Format.R16_UInt, 0);
@@ -105,19 +101,19 @@ namespace LearnDirectX.src.Common.Components
 
             #region Load PerFrame
 
-            var light = context.Lights.First().GetComponent<DirectLight>();
+            //var light = context.Lights.First().GetComponent<DirectLight>();
 
-            var perFrame = new PerFrame()
-            {
-                CameraPosition = context.CameraContext.Transform.Position,
-                Light = new DirectionalLight()
-                {
-                    Color = light.Color,
-                    Direction = light.Direction,
-                },
-            };
+            //var perFrame = new PerFrame()
+            //{
+            //    CameraPosition = context.CameraContext.Transform.Position,
+            //    Light = new DirectionalLight()
+            //    {
+            //        Color = light.Color,
+            //        Direction = light.Direction,
+            //    },
+            //};
 
-            _perFrameBuffer.UpdateValue(perFrame);
+            //_perFrameBuffer.UpdateValue(perFrame);
 
             #endregion
 

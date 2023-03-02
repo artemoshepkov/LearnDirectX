@@ -45,6 +45,8 @@ namespace LearnDirectX.src.Common.EngineSystem
         public static int Width { get => Instance._renderForm.Width; }
         public static int Height { get => Instance._renderForm.Height; }
 
+        public static bool IsCursorHide { get; private set; }
+
         public Form RenderForm { get => Instance._renderForm; }
         public Device1 Device { get; private set; }
 
@@ -101,6 +103,9 @@ namespace LearnDirectX.src.Common.EngineSystem
             Instance.Device.ImmediateContext.Rasterizer.SetViewport(0, 0, Width, Height, 0f, 1f);
             Instance.Device.ImmediateContext.OutputMerger.SetTargets(Instance._depthView, Instance._renderTargetView);
 
+            IsCursorHide = false;
+            ChangeCursorMode();
+
             Engine.AddEventUpdate(Update); // Create another class for event
         }
 
@@ -134,8 +139,8 @@ namespace LearnDirectX.src.Common.EngineSystem
 
         public static void ChangeCursorMode()
         {
-            //Instance._renderForm.Cursor.Hide() = true;
-            Console.WriteLine("Change cursor mode");
+            IsCursorHide = !IsCursorHide;
+            Instance._renderForm.HideCursor(IsCursorHide);
         }
 
         public static void Exit()

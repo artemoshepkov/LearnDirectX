@@ -1,4 +1,5 @@
 ﻿using DevExpress.XtraEditors.Internal;
+using LearnDirectX.src.Common.Components;
 using SharpDX.Windows;
 using System;
 using System.Collections.Generic;
@@ -94,6 +95,12 @@ namespace LearnDirectX.src.Common.EngineSystem
         public static void AddEventSceneChanged(Action sceneChangedEvent) =>
             Instance._selectedSceneChanged += sceneChangedEvent;
 
+        public static void SwitchCameraOnOff()
+        {
+            var cameraContoller = Instance._selectedScene.Camera.GetComponent<CameraController>();
+
+            cameraContoller.IsEnabled = !cameraContoller.IsEnabled;
+        }
 
         #endregion
 

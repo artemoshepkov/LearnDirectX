@@ -14,6 +14,8 @@ using SharpDX.Direct3D11;
 using System.IO;
 using SharpDX.Direct3D;
 using System.Runtime.Remoting.Contexts;
+using System.Linq;
+using LearnDirectX.src.Common;
 
 namespace LearnDirectX.src
 {
@@ -30,8 +32,10 @@ namespace LearnDirectX.src
             _controlBinds = new Dictionary<Key, Action>()
             {
                 { Key.Escape, Window.Exit },
-                { Key.R, Window.ChangeCursorMode },
+                { Key.R, () => { Window.ChangeCursorMode(); Engine.SwitchCameraOnOff(); } },
                 { Key.F, SetPoligonMode },
+                //{ Key.T, Engine.GAME1 },
+                //{ Key.Y, Engine.GAME2 },
             };
 
             Engine.AddScene(InitializeScene());
@@ -75,49 +79,23 @@ namespace LearnDirectX.src
 
             string ShadersPath = "../../src/Shaders/";
 
-            var shadersObjects = new Shader[]
-            {
-                new VertexShader(ShaderBytecode.CompileFromFile($"{ShadersPath}VS.hlsl", "VSMain", "vs_5_0")),
-                new PixelShader(ShaderBytecode.CompileFromFile($"{ShadersPath}PS.hlsl", "PSMain", "ps_5_0")),
-            };
+            Shader[] shadersObjects;
 
             GameObject gObj;
 
             #region Add cube
 
+            shadersObjects = new Shader[]
+            {
+                new VertexShader(ShaderBytecode.CompileFromFile($"{ShadersPath}VS.hlsl", "VSMain", "vs_5_0")),
+                new PixelShader(ShaderBytecode.CompileFromFile($"{ShadersPath}PS.hlsl", "PSMain", "ps_5_0")),
+            };
+
             gObj = new GameObject();
 
-            gObj.AddComponent(new Transform(new Vector3(0f, 0f, 0f)));
-            gObj.AddComponent(
-                new Mesh(
-                new Vertex[]
-                {
-                    new Vertex(new Vector3(-0.5f, 0.5f, -0.5f), new Vector3(0.5f, 0f, 0f)),  // 0-Top-left
-                    new Vertex(new Vector3(0.5f, 0.5f, -0.5f),  new Vector3(0.5f, 0f, 0f)),  // 1-Top-right
-                    new Vertex(new Vector3(0.5f, -0.5f, -0.5f),  new Vector3(0.5f, 0f, 0f)), // 2-Base-right
-                    new Vertex(new Vector3(-0.5f, -0.5f, -0.5f), new Vector3(0.5f, 0f, 0f)), // 3-Base-left
-
-                    new Vertex(new Vector3(-0.5f, 0.5f, 0.5f),  new Vector3(0.5f, 0f, 0f)),  // 4-Top-left
-                    new Vertex(new Vector3(0.5f, 0.5f, 0.5f),   new Vector3(0.5f, 0f, 0f)),  // 5-Top-right
-                    new Vertex(new Vector3(0.5f, -0.5f, 0.5f),  new Vector3(0.5f, 0f, 0f)),  // 6-Base-right
-                    new Vertex(new Vector3(-0.5f, -0.5f, 0.5f), new Vector3(0.5f, 0f, 0f)),
-                },
-                new ushort[]
-                {
-                    0, 1, 2, // Front A
-                    0, 2, 3, // Front B
-                    1, 5, 6, // Right A
-                    1, 6, 2, // Right B
-                    1, 0, 4, // Top A
-                    1, 4, 5, // Top B
-                    5, 4, 7, // Back A
-                    5, 7, 6, // Back B
-                    4, 0, 3, // Left A
-                    4, 3, 7, // Left B
-                    3, 2, 6, // Bottom A
-                    3, 6, 7, // Bottom B
-                }));
-
+            gObj.Name = "gObj1";
+            gObj.AddComponent(new Transform(new Vector3(0f, 1f, 0f)));
+            gObj.AddComponent(CubeMeshGenerator.GenerateMesh(4f, 8));
             gObj.AddComponent(new MeshRenderer(shadersObjects));
             gObj.GetComponent<MeshRenderer>().Initialize();
 
@@ -127,9 +105,9 @@ namespace LearnDirectX.src
 
             #region Add light
 
-            gObj = new GameObject();
-            gObj.AddComponent(new DirectLight() { Color = new Vector4(1f), Direction = new Vector3(-0.2f, -1.0f, -0.3f) });
-            scene.AddLight(gObj);
+            //gObj = new GameObject();
+            //gObj.AddComponent(new DirectLight() { Color = new Vector4(1f), Direction = new Vector3(-0.2f, -1.0f, -0.3f) });
+            //scene.AddLight(gObj);
 
             #endregion
 

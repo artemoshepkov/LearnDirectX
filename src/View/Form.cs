@@ -1,14 +1,11 @@
-﻿using DevExpress.XtraEditors;
+﻿using DevExpress.Utils.Drawing.Helpers;
+using DevExpress.XtraEditors;
 using LearnDirectX.src.Common.Components;
 using LearnDirectX.src.Common.EngineSystem;
+using SharpDX.RawInput;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LearnDirectX
@@ -19,11 +16,35 @@ namespace LearnDirectX
 
         private GameObject _selectedGameObject;
 
+        public bool IsCursorHide { get; set; }
+
         public Form()
         {
             InitializeComponent();
 
             Engine.AddEventSceneChanged(SetScene);
+        }
+
+        public void HideCursor(bool isHide)
+        {
+            IsCursorHide = isHide;
+
+            if (IsCursorHide)
+            {
+                Cursor.Hide();
+                Cursor.Clip = Bounds;
+            }
+            else
+            {
+                Cursor.Show();
+                Cursor.Clip = Rectangle.Empty;
+            }
+        }
+            
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
         }
 
         private void SetScene()
@@ -42,6 +63,18 @@ namespace LearnDirectX
 
             GameObjectList.SelectedIndex = 0;
 
+            LoadTransformSelectedObjectToGUI();
+        }
+
+        private void GameObjectList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _selectedGameObject = _selectedScene.GameObjects[GameObjectList.SelectedIndex];
+
+            LoadTransformSelectedObjectToGUI();
+        }
+
+        private void LoadTransformSelectedObjectToGUI()
+        {
             var transform = _selectedGameObject.GetComponent<Transform>();
 
             TransformX.Text = transform.Position.X.ToString();
@@ -51,11 +84,14 @@ namespace LearnDirectX
             RotationX.Text = transform.Rotation.X.ToString();
             RotationY.Text = transform.Rotation.Y.ToString();
             RotationZ.Text = transform.Rotation.Z.ToString();
+
         }
 
-        private void GameObjectList_SelectedIndexChanged(object sender, EventArgs e)
-        {
 
+        private void Form_MouseEnter(object sender, EventArgs e)
+        {
+            if (IsCursorHide)
+                Cursor.Clip = Bounds;
         }
 
         private void TransformX_KeyPress(object sender, KeyPressEventArgs e)
@@ -112,7 +148,6 @@ namespace LearnDirectX
 
             transform.Rotate(new System.Numerics.Vector3(float.Parse(textBox.Text), transform.Rotation.Y, transform.Rotation.Z));
         }
-
         private void RotationY_TextChanged(object sender, EventArgs e)
         {
             var textBox = (TextBox)sender;
@@ -121,7 +156,6 @@ namespace LearnDirectX
 
             transform.Rotate(new System.Numerics.Vector3(transform.Rotation.X, float.Parse(textBox.Text), transform.Rotation.Z));
         }
-
         private void RotationZ_TextChanged(object sender, EventArgs e)
         {
             var textBox = (TextBox)sender;
@@ -143,5 +177,6 @@ namespace LearnDirectX
         {
             LimitTextBoxInputOfDigits(sender, e);
         }
+
     }
 }
