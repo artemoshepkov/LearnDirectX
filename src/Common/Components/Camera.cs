@@ -81,7 +81,7 @@ namespace LearnDirectX.src.Common.Components
 
         public Matrix4x4 GetProjectionMatrix()
         {
-            return Matrix4x4.CreatePerspectiveFieldOfView(Fov.ConvertToRadians(), AspectRatio, 0.01f, 1000f); ;
+            return Matrix4x4.CreatePerspectiveFieldOfView(Fov.ConvertToRadians(), AspectRatio, 0.1f, 1000f); ;
         }
     }
 }

@@ -6,6 +6,7 @@ using LearnDirectX.src.Common.EngineSystem.Shaders.Structures.Lights;
 using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Buffer = SharpDX.Direct3D11.Buffer;
@@ -24,6 +25,7 @@ namespace LearnDirectX.src.Common.Components
 
         private ConstantBuffer<PerObject> _perObjectBuffer;
         private ConstantBuffer<PerFrame> _perFrameBuffer;
+
 
         #endregion
 
@@ -109,8 +111,27 @@ namespace LearnDirectX.src.Common.Components
 
             //var directLight = context.Lights.First().GetComponent<DirectLight>();
 
-            var pointLight= context.Lights.First().GetComponent<PointLight>();
-            var pointLightPosition = context.Lights.First().GetComponent<Transform>().Position;
+
+            var pointLights = new List<EngineSystem.Shaders.Structures.Lights.PointLight>();
+
+            foreach (var light in context.Lights)
+            {
+                var pointLight = light.GetComponent<PointLight>();
+
+                if (pointLight!= null)
+                {
+                    var pointLightPosition = pointLight.Owner.GetComponent<Transform>().Position;
+                    
+                    pointLights.Add(
+                        new EngineSystem.Shaders.Structures.Lights.PointLight()
+                        {
+                            Color = pointLight.Color,
+                            Position = pointLightPosition,
+                            Attenuation = pointLight.Attenuation,
+                        });
+                }
+
+            }
 
             var perFrame = new PerFrame()
             {
@@ -120,13 +141,8 @@ namespace LearnDirectX.src.Common.Components
                 //    Color = light.Color,
                 //    Direction = light.Direction,
                 //},
-                PointLight = new EngineSystem.Shaders.Structures.Lights.PointLight()
-                {
-                    Color = pointLight.Color,
-                    Position = pointLightPosition,
-                    Attenuation = pointLight.Attenuation,
-                },
-            };
+                PointLights = pointLights.ToArray(),
+        };
 
             _perFrameBuffer.UpdateValue(perFrame);
 

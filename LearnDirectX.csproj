@@ -67,9 +67,6 @@
     <Reference Include="SharpDX.DXGI, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <HintPath>packages\SharpDX.DXGI.4.2.0\lib\net45\SharpDX.DXGI.dll</HintPath>
     </Reference>
-    <Reference Include="SharpDX.RawInput, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>packages\SharpDX.RawInput.4.2.0\lib\net45\SharpDX.RawInput.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -84,13 +81,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\Common\Components\DirectLight.cs" />
+    <Compile Include="src\Common\Components\Light.cs" />
     <Compile Include="src\Common\Components\ObjectMaterial.cs" />
     <Compile Include="src\Common\Components\PointLight.cs" />
     <Compile Include="src\Common\CubeMeshGenerator.cs" />
+    <Compile Include="src\Common\EngineSystem\MeshLoader.cs" />
     <Compile Include="src\Common\EngineSystem\SceneRenderer.cs" />
+    <Compile Include="src\Common\EngineSystem\Shaders\Buffers\GBuffer.cs" />
     <Compile Include="src\Common\EngineSystem\Shaders\Structures\Lights\Attenuation.cs" />
     <Compile Include="src\Common\EngineSystem\Shaders\Structures\Lights\PointLight.cs" />
     <Compile Include="src\Common\EngineSystem\Shaders\Structures\Material.cs" />
+    <Compile Include="src\Common\Entity\Quad.cs" />
     <Compile Include="src\Common\Extensions\MathExtension.cs" />
     <Compile Include="src\View\Form.cs">
       <SubType>Form</SubType>

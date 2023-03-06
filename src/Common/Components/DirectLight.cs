@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Numerics;
 
 namespace LearnDirectX.src.Common.Components
 {
-    public class DirectLight : Component
+    public class DirectLight : Light
     {
-        public Vector4 Color;
         public Vector3 Direction;
 
         public DirectLight() { }

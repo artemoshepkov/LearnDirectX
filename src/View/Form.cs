@@ -1,8 +1,6 @@
-﻿using DevExpress.Utils.Drawing.Helpers;
-using DevExpress.XtraEditors;
+﻿using DevExpress.XtraEditors;
 using LearnDirectX.src.Common.Components;
 using LearnDirectX.src.Common.EngineSystem;
-using SharpDX.RawInput;
 using System;
 using System.Drawing;
 using System.Linq;

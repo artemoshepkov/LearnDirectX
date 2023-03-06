@@ -1,4 +1,6 @@
-﻿struct PixelShaderInput
+﻿#define NUM_POINT_LIGHTS 2
+
+struct PixelShaderInput
 {
     float4 position : SV_POSITION;
     float4 color : COLOR;
@@ -31,7 +33,7 @@ cbuffer PerFrame : register(b1)
 {
     float3 CameraPosition;
     DirectionalLight DirectLight;
-    PointLight DotLight;
+    PointLight DotLight[NUM_POINT_LIGHTS];
 };
 
 float3 CaclDirectLight(float3 normal, float3 viewDir, float3 pixelPosition, float3 pixelColor)
@@ -52,26 +54,26 @@ float3 CaclDirectLight(float3 normal, float3 viewDir, float3 pixelPosition, floa
     return (ambient + diffuse + specular) * pixelColor;
 }
 
-float3 CaclPointLight(float3 normal, float3 viewDir, float3 pixelPosition, float3 pixelColor)
+float3 CaclPointLight(PointLight light, float3 normal, float3 viewDir, float3 pixelPosition, float3 pixelColor)
 {
-    float constant = DotLight.attenuationCoefs.constant;
-    float linearc = DotLight.attenuationCoefs.linearC;
-    float quadratic = DotLight.attenuationCoefs.quadratic; 
+    float constant = light.attenuationCoefs.constant;
+    float linearc = light.attenuationCoefs.linearC;
+    float quadratic = light.attenuationCoefs.quadratic;
     
-    float3 lightDir = normalize(DotLight.position - pixelPosition);
+    float3 lightDir = normalize(light.position - pixelPosition);
     
     float ambientStrength = 0.3;
-    float3 ambient = DotLight.color.xyz * ambientStrength * pixelColor;
+    float3 ambient = light.color.xyz * ambientStrength * pixelColor;
     
     float diff = max(dot(normal, lightDir), 0);
-    float3 diffuse = diff * DotLight.color.xyz * pixelColor;
+    float3 diffuse = diff * light.color.xyz * pixelColor;
     
     float3 reflectDir = reflect(-lightDir, normal);
     float specularStrength = 0.5;
     float spec = pow(max(dot(viewDir, reflectDir), 0), 32);
-    float3 specular = specularStrength * spec * DotLight.color.xyz * pixelColor;
+    float3 specular = specularStrength * spec * light.color.xyz * pixelColor;
     
-    float dist = length(DotLight.position - pixelPosition);
+    float dist = length(light.position - pixelPosition);
     float attenuation = 1 / (constant + linearc * dist + quadratic * (dist * dist));
     
     return (ambient + diffuse + specular) * attenuation;
@@ -79,8 +81,14 @@ float3 CaclPointLight(float3 normal, float3 viewDir, float3 pixelPosition, float
 
 float4 PSMain(PixelShaderInput pixel) : SV_Target
 {    
-    float3 normal = normalize(pixel.normal);
-    float3 viewDir = normalize(CameraPosition - pixel.position.xyz);
+    //float3 normal = normalize(pixel.normal);
+    //float3 viewDir = normalize(CameraPosition - pixel.position.xyz);
     
-    return float4(CaclPointLight(normal, viewDir, pixel.fragPosition.xyz, pixel.color.xyz), 1);
+    //float3 result = float3(0, 0, 0);
+
+    //result += CaclPointLight(DotLight[0], normal, viewDir, pixel.fragPosition.xyz, pixel.color.xyz);
+    
+    //return float4(result, 1);
+    
+    return pixel.color;
 };

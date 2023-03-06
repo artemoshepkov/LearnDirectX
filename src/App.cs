@@ -21,6 +21,8 @@ namespace LearnDirectX.src
 
         public List<Scene> Scenes;
 
+        public static readonly int NUM_POINT_LIGHTS = 2;
+
         public App() 
         {
             _controlBinds = new Dictionary<Key, Action>()
@@ -43,12 +45,13 @@ namespace LearnDirectX.src
             {
                 rasterDesc = new RasterizerStateDescription()
                 {
-                    CullMode = CullMode.Back,
-                    FillMode = FillMode.Solid
+                    CullMode = CullMode.None,
+
                 };
             }
 
             rasterDesc.FillMode = isPoligon ? FillMode.Solid : FillMode.Wireframe;
+
 
             context.Rasterizer.State = new RasterizerState(context.Device, rasterDesc);
             isPoligon = !isPoligon;
@@ -85,9 +88,44 @@ namespace LearnDirectX.src
 
             gObj = new GameObject();
 
-            gObj.Name = "gObj1";
-            gObj.AddComponent(new Transform(new Vector3(0f, 0f, 0f)));
-            gObj.AddComponent(CubeMeshGenerator.GenerateMesh(3f, 8));
+            gObj.Name = "Surface";
+            gObj.AddComponent(new Transform(new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, 0f), new Vector3(0.005f, 0.005f, 0.005f)));
+            //gObj.AddComponent(CubeMeshGenerator.GenerateMesh(3f, 8));
+
+            var meshLoader = new MeshLoader();
+            var quads = meshLoader.ReadCornersFromFile("../../Assets/surface1.txt");
+
+            var vertexesSurface = new List<Common.EngineSystem.Shaders.Vertex>();
+            var indexes = new List<ushort>();
+
+            for (int i = 0; i < quads.Count; i++)
+            {
+                foreach (var point in quads[i].Points)
+                {
+                    vertexesSurface.Add(
+                        new Common.EngineSystem.Shaders.Vertex(
+                            point,
+                            new Vector4(1f, 0f, 0f, 1f)
+                        ));
+                }
+
+                indexes.Add((ushort)(4 * i));
+                indexes.Add((ushort)(4 * i + 1));
+                indexes.Add((ushort)(4 * i + 2));
+
+                indexes.Add((ushort)(4 * i));
+                indexes.Add((ushort)(4 * i + 2));
+                indexes.Add((ushort)(4 * i + 3));
+            }
+
+            gObj.AddComponent(
+                new Mesh() 
+                { 
+                    Vertexes = vertexesSurface.ToArray(),
+                    Indexes = indexes.ToArray(),
+                });
+
+
             gObj.AddComponent(new MeshRenderer(shadersObjects));
             gObj.GetComponent<MeshRenderer>().Initialize();
 
@@ -102,10 +140,21 @@ namespace LearnDirectX.src
             //scene.AddLight(gObj);
 
             gObj = new GameObject();
-            gObj.AddComponent(new Transform(new Vector3(0f, 2f, 0f)));
+            gObj.AddComponent(new Transform(new Vector3(2f, 2f, 0f)));
             gObj.AddComponent(
                 new PointLight() 
                 { 
+                    Color = new Vector4(1f),
+                    Attenuation = new Common.EngineSystem.Shaders.Structures.Lights.Attenuation(1f, 0.7f, 1.8f)
+                });
+            scene.AddLight(gObj);
+
+
+            gObj = new GameObject();
+            gObj.AddComponent(new Transform(new Vector3(-2f, 2f, 0f)));
+            gObj.AddComponent(
+                new PointLight()
+                {
                     Color = new Vector4(1f),
                     Attenuation = new Common.EngineSystem.Shaders.Structures.Lights.Attenuation(1f, 0.7f, 1.8f)
                 });
@@ -122,7 +171,7 @@ namespace LearnDirectX.src
         {
             var gObj = new GameObject();
 
-            gObj.AddComponent(new Transform(new Vector3(0f, 2f, -5f)));
+            gObj.AddComponent(new Transform(new Vector3(0f, 20f, 0f)));
             gObj.AddComponent(new Camera());
             gObj.AddComponent(new CameraController());
 

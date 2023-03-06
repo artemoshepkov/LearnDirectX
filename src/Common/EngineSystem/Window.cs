@@ -1,4 +1,5 @@
-﻿using SharpDX.Direct3D11;
+﻿using LearnDirectX.src.Common.EngineSystem.Shaders.Buffers;
+using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.Windows;
@@ -16,13 +17,16 @@ namespace LearnDirectX.src.Common.EngineSystem
 
         private Form _renderForm;
         private SwapChain1 _swapChain;
+
+        private GBuffer _gBuffer;
+
         public RenderTargetView _renderTargetView;
         private Texture2D _backBuffer;
         private Texture2D _depthBuffer;
         private DepthStencilView _depthView;
 
         private bool _updateViewport = true;
-        private int _countSamples = 8;
+        private SampleDescription _sampleDescription;
 
         #endregion
 
@@ -71,6 +75,8 @@ namespace LearnDirectX.src.Common.EngineSystem
                 Height = height
             };
 
+            Instance._sampleDescription = new SampleDescription(8, 0);
+
             Instance.InitializeDevice();
             Instance.InitializeSwapChain();
 
@@ -85,7 +91,7 @@ namespace LearnDirectX.src.Common.EngineSystem
                     MipLevels = 1,
                     Width = Instance.RenderForm.Width,
                     Height = Instance.RenderForm.Height,
-                    SampleDescription = new SampleDescription(Instance._countSamples, 0),
+                    SampleDescription = Instance._sampleDescription,
                     Usage = ResourceUsage.Default,
                     BindFlags = BindFlags.DepthStencil,
                     CpuAccessFlags = CpuAccessFlags.None,
@@ -184,7 +190,7 @@ namespace LearnDirectX.src.Common.EngineSystem
                     Height = _renderForm.Height,
                     Format = Format.R8G8B8A8_UNorm,
                     Stereo = false,
-                    SampleDescription = new SampleDescription(_countSamples, 0),
+                    SampleDescription = Instance._sampleDescription,
                     Usage = Usage.BackBuffer | Usage.RenderTargetOutput,
                     BufferCount = 1,
                     Scaling = Scaling.Stretch,
