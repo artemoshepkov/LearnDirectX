@@ -2,7 +2,6 @@
 {
     float3 position : POSITION;
     float3 normal : NORMAL;
-    float4 color : COLOR;
 };
 
 struct PixelShaderInput
@@ -23,10 +22,7 @@ cbuffer PerObject : register(b0)
 
 cbuffer PerMaterial : register(b2)
 {
-    float4 MaterialAmbient;
-    float4 MaterialDiffuse;
-    float4 MaterialSpecular;
-    float MaterialSpecularPower;
+    float4 Color;
 };
 
 PixelShaderInput VSMain(VertexShaderInput input)
@@ -34,7 +30,7 @@ PixelShaderInput VSMain(VertexShaderInput input)
     PixelShaderInput output = (PixelShaderInput) 0;
     
     output.position = mul(mul(ViewProjection, Model), float4(input.position, 1));
-    output.color = input.color;
+    output.color = Color;
     
     output.fragPosition = mul(Model, float4(input.position, 1));
     output.normal = mul((float3x3) WorldInverseTranspose, input.normal);

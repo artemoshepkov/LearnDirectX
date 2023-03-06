@@ -1,6 +1,8 @@
-﻿using DevExpress.XtraEditors;
+﻿using DevExpress.XtraBars.Docking.Helpers;
+using DevExpress.XtraEditors;
 using LearnDirectX.src.Common.Components;
 using LearnDirectX.src.Common.EngineSystem;
+using SharpDX.Direct2D1.Effects;
 using System;
 using System.Drawing;
 using System.Linq;
@@ -13,6 +15,8 @@ namespace LearnDirectX
         private Scene _selectedScene;
 
         private GameObject _selectedGameObject;
+
+        private const string _defaultFloatPropString = "Float property - ";
 
         public bool IsCursorHide { get; set; }
 
@@ -69,6 +73,20 @@ namespace LearnDirectX
             _selectedGameObject = _selectedScene.GameObjects[GameObjectList.SelectedIndex];
 
             LoadTransformSelectedObjectToGUI();
+
+            var prop = _selectedGameObject.GetComponent<FloatProperty>();
+
+            if (prop == null)
+            {
+                FloatPropLabel.Hide();
+
+                return;
+            }
+
+            FloatPropLabel.Text = _defaultFloatPropString + prop.Value;
+            TrackBarFloatProp.Value = (int)prop.Value;
+            TrackBarFloatProp.Minimum = (int)prop.MinValue;
+            TrackBarFloatProp.Maximum = (int)prop.MaxValue;
         }
 
         private void LoadTransformSelectedObjectToGUI()
@@ -82,7 +100,6 @@ namespace LearnDirectX
             RotationX.Text = transform.Rotation.X.ToString();
             RotationY.Text = transform.Rotation.Y.ToString();
             RotationZ.Text = transform.Rotation.Z.ToString();
-
         }
 
 
@@ -176,5 +193,11 @@ namespace LearnDirectX
             LimitTextBoxInputOfDigits(sender, e);
         }
 
+        private void TrackBarFloatProp_ValueChanged(object sender, EventArgs e)
+        {
+            var prop = _selectedGameObject.GetComponent<FloatProperty>();
+            prop.Value = TrackBarFloatProp.Value;
+            FloatPropLabel.Text = _defaultFloatPropString + prop.Value;
+        }
     }
 }

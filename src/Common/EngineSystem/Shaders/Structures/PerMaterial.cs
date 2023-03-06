@@ -7,7 +7,5 @@ namespace LearnDirectX.src.Common.EngineSystem.Shaders.Structures
     public struct PerMaterial
     {
         public Material Mat;
-        public float Shininess;
-        private Vector3 _padding0;
     }
 }

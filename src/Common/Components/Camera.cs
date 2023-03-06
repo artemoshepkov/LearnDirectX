@@ -16,8 +16,8 @@ namespace LearnDirectX.src.Common.Components
         public readonly float MinFov = 30f;
         public readonly float MaxFov = 120f;
 
-        public readonly float MinPitch = -90f;
-        public readonly float MaxPitch = 90f;
+        public readonly float MinPitch = -89f;
+        public readonly float MaxPitch = 89f;
 
         public Vector3 Front { get; private set; }
         public Vector3 Right { get; private set; }

@@ -32,7 +32,6 @@ namespace LearnDirectX.src.Common
                             {
                                 Position = new Vector3(x, y, z),
                                 Normal = new Vector3(0, 0, z),
-                                Color = new Vector4(0.5f, 0f, 0f, 1f),
                             });
                     }
                 }
@@ -49,7 +48,6 @@ namespace LearnDirectX.src.Common
                             {
                                 Position = new Vector3(x, y, z),
                                 Normal = new Vector3(0, y, 0),
-                                Color = new Vector4(0.5f, 0f, 0f, 1f),
                             });
                     }
                 }
@@ -66,7 +64,6 @@ namespace LearnDirectX.src.Common
                             {
                                 Position = new Vector3(x, y, z),
                                 Normal = new Vector3(x, 0, 0),
-                                Color = new Vector4(0.5f, 0f, 0f, 1f),
                             });
                     }
                 }

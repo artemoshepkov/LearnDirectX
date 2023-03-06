@@ -78,7 +78,7 @@ namespace LearnDirectX.src
 
             GameObject gObj;
 
-            #region Add cube
+            #region Add surface
 
             shadersObjects = new Shader[]
             {
@@ -86,50 +86,47 @@ namespace LearnDirectX.src
                 new PixelShader(ShaderBytecode.CompileFromFile($"{ShadersPath}PS.hlsl", "PSMain", "ps_5_0")),
             };
 
-            gObj = new GameObject();
-
-            gObj.Name = "Surface";
-            gObj.AddComponent(new Transform(new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, 0f), new Vector3(0.005f, 0.005f, 0.005f)));
-            //gObj.AddComponent(CubeMeshGenerator.GenerateMesh(3f, 8));
-
-            var meshLoader = new MeshLoader();
-            var quads = meshLoader.ReadCornersFromFile("../../Assets/surface1.txt");
-
-            var vertexesSurface = new List<Common.EngineSystem.Shaders.Vertex>();
-            var indexes = new List<ushort>();
+            var surfaceLoader = new MeshLoader();
+            var quads = surfaceLoader.ReadCornersFromFile("../../Assets/surface1.txt");
 
             for (int i = 0; i < quads.Count; i++)
             {
+                var vertexesSurface = new List<Common.EngineSystem.Shaders.Vertex>();
+                var indexes = new List<ushort>();
+
                 foreach (var point in quads[i].Points)
                 {
-                    vertexesSurface.Add(
-                        new Common.EngineSystem.Shaders.Vertex(
-                            point,
-                            new Vector4(1f, 0f, 0f, 1f)
-                        ));
+                    vertexesSurface.Add(new Common.EngineSystem.Shaders.Vertex(point));
                 }
 
-                indexes.Add((ushort)(4 * i));
-                indexes.Add((ushort)(4 * i + 1));
-                indexes.Add((ushort)(4 * i + 2));
+                indexes.Add(0);
+                indexes.Add(1);
+                indexes.Add(2);
 
-                indexes.Add((ushort)(4 * i));
-                indexes.Add((ushort)(4 * i + 2));
-                indexes.Add((ushort)(4 * i + 3));
+                indexes.Add(0);
+                indexes.Add(2);
+                indexes.Add(3);
+
+                gObj = new GameObject();
+
+                gObj.Name = "Quad" + i;
+                gObj.AddComponent(new Transform(new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, 0f), new Vector3(0.005f, 0.005f, 0.005f)));
+
+                gObj.AddComponent(
+                    new Mesh()
+                    {
+                        Vertexes = vertexesSurface.ToArray(),
+                        Indexes = indexes.ToArray(),
+                    });
+
+                gObj.AddComponent(new MeshRenderer(shadersObjects));
+                gObj.GetComponent<MeshRenderer>().Initialize();
+
+                gObj.AddComponent(new Material(new Vector4(0f, 0.6f, 0f, 1f)));
+                gObj.AddComponent(new FloatProperty(1f));
+
+                scene.AddObject(gObj);
             }
-
-            gObj.AddComponent(
-                new Mesh() 
-                { 
-                    Vertexes = vertexesSurface.ToArray(),
-                    Indexes = indexes.ToArray(),
-                });
-
-
-            gObj.AddComponent(new MeshRenderer(shadersObjects));
-            gObj.GetComponent<MeshRenderer>().Initialize();
-
-            scene.AddObject(gObj);
 
             #endregion
 

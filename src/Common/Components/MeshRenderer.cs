@@ -9,6 +9,7 @@ using SharpDX.Direct3D11;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.Remoting.Contexts;
 using Buffer = SharpDX.Direct3D11.Buffer;
 
 namespace LearnDirectX.src.Common.Components
@@ -24,8 +25,8 @@ namespace LearnDirectX.src.Common.Components
         private VertexBufferBinding _vertexBufferBinding;
 
         private ConstantBuffer<PerObject> _perObjectBuffer;
+        private ConstantBuffer<PerMaterial> _perMaterialBuffer;
         private ConstantBuffer<PerFrame> _perFrameBuffer;
-
 
         #endregion
 
@@ -67,6 +68,7 @@ namespace LearnDirectX.src.Common.Components
             _vertexBufferBinding = new VertexBufferBinding(_vertexBuffer, Utilities.SizeOf<Vertex>(), 0);
 
             _perObjectBuffer = new ConstantBuffer<PerObject>();
+            _perMaterialBuffer = new ConstantBuffer<PerMaterial>();
             _perFrameBuffer = new ConstantBuffer<PerFrame>();
         }
 
@@ -79,14 +81,41 @@ namespace LearnDirectX.src.Common.Components
                 shader.Use();
             }
             immediateContext.VertexShader.SetConstantBuffer(0, _perObjectBuffer.Buffer);
+            immediateContext.VertexShader.SetConstantBuffer(2, _perMaterialBuffer.Buffer);
             immediateContext.PixelShader.SetConstantBuffer(1, _perFrameBuffer.Buffer);
 
             immediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
             immediateContext.InputAssembler.SetIndexBuffer(_indexBuffer, SharpDX.DXGI.Format.R16_UInt, 0);
             immediateContext.InputAssembler.SetVertexBuffers(0, _vertexBufferBinding);
 
-            #region Load worldViewProjection
+            LoadPerMaterial();
+            LoadWorldViewProjection(context);
+            LoadPerFrame(context);
 
+            immediateContext.DrawIndexed(_mesh.Indexes.Length, 0, 0);
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private void LoadPerMaterial()
+        {
+            var material = Owner.GetComponent<Material>();
+
+            var perMaterial = new PerMaterial()
+            {
+                Mat = new EngineSystem.Shaders.Structures.Material()
+                {
+                    Color = material.Color,
+                },
+            };
+
+            _perMaterialBuffer.UpdateValue(perMaterial);
+        }
+
+        private void LoadWorldViewProjection(RendererContext context)
+        {
             var Model = Owner.GetComponent<Transform>().Model;
             var View = context.CameraContext.Camera.GetViewMatrix();
             var Projection = context.CameraContext.Camera.GetProjectionMatrix();
@@ -103,12 +132,10 @@ namespace LearnDirectX.src.Common.Components
             };
 
             _perObjectBuffer.UpdateValue(perObject);
+        }
 
-            #endregion
-
-
-            #region Load PerFrame
-
+        private void LoadPerFrame(RendererContext context)
+        {
             //var directLight = context.Lights.First().GetComponent<DirectLight>();
 
 
@@ -118,10 +145,10 @@ namespace LearnDirectX.src.Common.Components
             {
                 var pointLight = light.GetComponent<PointLight>();
 
-                if (pointLight!= null)
+                if (pointLight != null)
                 {
                     var pointLightPosition = pointLight.Owner.GetComponent<Transform>().Position;
-                    
+
                     pointLights.Add(
                         new EngineSystem.Shaders.Structures.Lights.PointLight()
                         {
@@ -142,13 +169,9 @@ namespace LearnDirectX.src.Common.Components
                 //    Direction = light.Direction,
                 //},
                 PointLights = pointLights.ToArray(),
-        };
+            };
 
             _perFrameBuffer.UpdateValue(perFrame);
-
-            #endregion
-
-            immediateContext.DrawIndexed(_mesh.Indexes.Length, 0, 0);
         }
 
         #endregion

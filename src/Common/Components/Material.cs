@@ -4,8 +4,17 @@ namespace LearnDirectX.src.Common.Components
 {
     public class Material : Component
     {
-        public Vector3 Ambient;
-        public Vector3 Diffuse;
-        public Vector3 Specular;
+        public Vector4 Color;
+
+        public Material()
+        {
+
+        }
+
+        public Material(Vector4 color)
+        {
+            Color = color;
+        }
+
     }
 }
