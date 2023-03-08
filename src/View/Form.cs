@@ -123,16 +123,16 @@ namespace LearnDirectX
         }
         private void LimitTextBoxInputOfDigits(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
-                e.Handled = true;
-
-            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.') && (e.KeyChar != '-'))
                 e.Handled = true;
         }
        
         private void TransformX_TextChanged(object sender, EventArgs e)
         {
             var textBox = (TextBox)sender;
+
+            if (textBox.Text == "" || textBox.Text == "-" || textBox.Text == ".")
+                return;
 
             var transform = _selectedGameObject.GetComponent<Transform>();
 

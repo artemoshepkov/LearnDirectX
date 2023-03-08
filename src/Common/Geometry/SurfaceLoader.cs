@@ -1,17 +1,14 @@
-﻿using LearnDirectX.src.Common.Entity;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
 
-namespace LearnDirectX.src.Common.EngineSystem
+namespace LearnDirectX.src.Common.Geometry
 {
-    public class MeshLoader
+    public class SurfaceLoader
     {
-        List<Quad> corners;
-
-        public List<Quad> ReadCornersFromFile(string path)
+        List<SurfaceQuad> corners;
+        public List<SurfaceQuad> ReadCornersFromFile(string path)
         {
             ReadCorners(path);
 
@@ -35,7 +32,7 @@ namespace LearnDirectX.src.Common.EngineSystem
                 var countQuadJ = int.Parse(indexes[1]);
                 var countQuadK = 1;
 
-                corners = new List<Quad>(countQuadI * countQuadJ * countQuadK);
+                corners = new List<SurfaceQuad>(countQuadI * countQuadJ * countQuadK);
 
                 while ((line = reader.ReadLine()) != null)
                 {
@@ -48,7 +45,7 @@ namespace LearnDirectX.src.Common.EngineSystem
             }
         }
 
-        private Quad CreateNewQuad(string[] cornersLine)
+        private SurfaceQuad CreateNewQuad(string[] cornersLine)
         {
             int i = int.Parse(cornersLine[0]);
             int j = int.Parse(cornersLine[1]);
@@ -61,13 +58,7 @@ namespace LearnDirectX.src.Common.EngineSystem
                 points.Add(new Vector3(float.Parse(cornersLine[3 * l]), float.Parse(cornersLine[3 * l + 1]), float.Parse(cornersLine[3 * l + 2])));
             }
 
-            return new Quad()
-            {
-                I = i,
-                J = j,
-                K = k,
-                Points = points,
-            };
+            return new SurfaceQuad(i, j, k, points);
         }
     }
 }

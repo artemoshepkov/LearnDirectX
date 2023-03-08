@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
 
-namespace LearnDirectX.src.Common.Entity
+namespace LearnDirectX.src.Common.Geometry
 {
-    public class Quad
+    public class SurfaceQuad : Quad
     {
-        public int I;
-        public int J;
-        public int K;
-
         public List<Vector3> Points;
+
+        public SurfaceQuad(int i, int j, int k, List<Vector3> points) : base(i, j, k)
+        {
+            Points = points;
+        }
 
         public override string ToString()
         {

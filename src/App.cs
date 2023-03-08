@@ -7,9 +7,8 @@ using System.Numerics;
 using Key = SharpDX.DirectInput.Key;
 using VertexShader = LearnDirectX.src.Common.EngineSystem.Shaders.VertexShader;
 using PixelShader = LearnDirectX.src.Common.EngineSystem.Shaders.PixelShader;
-
 using SharpDX.Direct3D11;
-using LearnDirectX.src.Common;
+using LearnDirectX.src.Common.Geometry;
 
 namespace LearnDirectX.src
 {
@@ -32,7 +31,7 @@ namespace LearnDirectX.src
                 { Key.F, SetPoligonMode },
             };
 
-            Engine.AddScene(InitializeScene());
+            Engine.AddScene(InitializeGridScene());
             Engine.AddEventUpdate(Update);
         }
 
@@ -68,6 +67,82 @@ namespace LearnDirectX.src
             }
         }
 
+        private static Scene InitializeGridScene()
+        {
+
+            var scene = new Scene();
+
+            scene.Camera = CreateCamera();
+
+            string ShadersPath = "../../src/Shaders/";
+
+            Shader[] shadersObjects;
+
+            GameObject gObj;
+
+            #region Add grid
+
+            var gridPath = "../../Assets/grid.bin";
+
+            var grid = GridLoader.ReadFromFile(gridPath);
+
+            shadersObjects = new Shader[]
+            {
+                new VertexShader(ShaderBytecode.CompileFromFile($"{ShadersPath}VS.hlsl", "VSMain", "vs_5_0")),
+                new PixelShader(ShaderBytecode.CompileFromFile($"{ShadersPath}PS.hlsl", "PSMain", "ps_5_0")),
+            };
+
+            foreach (var quad in grid.Quads)
+            {
+                gObj = new GameObject();
+
+                gObj.Name = "Quad: " + quad.ToString();
+
+                gObj.AddComponent(new Transform(new Vector3(0, 0, 0), new Vector3(0, 0, 0), new Vector3(0.01f, 0.01f, 0.01f)));
+
+                var vertexes = new List<Common.EngineSystem.Shaders.Vertex>();
+
+                for (int i = 0; i < 4; i++)
+                {
+                    vertexes.Add(new Common.EngineSystem.Shaders.Vertex(quad.TopCorners[i]));
+                    vertexes.Add(new Common.EngineSystem.Shaders.Vertex(quad.BottomCorners[i]));
+                }
+
+                gObj.AddComponent(new Mesh(
+                    vertexes.ToArray(),
+                    new ushort[]
+                    {
+                        0,2,6,
+                        2,6,4,
+
+                        0,3,2,
+                        0,3,1,
+
+                        0,1,7,
+                        0,7,6,
+
+                        5,7,3,
+                        7,3,1,
+
+                        5,7,4,
+                        7,4,6,
+
+                        5,3,2,
+                        5,2,4,
+                    }
+                ));
+                gObj.AddComponent(new MeshRenderer(shadersObjects));
+                gObj.GetComponent<MeshRenderer>().Initialize();
+                gObj.AddComponent(new Material(new Vector4(0f, 0.3f, 0f, 1f)));
+
+                scene.AddObject(gObj);
+            }
+
+            #endregion
+
+            return scene;
+        }
+
         private static Scene InitializeScene()
         {
             var scene = new Scene();
@@ -86,7 +161,7 @@ namespace LearnDirectX.src
                 new PixelShader(ShaderBytecode.CompileFromFile($"{ShadersPath}PS.hlsl", "PSMain", "ps_5_0")),
             };
 
-            var surfaceLoader = new MeshLoader();
+            var surfaceLoader = new SurfaceLoader();
             var quads = surfaceLoader.ReadCornersFromFile("../../Assets/surface1.txt");
 
             for (int i = 0; i < quads.Count; i++)
