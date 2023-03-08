@@ -82,9 +82,12 @@
   <ItemGroup>
     <Compile Include="src\Common\Components\DirectLight.cs" />
     <Compile Include="src\Common\Components\FloatProperty.cs" />
+    <Compile Include="src\Common\Components\GridTask\Grid.cs" />
     <Compile Include="src\Common\Components\Light.cs" />
     <Compile Include="src\Common\Components\ObjectMaterial.cs" />
     <Compile Include="src\Common\Components\PointLight.cs" />
+    <Compile Include="src\Common\Components\GridTask\QuadIndex.cs" />
+    <Compile Include="src\Common\Components\GridTask\SliceRenderer.cs" />
     <Compile Include="src\Common\Geometry\CubeMeshGenerator.cs" />
     <Compile Include="src\Common\Geometry\GridQuad.cs" />
     <Compile Include="src\Common\Geometry\SurfaceQuad.cs" />

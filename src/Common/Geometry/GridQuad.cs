@@ -9,7 +9,7 @@ namespace LearnDirectX.src.Common.Geometry
 
         public bool IsActive { get; set; }
 
-        public GridQuad(int i, int j, int k,bool active, Vector3[] topCorners, Vector3[] bottomCorners) : base(i, j, k)
+        public GridQuad(int i, int j, int k, bool active, Vector3[] topCorners, Vector3[] bottomCorners) : base(i, j, k)
         {
             IsActive = active;
             TopCorners = topCorners;

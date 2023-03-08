@@ -22,10 +22,26 @@ namespace LearnDirectX.src.Common.EngineSystem
 
             foreach (var gameObject in scene.GameObjects)
             {
-                var meshRenderer = gameObject.GetComponent<MeshRenderer>();
-                if (meshRenderer != null)
+                RenderObject(gameObject, rendererContext);
+            }
+        }
+
+        public static void RenderObject(GameObject gObj, RendererContext rendererContext)
+        {
+            if (!gObj.IsEnabled)
+                return;
+
+            var meshRenderer = gObj.GetComponent<MeshRenderer>();
+            if (meshRenderer != null)
+            {
+                meshRenderer.Render(rendererContext);
+            }
+
+            if (gObj.Children.Count > 0)
+            {
+                foreach (var child in gObj.Children)
                 {
-                    meshRenderer.Render(rendererContext);
+                    RenderObject(child, rendererContext);
                 }
             }
         }

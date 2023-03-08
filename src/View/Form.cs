@@ -1,6 +1,7 @@
 ﻿using DevExpress.XtraBars.Docking.Helpers;
 using DevExpress.XtraEditors;
 using LearnDirectX.src.Common.Components;
+using LearnDirectX.src.Common.Components.GridTask;
 using LearnDirectX.src.Common.EngineSystem;
 using SharpDX.Direct2D1.Effects;
 using System;
@@ -66,6 +67,28 @@ namespace LearnDirectX
             GameObjectList.SelectedIndex = 0;
 
             LoadTransformSelectedObjectToGUI();
+
+            if (_selectedGameObject.GetComponent<Grid>() != null)
+                LoadSlicesDataToGUI();
+        }
+
+        private void LoadSlicesDataToGUI()
+        {
+            var gridSize = _selectedGameObject.GetComponent<Grid>().Size;
+
+            TrackBarSliceI.Maximum = (int)gridSize.X - 1;
+            TrackBarSliceJ.Maximum = (int)gridSize.Y - 1;
+            TrackBarSliceK.Maximum = (int)gridSize.Z - 1;
+
+            var sliceRenderer = _selectedGameObject.GetComponent<SliceRenderer>();
+
+            TrackBarSliceI.Value = sliceRenderer.I;
+            TrackBarSliceJ.Value = sliceRenderer.J;
+            TrackBarSliceK.Value = sliceRenderer.K;
+
+            CheckBoxSliceI.Checked = sliceRenderer.SliceI;
+            CheckBoxSliceJ.Checked = sliceRenderer.SliceJ;
+            CheckBoxSliceK.Checked = sliceRenderer.SliceK;
         }
 
         private void GameObjectList_SelectedIndexChanged(object sender, EventArgs e)
@@ -79,6 +102,7 @@ namespace LearnDirectX
             if (prop == null)
             {
                 FloatPropLabel.Hide();
+                TrackBarFloatProp.Hide();
 
                 return;
             }
@@ -198,6 +222,103 @@ namespace LearnDirectX
             var prop = _selectedGameObject.GetComponent<FloatProperty>();
             prop.Value = TrackBarFloatProp.Value;
             FloatPropLabel.Text = _defaultFloatPropString + prop.Value;
+        }
+
+        private void CheckBoxSliceI_CheckStateChanged(object sender, EventArgs e)
+        {
+            if (CheckBoxAllGridVerify())
+            {
+                CheckBoxSliceI.Checked = false;
+                return;
+            }
+
+            var sliceRenderer = _selectedGameObject.GetComponent<SliceRenderer>();
+
+            var checkBox = (CheckBox)sender;
+
+            var newState = checkBox.Checked;
+
+            sliceRenderer.SliceI = newState;
+        }
+
+        private void CheckBoxSliceJ_CheckStateChanged(object sender, EventArgs e)
+        {
+            if (CheckBoxAllGridVerify())
+            {
+                CheckBoxSliceJ.Checked = false;
+                return;
+            }
+            var sliceRenderer = _selectedGameObject.GetComponent<SliceRenderer>();
+
+            var checkBox = (CheckBox)sender;
+
+            var newState = checkBox.Checked;
+
+            sliceRenderer.SliceJ = newState;
+        }
+
+        private void CheckBoxSliceK_CheckStateChanged(object sender, EventArgs e)
+        {
+            if (CheckBoxAllGridVerify())
+            {
+                CheckBoxSliceK.Checked = false;
+                return;
+            }
+
+            var sliceRenderer = _selectedGameObject.GetComponent<SliceRenderer>();
+
+            var checkBox = (CheckBox)sender;
+
+            var newState = checkBox.Checked;
+
+            sliceRenderer.SliceK = newState;
+        }
+
+        private bool CheckBoxAllGridVerify() => CheckBoxAllGrid.Checked;
+
+        private void CheckBoxAllGrid_CheckStateChanged(object sender, EventArgs e)
+        {
+            var checkBox = (CheckBox)sender;
+
+            var newState = checkBox.Checked;
+
+            if (newState)
+            {
+                var sliceRenderer = _selectedGameObject.GetComponent<SliceRenderer>();
+                sliceRenderer.SliceI = false;
+                CheckBoxSliceI.Checked = false;
+                sliceRenderer.SliceJ = false;
+                CheckBoxSliceJ.Checked = false;
+                sliceRenderer.SliceK = false;
+                CheckBoxSliceK.Checked = false;
+            }
+        }
+
+        private void TrackBarSliceI_ValueChanged(object sender, EventArgs e)
+        {
+            var sliceRenderer = _selectedGameObject.GetComponent<SliceRenderer>();
+
+            var trackBar = (TrackBar)sender;
+
+            sliceRenderer.I = trackBar.Value;
+        }
+
+        private void TrackBarSliceJ_ValueChanged(object sender, EventArgs e)
+        {
+            var sliceRenderer = _selectedGameObject.GetComponent<SliceRenderer>();
+
+            var trackBar = (TrackBar)sender;
+
+            sliceRenderer.J = trackBar.Value;
+        }
+
+        private void TrackBarSliceK_ValueChanged(object sender, EventArgs e)
+        {
+            var sliceRenderer = _selectedGameObject.GetComponent<SliceRenderer>();
+
+            var trackBar = (TrackBar)sender;
+
+            sliceRenderer.K = trackBar.Value;
         }
     }
 }

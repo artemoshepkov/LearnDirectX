@@ -92,13 +92,22 @@ namespace LearnDirectX.src
                 new PixelShader(ShaderBytecode.CompileFromFile($"{ShadersPath}PS.hlsl", "PSMain", "ps_5_0")),
             };
 
+            var gridGameObject = new GameObject();
+
+            gridGameObject.Name = "Grid";
+            gridGameObject.AddComponent(new Transform(new Vector3(0, 0, 0)));
+            gridGameObject.AddComponent(new Common.Components.GridTask.Grid(grid.Size));
+            gridGameObject.AddComponent(new SliceRenderer());
+
             foreach (var quad in grid.Quads)
             {
                 gObj = new GameObject();
 
                 gObj.Name = "Quad: " + quad.ToString();
+                gObj.IsEnabled = quad.IsActive;
 
                 gObj.AddComponent(new Transform(new Vector3(0, 0, 0), new Vector3(0, 0, 0), new Vector3(0.01f, 0.01f, 0.01f)));
+                gObj.AddComponent(new QuadIndex(quad.I, quad.J, quad.K));
 
                 var vertexes = new List<Common.EngineSystem.Shaders.Vertex>();
 
@@ -135,8 +144,10 @@ namespace LearnDirectX.src
                 gObj.GetComponent<MeshRenderer>().Initialize();
                 gObj.AddComponent(new Material(new Vector4(0f, 0.3f, 0f, 1f)));
 
-                scene.AddObject(gObj);
+                gridGameObject.AddChild(gObj);
             }
+
+            scene.AddObject(gridGameObject);
 
             #endregion
 

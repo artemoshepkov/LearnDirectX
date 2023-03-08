@@ -78,7 +78,7 @@ namespace LearnDirectX.src.Common.EngineSystem
 
                     Render();
 
-                    Update(); // Window; KeyboardInput; MouseInput
+                    Update(); // Window; KeyboardInput; MouseInput; CameraController;
 
                     Profiler.EndFrame();
                 });

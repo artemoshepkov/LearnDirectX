@@ -18,13 +18,11 @@ namespace LearnDirectX.src.Common.Geometry
                 grid.Size.Y = binReader.ReadInt32();
                 grid.Size.Z = binReader.ReadInt32();
 
-
-
                 for (int k = 0; k < grid.Size.Z; k++)
                 {
-                    for (int i = 0; i < grid.Size.Z; i++)
+                    for (int i = 0; i < grid.Size.X; i++)
                     {
-                        for (int j = 0; j < grid.Size.Z; j++)
+                        for (int j = 0; j < grid.Size.Y; j++)
                         {
                             bool active = binReader.ReadBoolean();
                             var topCorners = new Vector3[4];
