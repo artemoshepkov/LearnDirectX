@@ -1,14 +1,19 @@
 ﻿using DevExpress.Utils.Drawing;
 using DevExpress.Utils.MVVM.Internal;
+using DevExpress.XtraEditors.Design;
+using LearnDirectX.src.Common.Components.GridTask;
 using LearnDirectX.src.Common.Geometry;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 
 namespace LearnDirectX.src.Common.Geometry
 {
     public class GridLoader
     {
-        public static Grid ReadFromFile(string path)
+        public static Grid ReadGridFromFile(string path)
         {
             var grid = new Grid();
 
@@ -46,6 +51,49 @@ namespace LearnDirectX.src.Common.Geometry
             }
 
             return grid;
+        }
+
+        public static Dictionary<string, List<QuadProperty>> ReadPropsFromFile(Vector3 gridSize, string path)
+        {
+            var gridProps = new Dictionary<string, List<QuadProperty>>();
+
+            using (StreamReader reader = new StreamReader(path))
+            {
+                string line;
+
+                line = reader.ReadLine();
+
+                int propsAmount;
+
+                if (!int.TryParse(line, out propsAmount))
+                    return null;
+
+
+                for (int props = 0; props < propsAmount; props++)
+                {
+                    var propName = reader.ReadLine();
+
+                    gridProps[propName] = new List<QuadProperty>();
+
+                    for (int k = 0; k < gridSize.Z; k++)
+                    {
+                        for (int i = 0; i < gridSize.X; i++)
+                        {
+                            for (int j = 0; j < gridSize.Y; j++)
+                            {
+                                if ((line = reader.ReadLine()) == null || !float.TryParse(line, out float res))
+                                {
+                                    throw new Exception("Grid size doesn`t correspond prop file");
+                                }
+
+                                gridProps[propName].Add(new QuadProperty(new Vector3(i, j, k), res));
+                            }
+                        }
+                    }
+                }
+            }
+
+            return gridProps;
         }
     }
 }

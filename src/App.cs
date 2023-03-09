@@ -9,6 +9,8 @@ using VertexShader = LearnDirectX.src.Common.EngineSystem.Shaders.VertexShader;
 using PixelShader = LearnDirectX.src.Common.EngineSystem.Shaders.PixelShader;
 using SharpDX.Direct3D11;
 using LearnDirectX.src.Common.Geometry;
+using System.Linq;
+using LearnDirectX.src.Common.Components.GridTask;
 
 namespace LearnDirectX.src
 {
@@ -17,10 +19,10 @@ namespace LearnDirectX.src
         private Dictionary<Key, Action> _controlBinds;
 
         private bool isPoligon = false;
+        
+        private Dictionary<string, List<QuadProperty>> _gridProperties;
 
         public List<Scene> Scenes;
-
-        public static readonly int NUM_POINT_LIGHTS = 2;
 
         public App() 
         {
@@ -45,12 +47,10 @@ namespace LearnDirectX.src
                 rasterDesc = new RasterizerStateDescription()
                 {
                     CullMode = CullMode.None,
-
                 };
             }
 
             rasterDesc.FillMode = isPoligon ? FillMode.Solid : FillMode.Wireframe;
-
 
             context.Rasterizer.State = new RasterizerState(context.Device, rasterDesc);
             isPoligon = !isPoligon;
@@ -67,47 +67,62 @@ namespace LearnDirectX.src
             }
         }
 
-        private static Scene InitializeGridScene()
+        private Scene InitializeGridScene()
         {
+            string ShadersPath = "../../src/Shaders/";
+            var gridPath = "../../Assets/grid.bin";
+            var gridPropsPath = "../../Assets/gridProps.txt";
+
 
             var scene = new Scene();
 
             scene.Camera = CreateCamera();
 
-            string ShadersPath = "../../src/Shaders/";
-
-            Shader[] shadersObjects;
-
-            GameObject gObj;
 
             #region Add grid
 
-            var gridPath = "../../Assets/grid.bin";
-
-            var grid = GridLoader.ReadFromFile(gridPath);
-
-            shadersObjects = new Shader[]
+            Shader[] shadersObjects = new Shader[]
             {
                 new VertexShader(ShaderBytecode.CompileFromFile($"{ShadersPath}VS.hlsl", "VSMain", "vs_5_0")),
                 new PixelShader(ShaderBytecode.CompileFromFile($"{ShadersPath}PS.hlsl", "PSMain", "ps_5_0")),
             };
+
+            var grid = GridLoader.ReadGridFromFile(gridPath);
+
+            _gridProperties = GridLoader.ReadPropsFromFile(grid.Size, gridPropsPath);
 
             var gridGameObject = new GameObject();
 
             gridGameObject.Name = "Grid";
             gridGameObject.AddComponent(new Transform(new Vector3(0, 0, 0)));
             gridGameObject.AddComponent(new Common.Components.GridTask.Grid(grid.Size));
-            gridGameObject.AddComponent(new SliceRenderer());
+            gridGameObject.AddComponent(new SliceRenderer(grid.Size));
 
             foreach (var quad in grid.Quads)
             {
-                gObj = new GameObject();
+                var propName = _gridProperties.Keys.Last();
+
+                var gObj = new GameObject();
 
                 gObj.Name = "Quad: " + quad.ToString();
                 gObj.IsEnabled = quad.IsActive;
 
                 gObj.AddComponent(new Transform(new Vector3(0, 0, 0), new Vector3(0, 0, 0), new Vector3(0.01f, 0.01f, 0.01f)));
+
+                gObj.AddComponent(new Material(new Vector4(0.35f, 0.35f, 0f, 1f)));
+
                 gObj.AddComponent(new QuadIndex(quad.I, quad.J, quad.K));
+
+                foreach (var prop in _gridProperties[propName])
+                {
+                    if (prop.Indexes.X == quad.I && prop.Indexes.Y == quad.J && prop.Indexes.Z == quad.K)
+                    {
+                        gObj.AddComponent(new FloatProperty(prop.Value));
+                    }
+                }
+                gObj.AddComponent(new MaterialUpdater());
+                gObj.GetComponent<MaterialUpdater>().Initialize();
+
 
                 var vertexes = new List<Common.EngineSystem.Shaders.Vertex>();
 
@@ -142,10 +157,11 @@ namespace LearnDirectX.src
                 ));
                 gObj.AddComponent(new MeshRenderer(shadersObjects));
                 gObj.GetComponent<MeshRenderer>().Initialize();
-                gObj.AddComponent(new Material(new Vector4(0f, 0.3f, 0f, 1f)));
 
                 gridGameObject.AddChild(gObj);
             }
+
+            gridGameObject.GetComponent<SliceRenderer>().UpdateSlices();
 
             scene.AddObject(gridGameObject);
 
@@ -248,6 +264,12 @@ namespace LearnDirectX.src
             scene.Camera = CreateCamera();
 
             return scene;
+        }
+
+
+        private void ChangeGridProperty(string prop)
+        {
+
         }
 
         private static GameObject CreateCamera()

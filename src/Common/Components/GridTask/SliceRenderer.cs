@@ -1,5 +1,6 @@
 ﻿using LearnDirectX.src.Common.EngineSystem;
 using System.Linq;
+using System.Numerics;
 
 namespace LearnDirectX.src.Common.Components
 {
@@ -12,6 +13,8 @@ namespace LearnDirectX.src.Common.Components
         private int _i;
         private int _j;
         private int _k;
+
+        private Vector3 _gridSize;
 
         public bool SliceI
         {
@@ -92,10 +95,15 @@ namespace LearnDirectX.src.Common.Components
 
         public SliceRenderer()
         {
+        }
+
+        public SliceRenderer(Vector3 gridSize)
+        {
             _i = _j = _k = 0;
             _sliceI = false;
             _sliceJ = false;
             _sliceK = false;
+            _gridSize = gridSize;
         }
 
         public void UpdateSlices()
@@ -106,7 +114,19 @@ namespace LearnDirectX.src.Common.Components
             {
                 foreach (var quad in quads)
                 {
-                    quad.IsEnabled = true;
+                    var quadIndex = quad.GetComponent<QuadIndex>();
+                    if (quadIndex.I == 0 || quadIndex.J == 0 || quadIndex.K == 0)
+                    {
+                        quad.IsEnabled = true;
+                    }
+                    else if (quadIndex.I == _gridSize.X - 1 || quadIndex.J == _gridSize.Y - 1 || quadIndex.K == _gridSize.Z - 1)
+                    {
+                        quad.IsEnabled = true;
+                    }
+                    else
+                    {
+                        quad.IsEnabled = false;
+                    }
                 }
 
                 return;
