@@ -80,6 +80,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\BaseApplication.cs" />
     <Compile Include="src\Common\Components\DirectLight.cs" />
     <Compile Include="src\Common\Components\GridTask\FloatProperty.cs" />
     <Compile Include="src\Common\Components\GridTask\Grid.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="src\Common\Components\PointLight.cs" />
     <Compile Include="src\Common\Components\GridTask\QuadIndex.cs" />
     <Compile Include="src\Common\Components\GridTask\SliceRenderer.cs" />
+    <Compile Include="src\Common\EngineSystem\Shaders\Buffers\ArrayConstantBuffer.cs" />
     <Compile Include="src\Common\Geometry\CubeMeshGenerator.cs" />
     <Compile Include="src\Common\Geometry\GridProperty.cs" />
     <Compile Include="src\Common\Geometry\GridQuad.cs" />
@@ -98,7 +100,6 @@
     <Compile Include="src\Common\Geometry\GridLoader.cs" />
     <Compile Include="src\Common\Geometry\SurfaceLoader.cs" />
     <Compile Include="src\Common\EngineSystem\SceneRenderer.cs" />
-    <Compile Include="src\Common\EngineSystem\Shaders\Buffers\GBuffer.cs" />
     <Compile Include="src\Common\EngineSystem\Shaders\Structures\Lights\Attenuation.cs" />
     <Compile Include="src\Common\EngineSystem\Shaders\Structures\Lights\PointLight.cs" />
     <Compile Include="src\Common\EngineSystem\Shaders\Structures\Material.cs" />

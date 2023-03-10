@@ -1,21 +1,18 @@
-﻿using SharpDX;
-using SharpDX.Direct3D11;
+﻿using SharpDX.Direct3D11;
 using System;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Buffer = SharpDX.Direct3D11.Buffer;
 
 namespace LearnDirectX.src.Common.EngineSystem.Shaders.Buffers
 {
-    public class ConstantBuffer<T> : IDisposable where T : struct
+    public class ArrayConstantBuffer<T> : IDisposable where T : struct
     {
-        public Buffer Buffer { get; }
+        public SharpDX.Direct3D11.Buffer Buffer { get; }
 
-        public ConstantBuffer()
+        public ArrayConstantBuffer(int countLigths)
         {
-            int size = Marshal.SizeOf(typeof(T));
+            int size = Marshal.SizeOf(typeof(T)) * countLigths;
 
-            Buffer = new Buffer(
+            Buffer = new SharpDX.Direct3D11.Buffer(
                 Window.Instance.Device,
                 new BufferDescription
                 {
@@ -26,11 +23,6 @@ namespace LearnDirectX.src.Common.EngineSystem.Shaders.Buffers
                     OptionFlags = ResourceOptionFlags.None,
                     StructureByteStride = 0,
                 });
-        }
-
-        public void UpdateValue(T value)
-        {
-            Window.Instance.Device.ImmediateContext.UpdateSubresource(ref value, Buffer);
         }
 
         public void UpdateArray(T[] data)

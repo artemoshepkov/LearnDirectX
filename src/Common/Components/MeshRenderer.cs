@@ -11,6 +11,7 @@ using System.Linq;
 using System.Numerics;
 using System.Runtime.Remoting.Contexts;
 using Buffer = SharpDX.Direct3D11.Buffer;
+using LearnDirectX.src.Common.EngineSystem.Shaders.Buffers;
 
 namespace LearnDirectX.src.Common.Components
 {
@@ -27,6 +28,8 @@ namespace LearnDirectX.src.Common.Components
         private ConstantBuffer<PerObject> _perObjectBuffer;
         private ConstantBuffer<PerMaterial> _perMaterialBuffer;
         private ConstantBuffer<PerFrame> _perFrameBuffer;
+
+        private ArrayConstantBuffer<EngineSystem.Shaders.Structures.Lights.PointLight> _perPointLightBuffer;
 
         #endregion
 
@@ -70,6 +73,8 @@ namespace LearnDirectX.src.Common.Components
             _perObjectBuffer = new ConstantBuffer<PerObject>();
             _perMaterialBuffer = new ConstantBuffer<PerMaterial>();
             _perFrameBuffer = new ConstantBuffer<PerFrame>();
+
+            _perPointLightBuffer = new ArrayConstantBuffer<EngineSystem.Shaders.Structures.Lights.PointLight>(4);
         }
 
         public void Render(RendererContext context)
@@ -83,6 +88,8 @@ namespace LearnDirectX.src.Common.Components
             immediateContext.VertexShader.SetConstantBuffer(0, _perObjectBuffer.Buffer);
             immediateContext.VertexShader.SetConstantBuffer(2, _perMaterialBuffer.Buffer);
             immediateContext.PixelShader.SetConstantBuffer(1, _perFrameBuffer.Buffer);
+
+            immediateContext.PixelShader.SetConstantBuffer(3, _perPointLightBuffer.Buffer);
 
             immediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
             immediateContext.InputAssembler.SetIndexBuffer(_indexBuffer, SharpDX.DXGI.Format.R16_UInt, 0);
@@ -157,21 +164,22 @@ namespace LearnDirectX.src.Common.Components
                             Attenuation = pointLight.Attenuation,
                         });
                 }
-
             }
 
-            var perFrame = new PerFrame()
-            {
-                CameraPosition = context.CameraContext.Transform.Position,
-                //DirectLight = new DirectionalLight()
-                //{
-                //    Color = light.Color,
-                //    Direction = light.Direction,
-                //},
-                PointLights = pointLights.ToArray(),
-            };
+            _perPointLightBuffer.UpdateArray(pointLights.ToArray());
 
-            _perFrameBuffer.UpdateValue(perFrame);
+            //var perFrame = new PerFrame()
+            //{
+            //    CameraPosition = context.CameraContext.Transform.Position,
+            //    //DirectLight = new DirectionalLight()
+            //    //{
+            //    //    Color = light.Color,
+            //    //    Direction = light.Direction,
+            //    //},
+            //    PointLights = pointLights.ToArray(),
+            //};
+
+            //_perFrameBuffer.UpdateArray(perFrame);
         }
 
         #endregion

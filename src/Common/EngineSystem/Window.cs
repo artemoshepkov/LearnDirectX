@@ -18,8 +18,6 @@ namespace LearnDirectX.src.Common.EngineSystem
         private Form _renderForm;
         private SwapChain1 _swapChain;
 
-        private GBuffer _gBuffer;
-
         public RenderTargetView _renderTargetView;
         private Texture2D _backBuffer;
         private Texture2D _depthBuffer;

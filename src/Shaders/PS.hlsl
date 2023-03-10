@@ -1,4 +1,4 @@
-﻿#define NUM_POINT_LIGHTS 2
+﻿#define NUM_POINT_LIGHTS 4
 
 struct PixelShaderInput
 {
@@ -33,6 +33,10 @@ cbuffer PerFrame : register(b1)
 {
     float3 CameraPosition;
     DirectionalLight DirectLight;
+};
+
+cbuffer PointLightsBuffer : register(b3)
+{
     PointLight DotLight[NUM_POINT_LIGHTS];
 };
 
@@ -55,7 +59,7 @@ float3 CaclDirectLight(float3 normal, float3 viewDir, float3 pixelPosition, floa
 }
 
 float3 CaclPointLight(PointLight light, float3 normal, float3 viewDir, float3 pixelPosition, float3 pixelColor)
-{
+{    
     float constant = light.attenuationCoefs.constant;
     float linearc = light.attenuationCoefs.linearC;
     float quadratic = light.attenuationCoefs.quadratic;
@@ -81,14 +85,13 @@ float3 CaclPointLight(PointLight light, float3 normal, float3 viewDir, float3 pi
 
 float4 PSMain(PixelShaderInput pixel) : SV_Target
 {    
-    //float3 normal = normalize(pixel.normal);
-    //float3 viewDir = normalize(CameraPosition - pixel.position.xyz);
+    float3 normal = normalize(pixel.normal);
+    float3 viewDir = normalize(CameraPosition - pixel.position.xyz);
     
-    //float3 result = float3(0, 0, 0);
-
-    //result += CaclPointLight(DotLight[0], normal, viewDir, pixel.fragPosition.xyz, pixel.color.xyz);
+    float3 result = float3(0, 0, 0);
     
-    //return float4(result, 1);
+    for (int i = 0; i < NUM_POINT_LIGHTS; i++)
+        result += CaclPointLight(DotLight[i], normal, viewDir, pixel.fragPosition.xyz, pixel.color.xyz);
     
-    return pixel.color;
+    return float4(result, 1);
 };
