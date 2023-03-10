@@ -20,7 +20,7 @@ namespace LearnDirectX.src.Common.Components
         };
 
         private float _speed = 0.01f;
-        private float _mouseSensitivity = 0.3f;
+        private float _mouseSensitivity = 0.01f;
         private float _fovSensitivity = 0.1f;
 
         public bool IsEnabled = true;

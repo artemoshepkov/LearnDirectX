@@ -149,6 +149,7 @@
   <ItemGroup>
     <Content Include=".gitignore" />
     <Content Include="src\Shaders\PS.hlsl" />
+    <Content Include="src\Shaders\PSLight.hlsl" />
     <Content Include="src\Shaders\VS.hlsl" />
   </ItemGroup>
   <ItemGroup>

@@ -10,6 +10,5 @@ namespace LearnDirectX.src.Common.EngineSystem.Shaders.Structures.Lights
         public Vector3 Position;
         float _padding0;
         public Attenuation Attenuation;
-
     }
 }

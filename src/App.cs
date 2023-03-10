@@ -12,6 +12,7 @@ using LearnDirectX.src.Common.Geometry;
 using System.Linq;
 using LearnDirectX.src.Common.Components.GridTask;
 using LearnDirectX.src.Common;
+using LearnDirectX.src.Common.EngineSystem.Shaders;
 
 namespace LearnDirectX.src
 {
@@ -30,7 +31,7 @@ namespace LearnDirectX.src
                 { Key.F, SetPoligonMode },
             };
 
-            Engine.AddScene(InitializeScene());
+            Engine.AddScene(InitializeGridScene());
             Engine.AddEventUpdate(Update);
         }
 
@@ -93,7 +94,7 @@ namespace LearnDirectX.src
 
                 gObj.AddComponent(new Transform(new Vector3(0, 0, 0), new Vector3(0, 0, 0), new Vector3(0.01f, 0.01f, 0.01f)));
 
-                gObj.AddComponent(new Material(new Vector4(0.35f, 0.35f, 0f, 1f)));
+                gObj.AddComponent(new Material(new Vector4(0f, 0.6f, 0f, 1f)));
 
                 gObj.AddComponent(new QuadIndex(quad.I, quad.J, quad.K));
 
@@ -141,6 +142,35 @@ namespace LearnDirectX.src
                 ));
                 gObj.AddComponent(new MeshRenderer(shadersObjects));
                 gObj.GetComponent<MeshRenderer>().Initialize();
+
+                var gObjGeometry = new GameObject();
+                gObjGeometry.AddComponent(new Transform(new Vector3(0f, 0f, 0f), new Vector3(0, 0, 0), new Vector3(0.01f, 0.01f, 0.01f)));
+                gObjGeometry.AddComponent(new Material(new Vector4(0f, 0f, 0f, 1f)));
+                gObjGeometry.AddComponent(new Mesh(
+                    vertexes.ToArray(),
+                    new ushort[]
+                    {
+                        0,1,
+                        2,3,
+                        4,5,
+                        6,7,
+
+                        0,2,
+                        0,6,
+                        2,4,
+                        4,6,
+
+                        1,3,
+                        1,7,
+                        3,5,
+                        5,7
+
+                    },
+                    SharpDX.Direct3D.PrimitiveTopology.LineList));
+                gObjGeometry.AddComponent(new MeshRenderer(shadersObjects));
+                gObjGeometry.GetComponent<MeshRenderer>().Initialize();
+
+                gObj.AddChild(gObjGeometry);
 
                 gridGameObject.AddChild(gObj);
             }
@@ -216,35 +246,6 @@ namespace LearnDirectX.src
 
             #endregion
 
-            #region Add light
-
-            //gObj = new GameObject();
-            //gObj.AddComponent(new DirectLight() { Color = new Vector4(1f), Direction = new Vector3(0f, -1f, 0f) });
-            //scene.AddLight(gObj);
-
-            gObj = new GameObject();
-            gObj.AddComponent(new Transform(new Vector3(2f, 2f, 0f)));
-            gObj.AddComponent(
-                new PointLight()
-                {
-                    Color = new Vector4(1f),
-                    Attenuation = new Common.EngineSystem.Shaders.Structures.Lights.Attenuation(1f, 0.7f, 1.8f)
-                });
-            scene.AddLight(gObj);
-
-
-            gObj = new GameObject();
-            gObj.AddComponent(new Transform(new Vector3(-2f, 2f, 0f)));
-            gObj.AddComponent(
-                new PointLight()
-                {
-                    Color = new Vector4(1f),
-                    Attenuation = new Common.EngineSystem.Shaders.Structures.Lights.Attenuation(1f, 0.7f, 1.8f)
-                });
-            scene.AddLight(gObj);
-
-            #endregion
-
             scene.Camera = CreateCamera();
 
             return scene;
@@ -279,12 +280,25 @@ namespace LearnDirectX.src
                     Vertexes = CubeMeshGenerator.GenerateVertexes(5, 1),
                     Indexes = CubeMeshGenerator.GenerateIndexes(5),
                 });
-
             gObj.AddComponent(new MeshRenderer(shadersObjects));
             gObj.GetComponent<MeshRenderer>().Initialize();
-
             gObj.AddComponent(new Material(new Vector4(1f)));
-            gObj.AddComponent(new FloatProperty(1f));
+
+            var gObjGeometry = new GameObject();
+            gObjGeometry.AddComponent(new Transform(new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, 0f), new Vector3(10f, 1f, 10f)));
+            gObjGeometry.AddComponent(new Material(new Vector4(0f, 0f, 0f, 1f)));
+            gObjGeometry.AddComponent(new Mesh(
+                CubeMeshGenerator.GenerateVertexes(5, 1),
+                new ushort[]
+                {
+                    0,1,
+                    2,3,
+                },
+                SharpDX.Direct3D.PrimitiveTopology.LineList));
+            gObjGeometry.AddComponent(new MeshRenderer(shadersObjects));
+            gObjGeometry.GetComponent<MeshRenderer>().Initialize();
+
+            gObj.AddChild(gObjGeometry);
 
             scene.AddObject(gObj);
 

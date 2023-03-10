@@ -89,18 +89,18 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel6, 0, 9);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel5, 0, 8);
-            this.tableLayoutPanel1.Controls.Add(this.FloatPropLabel, 0, 5);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.GameObjectList, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.TrackBarFloatProp, 0, 6);
             this.tableLayoutPanel1.Controls.Add(this.CheckBoxAllGrid, 0, 7);
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel4, 0, 11);
+            this.tableLayoutPanel1.Controls.Add(this.TrackBarFloatProp, 0, 13);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel4, 0, 6);
+            this.tableLayoutPanel1.Controls.Add(this.FloatPropLabel, 0, 11);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 13;
+            this.tableLayoutPanel1.RowCount = 14;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -114,6 +114,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(198, 459);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
@@ -124,7 +125,7 @@
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 66.66666F));
             this.tableLayoutPanel6.Controls.Add(this.CheckBoxSliceJ, 0, 0);
             this.tableLayoutPanel6.Controls.Add(this.TrackBarSliceJ, 1, 0);
-            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 341);
+            this.tableLayoutPanel6.Location = new System.Drawing.Point(3, 322);
             this.tableLayoutPanel6.Name = "tableLayoutPanel6";
             this.tableLayoutPanel6.RowCount = 1;
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -157,7 +158,7 @@
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 66.66666F));
             this.tableLayoutPanel5.Controls.Add(this.CheckBoxSliceI, 0, 0);
             this.tableLayoutPanel5.Controls.Add(this.TrackBarSliceI, 1, 0);
-            this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 296);
+            this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 277);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 1;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -186,7 +187,7 @@
             // FloatPropLabel
             // 
             this.FloatPropLabel.AutoSize = true;
-            this.FloatPropLabel.Location = new System.Drawing.Point(3, 206);
+            this.FloatPropLabel.Location = new System.Drawing.Point(3, 364);
             this.FloatPropLabel.Name = "FloatPropLabel";
             this.FloatPropLabel.Size = new System.Drawing.Size(76, 13);
             this.FloatPropLabel.TabIndex = 19;
@@ -363,7 +364,7 @@
             // 
             // TrackBarFloatProp
             // 
-            this.TrackBarFloatProp.Location = new System.Drawing.Point(3, 222);
+            this.TrackBarFloatProp.Location = new System.Drawing.Point(3, 380);
             this.TrackBarFloatProp.Name = "TrackBarFloatProp";
             this.TrackBarFloatProp.Size = new System.Drawing.Size(192, 45);
             this.TrackBarFloatProp.TabIndex = 21;
@@ -372,7 +373,7 @@
             // CheckBoxAllGrid
             // 
             this.CheckBoxAllGrid.AutoSize = true;
-            this.CheckBoxAllGrid.Location = new System.Drawing.Point(3, 273);
+            this.CheckBoxAllGrid.Location = new System.Drawing.Point(3, 254);
             this.CheckBoxAllGrid.Name = "CheckBoxAllGrid";
             this.CheckBoxAllGrid.Size = new System.Drawing.Size(58, 17);
             this.CheckBoxAllGrid.TabIndex = 22;
@@ -387,7 +388,7 @@
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 66.14584F));
             this.tableLayoutPanel4.Controls.Add(this.CheckBoxSliceK, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.TrackBarSliceK, 1, 0);
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 386);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 209);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 1;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));

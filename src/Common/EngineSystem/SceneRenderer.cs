@@ -31,18 +31,18 @@ namespace LearnDirectX.src.Common.EngineSystem
             if (!gObj.IsEnabled)
                 return;
 
-            var meshRenderer = gObj.GetComponent<MeshRenderer>();
-            if (meshRenderer != null)
-            {
-                meshRenderer.Render(rendererContext);
-            }
-
             if (gObj.Children.Count > 0)
             {
                 foreach (var child in gObj.Children)
                 {
                     RenderObject(child, rendererContext);
                 }
+            }
+
+            var meshRenderer = gObj.GetComponent<MeshRenderer>();
+            if (meshRenderer != null)
+            {
+                meshRenderer.Render(rendererContext);
             }
         }
     }

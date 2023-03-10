@@ -13,7 +13,7 @@ namespace LearnDirectX.src.Common
             var vertexes = GenerateVertexes(amountSquareForSide, cubeSize);
             var indexes = GenerateIndexes(amountSquareForSide);
 
-            return new Mesh(vertexes, indexes);
+            return new Mesh(vertexes, indexes, SharpDX.Direct3D.PrimitiveTopology.TriangleList);
         }
         public static Vertex[] GenerateVertexes(int amountSquareForSide, float cubeSize)
         {

@@ -44,7 +44,6 @@ namespace LearnDirectX
             }
         }
             
-
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -68,8 +67,24 @@ namespace LearnDirectX
 
             LoadTransformSelectedObjectToGUI();
 
-            if (_selectedGameObject.GetComponent<Grid>() != null)
-                LoadSlicesDataToGUI();
+            LoadGridOptions();
+        }
+
+        private void LoadGridOptions()
+        {
+            if (_selectedGameObject.GetComponent<Grid>() == null)
+            {
+                CheckBoxAllGrid.Hide();
+                CheckBoxSliceI.Hide();
+                CheckBoxSliceJ.Hide();
+                CheckBoxSliceK.Hide();
+                TrackBarSliceI.Hide();
+                TrackBarSliceJ.Hide();
+                TrackBarSliceK.Hide();
+                return;
+            }
+            
+            LoadSlicesDataToGUI();
         }
 
         private void LoadSlicesDataToGUI()

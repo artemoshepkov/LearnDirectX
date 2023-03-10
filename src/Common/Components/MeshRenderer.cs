@@ -91,15 +91,17 @@ namespace LearnDirectX.src.Common.Components
 
             immediateContext.PixelShader.SetConstantBuffer(3, _perPointLightBuffer.Buffer);
 
-            immediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
+            immediateContext.InputAssembler.PrimitiveTopology = _mesh.PrimitiveTopology;
             immediateContext.InputAssembler.SetIndexBuffer(_indexBuffer, SharpDX.DXGI.Format.R16_UInt, 0);
             immediateContext.InputAssembler.SetVertexBuffers(0, _vertexBufferBinding);
 
             LoadPerMaterial();
             LoadWorldViewProjection(context);
-            LoadPerFrame(context);
+            //LoadPerFrame(context);
 
             immediateContext.DrawIndexed(_mesh.Indexes.Length, 0, 0);
+
+            immediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleList;
         }
 
         #endregion
