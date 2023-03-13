@@ -149,6 +149,7 @@ namespace LearnDirectX.src.Common.Components
             var basePanel = new StackPanel();
             basePanel.Dock = DockStyle.Fill;
             basePanel.LayoutDirection = StackPanelLayoutDirection.TopDown;
+            basePanel.AutoSize = true;
 
             {
                 var gridSize = Owner.GetComponent<Grid>().Size;
@@ -158,6 +159,7 @@ namespace LearnDirectX.src.Common.Components
                 {
                     var layout = new StackPanel();
                     layout.LayoutDirection = StackPanelLayoutDirection.LeftToRight;
+                    layout.AutoSize = true;
                     basePanel.AddControl(layout);
 
                     var checkBoxAllGrid = new CheckBox();
@@ -184,6 +186,7 @@ namespace LearnDirectX.src.Common.Components
                 {
                     var layout = new StackPanel();
                     layout.LayoutDirection = StackPanelLayoutDirection.LeftToRight;
+                    layout.AutoSize = true;
                     basePanel.AddControl(layout);
 
                     var checkBox = new CheckBox();
@@ -216,6 +219,7 @@ namespace LearnDirectX.src.Common.Components
                 {
                     var layout = new StackPanel();
                     layout.LayoutDirection = StackPanelLayoutDirection.LeftToRight;
+                    layout.AutoSize = true;
                     basePanel.AddControl(layout);
 
                     var checkBox = new CheckBox();
@@ -248,6 +252,7 @@ namespace LearnDirectX.src.Common.Components
                 {
                     var layout = new StackPanel();
                     layout.LayoutDirection = StackPanelLayoutDirection.LeftToRight;
+                    layout.AutoSize = true;
                     basePanel.AddControl(layout);
 
                     var checkBox = new CheckBox();
@@ -278,7 +283,7 @@ namespace LearnDirectX.src.Common.Components
 
             var groupBox = new GroupBox();
             groupBox.Text = "SliceRenderer";
-            groupBox.Height = 600;
+            groupBox.AutoSize = true;
             groupBox.Dock = DockStyle.Top;
             groupBox.AddControl(basePanel);
 

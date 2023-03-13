@@ -1,5 +1,6 @@
 ﻿using DevExpress.Utils.Extensions;
 using DevExpress.Utils.Layout;
+using DevExpress.XtraBars.Docking2010.Views.WindowsUI;
 using LearnDirectX.src.Common.Extensions;
 using System;
 using System.Numerics;
@@ -39,6 +40,7 @@ namespace LearnDirectX.src.Common.Components
 
             var basePanel = new StackPanel();
             basePanel.Dock = DockStyle.Fill;
+            basePanel.AutoSize = true;
             basePanel.LayoutDirection = StackPanelLayoutDirection.TopDown;
 
             Action<object, KeyPressEventArgs> limitTextBotInputOfDigits = (object sender, KeyPressEventArgs e) =>
@@ -52,6 +54,7 @@ namespace LearnDirectX.src.Common.Components
             {
                 var layout = new StackPanel();
                 layout.LayoutDirection = StackPanelLayoutDirection.LeftToRight;
+                layout.AutoSize = true;
                 basePanel.AddControl(layout);
 
                 var labelPos = new Label();
@@ -149,6 +152,7 @@ namespace LearnDirectX.src.Common.Components
             {
                 var layout = new StackPanel();
                 layout.LayoutDirection = StackPanelLayoutDirection.LeftToRight;
+                layout.AutoSize = true;
                 basePanel.AddControl(layout);
 
                 var label = new Label();
@@ -246,6 +250,7 @@ namespace LearnDirectX.src.Common.Components
             {
                 var layout = new StackPanel();
                 layout.LayoutDirection = StackPanelLayoutDirection.LeftToRight;
+                layout.AutoSize = true;
                 basePanel.AddControl(layout);
 
                 var label = new Label();
@@ -340,7 +345,7 @@ namespace LearnDirectX.src.Common.Components
 
             var groupBox = new GroupBox();
             groupBox.Text = "Transform";
-            groupBox.Height = 400;
+            groupBox.AutoSize = true;
             groupBox.Dock = DockStyle.Top;
             groupBox.AddControl(basePanel);
 
