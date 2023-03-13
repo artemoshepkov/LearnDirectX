@@ -74,7 +74,7 @@ namespace LearnDirectX.src.Common.Geometry
 
                     gridProps.Add(new GridProperty(propName));
 
-                    for (int k = 0; k < gridSize.Z; k++)
+                    for (int k = (int)gridSize.Z - 1; k >= 0; k--)
                     {
                         for (int i = 0; i < gridSize.X; i++)
                         {

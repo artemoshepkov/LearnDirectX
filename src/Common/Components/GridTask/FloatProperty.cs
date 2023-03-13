@@ -14,8 +14,8 @@ namespace LearnDirectX.src.Common.Components.GridTask
 
         private event Action _valueChanged;
 
-        public readonly float MinValue;
-        public readonly float MaxValue;
+        public float MinValue;
+        public float MaxValue;
 
         public float Value 
         {

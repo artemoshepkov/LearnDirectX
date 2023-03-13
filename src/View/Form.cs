@@ -3,9 +3,7 @@ using DevExpress.Utils.Layout;
 using DevExpress.XtraBars.Docking.Helpers;
 using DevExpress.XtraEditors;
 using LearnDirectX.src.Common.Components;
-using LearnDirectX.src.Common.Components.GridTask;
 using LearnDirectX.src.Common.EngineSystem;
-using SharpDX.Direct2D1.Effects;
 using System;
 using System.Drawing;
 using System.Linq;
@@ -17,8 +15,6 @@ namespace LearnDirectX
     {
         private GameObject _selectedGameObject;
 
-        private const string _defaultFloatPropString = "Float property - ";
-
         public bool IsCursorHide { get; set; }
 
         public Form()
@@ -27,22 +23,6 @@ namespace LearnDirectX
 
             Engine.AddEventSceneChanged(SetScene);
             Engine.AddEventScenesListChanged(UpdateScenesList);
-        }
-
-        public void HideCursor(bool isHide)
-        {
-            IsCursorHide = isHide;
-
-            if (IsCursorHide)
-            {
-                Cursor.Hide();
-                Cursor.Clip = Bounds;
-            }
-            else
-            {
-                Cursor.Show();
-                Cursor.Clip = Rectangle.Empty;
-            }
         }
 
         private void UpdateScenesList()
@@ -65,10 +45,10 @@ namespace LearnDirectX
                 return;
 
             _selectedGameObject = Engine.SelectedScene.GameObjects.First();
-            SetGameObject();
+            SetGameObjects();
         }
 
-        private void SetGameObject()
+        private void SetGameObjects()
         {
             GameObjectList.Items.Clear();
             foreach (var gObj in Engine.SelectedScene.GameObjects)
@@ -84,7 +64,26 @@ namespace LearnDirectX
             GameObjectList.SelectedItem = _selectedGameObject;
 
             LoadGameObjectInspector();
+
+
+            //TreeViewScenes.Nodes.Clear();
+            //foreach (var gObj in Engine.SelectedScene.GameObjects)
+            //{
+            //    if (gObj.Children != null)
+            //    {
+            //        TreeViewScenes.Nodes.Add(SetNodeGameObject(gObj));
+            //    }
+            //}
         }
+
+        //private TreeNode SetNodeGameObject(GameObject gObj)
+        //{
+        //    var parentNode = new TreeNode();
+        //    foreach (var node in gObj.Children)
+        //    {
+
+        //    }
+        //}
 
         private void LoadGameObjectInspector()
         {
@@ -95,6 +94,15 @@ namespace LearnDirectX
                 if (gui != null)
                     Inspector.AddControl(gui);
             }
+        }
+
+        private void ListBoxScenes_SelectedValueChanged(object sender, EventArgs e)
+        {
+            var selectedScene = ListBoxScenes.SelectedItem;
+
+            Engine.SelectedScene = selectedScene as Scene;
+
+            ActiveControl = null;
         }
 
         private void GameObjectList_SelectedIndexChanged(object sender, EventArgs e)
@@ -110,20 +118,20 @@ namespace LearnDirectX
                 Cursor.Clip = Bounds;
         }
 
-        private void TrackBarFloatProp_ValueChanged(object sender, EventArgs e)
+        public void HideCursor(bool isHide)
         {
-            var prop = _selectedGameObject.GetComponent<FloatProperty>();
-            prop.Value = TrackBarFloatProp.Value;
-            FloatPropLabel.Text = _defaultFloatPropString + prop.Value;
-        }
+            IsCursorHide = isHide;
 
-        private void ListBoxScenes_SelectedValueChanged(object sender, EventArgs e)
-        {
-            var selectedScene = ListBoxScenes.SelectedItem;
-
-            Engine.SelectedScene = selectedScene as Scene;
-
-            ActiveControl = null;
+            if (IsCursorHide)
+            {
+                Cursor.Hide();
+                Cursor.Clip = Bounds;
+            }
+            else
+            {
+                Cursor.Show();
+                Cursor.Clip = Rectangle.Empty;
+            }
         }
     }
 }

@@ -18,5 +18,10 @@ namespace LearnDirectX.src.Common.Geometry
             MinValue = float.MaxValue;
             MaxValue = float.MinValue;
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

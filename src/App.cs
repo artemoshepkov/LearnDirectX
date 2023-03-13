@@ -13,25 +13,24 @@ using System.Linq;
 using LearnDirectX.src.Common.Components.GridTask;
 using LearnDirectX.src.Common;
 using LearnDirectX.src.Common.EngineSystem.Shaders.Uploaders;
+using SharpDX.Direct2D1.Effects;
 
 namespace LearnDirectX.src
 {
     public sealed class App : BaseApplication
     {
         private bool _isPoligon = false;
-        
-        private List<GridProperty> _gridProperties;
 
         public App() 
         {
             _controlBinds = new Dictionary<Key, Action>()
             {
                 { Key.Escape, Window.Exit },
-                { Key.R, () => { Window.ChangeCursorMode(); Engine.SwitchCameraOnOff(); } },
+                { Key.E, () => { Window.ChangeCursorMode(); Engine.SwitchCameraOnOff(); } },
                 { Key.F, SetPoligonMode },
             };
 
-            Engine.AddScene(InitializeSurfaceScene());
+            //Engine.AddScene(InitializeSurfaceScene());
             Engine.AddScene(InitializeLightScene());
             Engine.AddScene(InitializeGridScene());
 
@@ -86,7 +85,15 @@ namespace LearnDirectX.src
 
             var grid = GridLoader.ReadGridFromFile(gridPath);
 
-            _gridProperties = GridLoader.ReadPropsFromFile(grid.Size, gridPropsPath);
+            var gridProperties = GridLoader.ReadPropsFromFile(grid.Size, gridPropsPath);
+            var gridHeightProperty = new GridProperty("Height");
+            gridHeightProperty.MinValue = 0;
+            gridHeightProperty.MaxValue = 13;
+            foreach (var quad in grid.Quads)
+            {
+                gridHeightProperty.QuadProperties.Add(new QuadProperty(new Vector3(quad.I, quad.J, quad.K), quad.K));
+            }
+            gridProperties.Add(gridHeightProperty);
 
             var gridGameObject = new GameObject();
 
@@ -94,14 +101,13 @@ namespace LearnDirectX.src
             gridGameObject.AddComponent(new Transform());
             gridGameObject.GetComponent<Transform>().Rotate(new Vector3(0f, 0f, 180f));
             gridGameObject.GetComponent<Transform>().Scale(new Vector3(0.001f, 0.001f, 0.001f));
+            gridGameObject.AddComponent(new GridProperties(gridProperties));
             gridGameObject.AddComponent(new Common.Components.GridTask.Grid(grid.Size));
             gridGameObject.AddComponent(new SliceRenderer());
             gridGameObject.AddComponent(new Palette(new List<Vector4>() { new Vector4(1f, 0f, 0f, 1f), new Vector4(0f, 1f, 0f, 1f) , new Vector4(0f, 0f, 1f, 1f) }));
 
             foreach (var quad in grid.Quads)
             {
-                var gridProperty = _gridProperties[0];
-
                 var gObj = new GameObject();
 
                 gridGameObject.AddChild(gObj);
@@ -113,17 +119,7 @@ namespace LearnDirectX.src
                 gObj.AddComponent(new Material(new Vector4(0f, 0.6f, 0f, 1f)));
 
                 gObj.AddComponent(new QuadIndex(quad.I, quad.J, quad.K));
-
-                //foreach (var prop in gridProperty.QuadProperties)
-                //{
-                //    if (prop.Indexes.X == quad.I && prop.Indexes.Y == quad.J && prop.Indexes.Z == quad.K)
-                //    {
-                //        gObj.AddComponent(new FloatProperty(prop.Value, gridProperty.MinValue, gridProperty.MaxValue));
-                //        break;
-                //    }
-                //}
-
-                gObj.AddComponent(new FloatProperty(quad.K, 0, 13));
+                gObj.AddComponent(new FloatProperty(0, 0, 0));
                 gObj.AddComponent(new MaterialUpdater());
 
                 var vertexes = new List<Common.EngineSystem.Shaders.Vertex>();
@@ -186,6 +182,8 @@ namespace LearnDirectX.src
                 gObjGeometry.AddComponent(new MeshRenderer(shadersObjects, shadersUploaders));
 
             }
+
+            gridGameObject.GetComponent<GridProperties>().UpdateProps();
 
             gridGameObject.GetComponent<SliceRenderer>().UpdateSlices();
 
@@ -322,7 +320,7 @@ namespace LearnDirectX.src
 
             #endregion
 
-            scene.Camera = CreateCamera(0.1f);
+            scene.Camera = CreateCamera(0.3f);
 
             return scene;
         }

@@ -23,7 +23,6 @@ namespace LearnDirectX.src.Common.EngineSystem
 
         private Scene _selectedScene;
 
-
         #endregion
 
         #region Properties

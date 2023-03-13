@@ -87,6 +87,7 @@
     <Compile Include="src\Common\Components\DirectLight.cs" />
     <Compile Include="src\Common\Components\GridTask\FloatProperty.cs" />
     <Compile Include="src\Common\Components\GridTask\Grid.cs" />
+    <Compile Include="src\Common\Components\GridTask\GridProperties.cs" />
     <Compile Include="src\Common\Components\GridTask\MaterialUpdater.cs" />
     <Compile Include="src\Common\Components\GridTask\Palette.cs" />
     <Compile Include="src\Common\Components\ObjectMaterial.cs" />
