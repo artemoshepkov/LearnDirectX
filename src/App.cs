@@ -31,7 +31,10 @@ namespace LearnDirectX.src
                 { Key.F, SetPoligonMode },
             };
 
+            Engine.AddScene(InitializeSurfaceScene());
+            Engine.AddScene(InitializeLightScene());
             Engine.AddScene(InitializeGridScene());
+
             Engine.AddEventUpdate(Update);
         }
 
@@ -62,9 +65,9 @@ namespace LearnDirectX.src
             var gridPath = "../../Assets/grid.bin";
             var gridPropsPath = "../../Assets/gridProps.txt";
 
-            var scene = new Scene();
+            var scene = new Scene("Grid");
 
-            scene.Camera = CreateCamera();
+            scene.Camera = CreateCamera(0.01f);
 
             #region Add grid
 
@@ -81,7 +84,6 @@ namespace LearnDirectX.src
                 new ObjectUploader(0),
             };
 
-
             var grid = GridLoader.ReadGridFromFile(gridPath);
 
             _gridProperties = GridLoader.ReadPropsFromFile(grid.Size, gridPropsPath);
@@ -93,7 +95,7 @@ namespace LearnDirectX.src
             gridGameObject.GetComponent<Transform>().Rotate(new Vector3(0f, 0f, 180f));
             gridGameObject.GetComponent<Transform>().Scale(new Vector3(0.001f, 0.001f, 0.001f));
             gridGameObject.AddComponent(new Common.Components.GridTask.Grid(grid.Size));
-            gridGameObject.AddComponent(new SliceRenderer(grid.Size));
+            gridGameObject.AddComponent(new SliceRenderer());
             gridGameObject.AddComponent(new Palette(new List<Vector4>() { new Vector4(1f, 0f, 0f, 1f), new Vector4(0f, 1f, 0f, 1f) , new Vector4(0f, 0f, 1f, 1f) }));
 
             foreach (var quad in grid.Quads)
@@ -196,7 +198,7 @@ namespace LearnDirectX.src
 
         private static Scene InitializeSurfaceScene()
         {
-            var scene = new Scene();
+            var scene = new Scene("Surface");
 
             string ShadersPath = "../../src/Shaders/";
 
@@ -255,14 +257,14 @@ namespace LearnDirectX.src
 
             #endregion
 
-            scene.Camera = CreateCamera();
+            scene.Camera = CreateCamera(0.01f);
 
             return scene;
         }
 
         private static Scene InitializeLightScene()
         {
-            var scene = new Scene();
+            var scene = new Scene("Light");
 
             string ShadersPath = "../../src/Shaders/";
 
@@ -320,12 +322,12 @@ namespace LearnDirectX.src
 
             #endregion
 
-            scene.Camera = CreateCamera();
+            scene.Camera = CreateCamera(0.1f);
 
             return scene;
         }
 
-        private static GameObject CreateCamera()
+        private static GameObject CreateCamera(float mouseSensitivity)
         {
             var gObj = new GameObject();
 
@@ -333,6 +335,7 @@ namespace LearnDirectX.src
             gObj.GetComponent<Transform>().Translate(new Vector3(0f, 3f, -4f));
             gObj.AddComponent(new Camera());
             gObj.AddComponent(new CameraController());
+            gObj.GetComponent<CameraController>().MouseSensitivity = mouseSensitivity;
 
             return gObj;
         }
@@ -341,6 +344,7 @@ namespace LearnDirectX.src
         {
             var gObj = new GameObject();
 
+            gObj.Name = "Light";
             gObj.AddComponent(new Transform());
             gObj.GetComponent<Transform>().Translate(position);
             gObj.AddComponent(new Material(color));

@@ -1,6 +1,9 @@
-﻿using LearnDirectX.src.Common.EngineSystem;
-using System.Linq;
+﻿using DevExpress.Utils.Extensions;
+using DevExpress.Utils.Layout;
+using LearnDirectX.src.Common.Components.GridTask;
+using System;
 using System.Numerics;
+using System.Windows.Forms;
 
 namespace LearnDirectX.src.Common.Components
 {
@@ -14,9 +17,7 @@ namespace LearnDirectX.src.Common.Components
         private int _j;
         private int _k;
 
-        private Vector3 _gridSize;
-
-        public bool SliceI
+        public bool IsSliceI
         {
             get
             {
@@ -28,7 +29,7 @@ namespace LearnDirectX.src.Common.Components
                 UpdateSlices();
             }
         }
-        public bool SliceJ
+        public bool IsSliceJ
         {
             get
             {
@@ -40,7 +41,7 @@ namespace LearnDirectX.src.Common.Components
                 UpdateSlices();
             }
         }
-        public bool SliceK
+        public bool IsSliceK
         {
             get
             {
@@ -62,7 +63,7 @@ namespace LearnDirectX.src.Common.Components
             set
             {
                 _i = value;
-                if (SliceI)
+                if (IsSliceI)
                     UpdateSlices();
             }
         }
@@ -75,7 +76,7 @@ namespace LearnDirectX.src.Common.Components
             set
             {
                 _j = value;
-                if (SliceJ)
+                if (IsSliceJ)
                     UpdateSlices();
             }
         }
@@ -88,30 +89,27 @@ namespace LearnDirectX.src.Common.Components
             set
             {
                 _k = value;
-                if (SliceK)
+                if (IsSliceK)
                     UpdateSlices();
             }
         }
 
         public SliceRenderer()
         {
-        }
-
-        public SliceRenderer(Vector3 gridSize)
-        {
             _i = _j = _k = 0;
             _sliceI = false;
             _sliceJ = false;
             _sliceK = false;
-            _gridSize = gridSize;
         }
 
         public void UpdateSlices()
         {
             var quads = Owner.Children;
 
-            if (!(SliceI || SliceJ || SliceK))
+            if (!(IsSliceI || IsSliceJ || IsSliceK))
             {
+                var gridSize = Owner.GetComponent<Grid>().Size;
+
                 foreach (var quad in quads)
                 {
                     var quadIndex = quad.GetComponent<QuadIndex>();
@@ -119,7 +117,7 @@ namespace LearnDirectX.src.Common.Components
                     {
                         quad.IsEnabled = true;
                     }
-                    else if (quadIndex.I == _gridSize.X - 1 || quadIndex.J == _gridSize.Y - 1 || quadIndex.K == _gridSize.Z - 1)
+                    else if (quadIndex.I == gridSize.X - 1 || quadIndex.J == gridSize.Y - 1 || quadIndex.K == gridSize.Z - 1)
                     {
                         quad.IsEnabled = true;
                     }
@@ -135,7 +133,7 @@ namespace LearnDirectX.src.Common.Components
             foreach (var quad in quads)
             {
                 var quadIndex = quad.GetComponent<QuadIndex>();
-                if (SliceI && quadIndex.I == I || SliceJ && quadIndex.J == J || SliceK && quadIndex.K == K)
+                if (IsSliceI && quadIndex.I == I || IsSliceJ && quadIndex.J == J || IsSliceK && quadIndex.K == K)
                 {
                     quad.IsEnabled = true;
                 }
@@ -144,6 +142,147 @@ namespace LearnDirectX.src.Common.Components
                     quad.IsEnabled = false;
                 }
             }
+        }
+
+        public override GroupBox GetGUI()
+        {
+            var basePanel = new StackPanel();
+            basePanel.Dock = DockStyle.Fill;
+            basePanel.LayoutDirection = StackPanelLayoutDirection.TopDown;
+
+            {
+                var gridSize = Owner.GetComponent<Grid>().Size;
+
+                #region All grid checkBox
+
+                {
+                    var layout = new StackPanel();
+                    layout.LayoutDirection = StackPanelLayoutDirection.LeftToRight;
+                    basePanel.AddControl(layout);
+
+                    var checkBoxAllGrid = new CheckBox();
+                    checkBoxAllGrid.Text = "All grid";
+                    checkBoxAllGrid.Checked = !(IsSliceI && IsSliceJ && IsSliceK);
+                    checkBoxAllGrid.CheckStateChanged += (object sender, EventArgs e) =>
+                    {
+                        var checkBox = (CheckBox)sender;
+
+                        var newState = checkBox.Checked;
+
+                        if (newState)
+                        {
+                            IsSliceI = IsSliceJ = IsSliceK = false;
+                        }
+                    };
+                    layout.AddControl(checkBoxAllGrid);
+                }
+
+                #endregion
+
+                #region I slice
+
+                {
+                    var layout = new StackPanel();
+                    layout.LayoutDirection = StackPanelLayoutDirection.LeftToRight;
+                    basePanel.AddControl(layout);
+
+                    var checkBox = new CheckBox();
+                    checkBox.Text = "I slice";
+                    checkBox.Checked = IsSliceI;
+                    checkBox.CheckedChanged += (object sender, EventArgs e) =>
+                    {
+                        var checkBoxI = (CheckBox)sender;
+
+                        IsSliceI = checkBoxI.Checked;
+                    };
+                    layout.AddControl(checkBox);
+
+                    var trackBar = new TrackBar();
+                    trackBar.Value = I;
+                    trackBar.Maximum = (int)gridSize.X - 1;
+                    trackBar.ValueChanged += (object sender, EventArgs e) =>
+                    { 
+                        var trackBarI = (TrackBar)sender;
+
+                        I = trackBarI.Value;
+                    };
+                    layout.AddControl(trackBar);
+                }
+
+                #endregion
+
+                #region J slice
+
+                {
+                    var layout = new StackPanel();
+                    layout.LayoutDirection = StackPanelLayoutDirection.LeftToRight;
+                    basePanel.AddControl(layout);
+
+                    var checkBox = new CheckBox();
+                    checkBox.Text = "J slice";
+                    checkBox.Checked = IsSliceJ;
+                    checkBox.CheckedChanged += (object sender, EventArgs e) =>
+                    {
+                        var checkBoxJ = (CheckBox)sender;
+
+                        IsSliceJ = checkBoxJ.Checked;
+                    };
+                    layout.AddControl(checkBox);
+
+                    var trackBar = new TrackBar();
+                    trackBar.Value = J;
+                    trackBar.Maximum = (int)gridSize.Y - 1;
+                    trackBar.ValueChanged += (object sender, EventArgs e) =>
+                    {
+                        var trackBarJ = (TrackBar)sender;
+
+                        J = trackBarJ.Value;
+                    };
+                    layout.AddControl(trackBar);
+                }
+
+                #endregion
+
+                #region K slice
+
+                {
+                    var layout = new StackPanel();
+                    layout.LayoutDirection = StackPanelLayoutDirection.LeftToRight;
+                    basePanel.AddControl(layout);
+
+                    var checkBox = new CheckBox();
+                    checkBox.Text = "K slice";
+                    checkBox.Checked = IsSliceK;
+                    checkBox.CheckedChanged += (object sender, EventArgs e) =>
+                    {
+                        var checkBoxK = (CheckBox)sender;
+
+                        IsSliceK = checkBoxK.Checked;
+                    };
+                    layout.AddControl(checkBox);
+
+                    var trackBar = new TrackBar();
+                    trackBar.Value = K;
+                    trackBar.Maximum = (int)gridSize.Z - 1;
+                    trackBar.ValueChanged += (object sender, EventArgs e) =>
+                    {
+                        var trackBarJ = (TrackBar)sender;
+
+                        K = trackBarJ.Value;
+                    };
+                    layout.AddControl(trackBar);
+                }
+
+                #endregion
+            }
+
+            var groupBox = new GroupBox();
+            groupBox.Text = "SliceRenderer";
+            groupBox.Height = 600;
+            groupBox.Dock = DockStyle.Top;
+            groupBox.AddControl(basePanel);
+
+            return groupBox;
         }
     }
 }

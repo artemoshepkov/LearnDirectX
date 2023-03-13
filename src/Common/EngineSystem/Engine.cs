@@ -11,6 +11,9 @@ namespace LearnDirectX.src.Common.EngineSystem
     public sealed class Engine
     {
         private event Action _selectedSceneChanged;
+        private event Action _scenesListChanged;
+
+        private event UpdateEvent _updateEvent;
 
         #region Fields
 
@@ -20,7 +23,6 @@ namespace LearnDirectX.src.Common.EngineSystem
 
         private Scene _selectedScene;
 
-        private event UpdateEvent _updateEvent;
 
         #endregion
 
@@ -42,13 +44,25 @@ namespace LearnDirectX.src.Common.EngineSystem
             {
                 return Instance._selectedScene;
             }
-            private set 
+            set 
             { 
                 Instance._selectedScene = value;
                 Instance._selectedSceneChanged?.Invoke();
             }
         }
 
+        public static List<Scene> Scenes
+        {
+            get
+            {
+                return Instance._scenes;
+            }
+            private set
+            {
+                Instance._scenes = value;
+                Instance._scenesListChanged?.Invoke();
+            }
+        }
         #endregion
 
         #region Constructor
@@ -61,7 +75,7 @@ namespace LearnDirectX.src.Common.EngineSystem
 
         public static void Init(string title, int width, int height)
         {
-            Instance._scenes = new List<Scene>();
+            Scenes = new List<Scene>();
             Window.Init(title, width, height);
         }
 
@@ -86,7 +100,8 @@ namespace LearnDirectX.src.Common.EngineSystem
 
         public static void AddScene(Scene scene)
         {
-            Instance._scenes.Add(scene);
+            Scenes.Add(scene);
+            Instance._scenesListChanged?.Invoke();
             SelectedScene = scene;
         }
 
@@ -94,6 +109,8 @@ namespace LearnDirectX.src.Common.EngineSystem
 
         public static void AddEventSceneChanged(Action sceneChangedEvent) =>
             Instance._selectedSceneChanged += sceneChangedEvent;
+        public static void AddEventScenesListChanged(Action scenesListChangedEvent) =>
+            Instance._scenesListChanged += scenesListChangedEvent;
 
         public static void SwitchCameraOnOff()
         {
@@ -110,14 +127,7 @@ namespace LearnDirectX.src.Common.EngineSystem
 
         private static void Render()
         {
-            try
-            {
-                SceneRenderer.Render(Instance._selectedScene);
-            }
-            catch (System.NullReferenceException)
-            {
-                Console.WriteLine("You need to add scene to engine");
-            }
+            SceneRenderer.Render(Instance._selectedScene);
         }
 
         #endregion

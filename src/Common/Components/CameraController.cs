@@ -20,9 +20,9 @@ namespace LearnDirectX.src.Common.Components
         };
 
         private float _speed = 0.01f;
-        private float _mouseSensitivity = 0.1f;
         private float _fovSensitivity = 0.1f;
 
+        public float MouseSensitivity = 0.1f;
         public bool IsEnabled = true;
 
         public CameraController()
@@ -52,8 +52,8 @@ namespace LearnDirectX.src.Common.Components
                 }
             }
 
-            camera.Yaw += MouseInput.MousePos.X * _mouseSensitivity * Profiler.DeltaTime;
-            camera.Pitch += -MouseInput.MousePos.Y * _mouseSensitivity * Profiler.DeltaTime;
+            camera.Yaw += MouseInput.MousePos.X * MouseSensitivity * Profiler.DeltaTime;
+            camera.Pitch += -MouseInput.MousePos.Y * MouseSensitivity * Profiler.DeltaTime;
 
             camera.Fov += (float)MouseInput.MouseWheelAxis * _fovSensitivity * Profiler.DeltaTime;
 

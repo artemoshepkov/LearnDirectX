@@ -68,6 +68,7 @@ namespace LearnDirectX.src.Common.Components
                     layout.Controls.Add(labelX);
 
                     var textBoxPosX = new TextBox();
+                    textBoxPosX.Text = Position.X.ToString();
                     textBoxPosX.AutoSize = true;
                     textBoxPosX.Width = textBoxWidth;
                     textBoxPosX.KeyPress += (object sender, KeyPressEventArgs e) => limitTextBotInputOfDigits(sender, e);
@@ -94,6 +95,7 @@ namespace LearnDirectX.src.Common.Components
                     layout.Controls.Add(labelY);
 
                     var textBoxPosY = new TextBox();
+                    textBoxPosY.Text = Position.Y.ToString();
                     textBoxPosY.AutoSize = true;
                     textBoxPosY.Width = textBoxWidth;
                     textBoxPosY.KeyPress += (object sender, KeyPressEventArgs e) => limitTextBotInputOfDigits(sender, e);
@@ -120,6 +122,7 @@ namespace LearnDirectX.src.Common.Components
                     layout.Controls.Add(labelZ);
 
                     var textBoxPosZ = new TextBox();
+                    textBoxPosZ.Text = Position.Z.ToString();
                     textBoxPosZ.AutoSize = true;
                     textBoxPosZ.Width = textBoxWidth;
                     textBoxPosZ.KeyPress += (object sender, KeyPressEventArgs e) => limitTextBotInputOfDigits(sender, e);
@@ -162,6 +165,7 @@ namespace LearnDirectX.src.Common.Components
                     layout.Controls.Add(labelX);
 
                     var textBoxPosX = new TextBox();
+                    textBoxPosX.Text = Rotation.X.ToString();
                     textBoxPosX.AutoSize = true;
                     textBoxPosX.Width = textBoxWidth;
                     textBoxPosX.KeyPress += (object sender, KeyPressEventArgs e) => limitTextBotInputOfDigits(sender, e);
@@ -188,6 +192,7 @@ namespace LearnDirectX.src.Common.Components
                     layout.Controls.Add(labelY);
 
                     var textBoxPosY = new TextBox();
+                    textBoxPosY.Text = Rotation.Y.ToString();
                     textBoxPosY.AutoSize = true;
                     textBoxPosY.Width = textBoxWidth;
                     textBoxPosY.KeyPress += (object sender, KeyPressEventArgs e) => limitTextBotInputOfDigits(sender, e);
@@ -214,6 +219,7 @@ namespace LearnDirectX.src.Common.Components
                     layout.Controls.Add(labelZ);
 
                     var textBoxPosZ = new TextBox();
+                    textBoxPosZ.Text = Rotation.Z.ToString();
                     textBoxPosZ.AutoSize = true;
                     textBoxPosZ.Width = textBoxWidth;
                     textBoxPosZ.KeyPress += (object sender, KeyPressEventArgs e) => limitTextBotInputOfDigits(sender, e);
@@ -256,6 +262,7 @@ namespace LearnDirectX.src.Common.Components
                     layout.Controls.Add(labelX);
 
                     var textBoxPosX = new TextBox();
+                    textBoxPosX.Text = ScaleV.X.ToString();
                     textBoxPosX.AutoSize = true;
                     textBoxPosX.Width = textBoxWidth;
                     textBoxPosX.KeyPress += (object sender, KeyPressEventArgs e) => limitTextBotInputOfDigits(sender, e);
@@ -282,6 +289,7 @@ namespace LearnDirectX.src.Common.Components
                     layout.Controls.Add(labelY);
 
                     var textBoxPosY = new TextBox();
+                    textBoxPosY.Text = ScaleV.Y.ToString();
                     textBoxPosY.AutoSize = true;
                     textBoxPosY.Width = textBoxWidth;
                     textBoxPosY.KeyPress += (object sender, KeyPressEventArgs e) => limitTextBotInputOfDigits(sender, e);
@@ -308,6 +316,7 @@ namespace LearnDirectX.src.Common.Components
                     layout.Controls.Add(labelZ);
 
                     var textBoxPosZ = new TextBox();
+                    textBoxPosZ.Text = ScaleV.Z.ToString();
                     textBoxPosZ.AutoSize = true;
                     textBoxPosZ.Width = textBoxWidth;
                     textBoxPosZ.KeyPress += (object sender, KeyPressEventArgs e) => limitTextBotInputOfDigits(sender, e);

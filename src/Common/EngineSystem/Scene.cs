@@ -5,14 +5,17 @@ namespace LearnDirectX.src.Common.EngineSystem
 {
     public class Scene
     {
+        public string Name;
+
         public GameObject Camera;
         public List<GameObject> GameObjects { get; private set; }
         public List<GameObject> Lights { get; private set; }
 
-        public Scene()
+        public Scene(string name)
         {
             GameObjects = new List<GameObject>();
             Lights = new List<GameObject>();
+            Name = name;
         }
 
         public void AddObject(GameObject gameObject)
@@ -33,6 +36,11 @@ namespace LearnDirectX.src.Common.EngineSystem
         public void RemoveLight(GameObject gameObject)
         {
             Lights.Remove(gameObject);
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }
