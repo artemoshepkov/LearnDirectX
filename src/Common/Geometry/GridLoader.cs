@@ -23,7 +23,7 @@ namespace LearnDirectX.src.Common.Geometry
                 grid.Size.Y = binReader.ReadInt32();
                 grid.Size.Z = binReader.ReadInt32();
 
-                for (int k = 0; k < grid.Size.Z; k++)
+                for (int k = (int)grid.Size.Z - 1; k >= 0; k--)
                 {
                     for (int i = 0; i < grid.Size.X; i++)
                     {
@@ -53,9 +53,9 @@ namespace LearnDirectX.src.Common.Geometry
             return grid;
         }
 
-        public static Dictionary<string, List<QuadProperty>> ReadPropsFromFile(Vector3 gridSize, string path)
+        public static List<GridProperty> ReadPropsFromFile(Vector3 gridSize, string path)
         {
-            var gridProps = new Dictionary<string, List<QuadProperty>>();
+            var gridProps = new List<GridProperty>();
 
             using (StreamReader reader = new StreamReader(path))
             {
@@ -68,12 +68,11 @@ namespace LearnDirectX.src.Common.Geometry
                 if (!int.TryParse(line, out propsAmount))
                     return null;
 
-
                 for (int props = 0; props < propsAmount; props++)
                 {
                     var propName = reader.ReadLine();
 
-                    gridProps[propName] = new List<QuadProperty>();
+                    gridProps.Add(new GridProperty(propName));
 
                     for (int k = 0; k < gridSize.Z; k++)
                     {
@@ -86,7 +85,17 @@ namespace LearnDirectX.src.Common.Geometry
                                     throw new Exception("Grid size doesn`t correspond prop file");
                                 }
 
-                                gridProps[propName].Add(new QuadProperty(new Vector3(i, j, k), res));
+                                if (res > gridProps[props].MaxValue)
+                                {
+                                    gridProps[props].MaxValue = res;
+                                }
+
+                                if (res < gridProps[props].MinValue)
+                                {
+                                    gridProps[props].MinValue = res;
+                                }
+
+                                gridProps[props].QuadProperties.Add(new QuadProperty(new Vector3(i, j, k), res));
                             }
                         }
                     }

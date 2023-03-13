@@ -12,7 +12,7 @@ using LearnDirectX.src.Common.Geometry;
 using System.Linq;
 using LearnDirectX.src.Common.Components.GridTask;
 using LearnDirectX.src.Common;
-using LearnDirectX.src.Common.EngineSystem.Shaders;
+using LearnDirectX.src.Common.EngineSystem.Shaders.Uploaders;
 
 namespace LearnDirectX.src
 {
@@ -20,7 +20,7 @@ namespace LearnDirectX.src
     {
         private bool _isPoligon = false;
         
-        private Dictionary<string, List<QuadProperty>> _gridProperties;
+        private List<GridProperty> _gridProperties;
 
         public App() 
         {
@@ -49,6 +49,8 @@ namespace LearnDirectX.src
             }
 
             rasterDesc.FillMode = _isPoligon ? FillMode.Solid : FillMode.Wireframe;
+            rasterDesc.IsMultisampleEnabled = _isPoligon;
+            rasterDesc.IsAntialiasedLineEnabled = _isPoligon;
 
             context.Rasterizer.State = new RasterizerState(context.Device, rasterDesc);
             _isPoligon = !_isPoligon;
@@ -72,6 +74,14 @@ namespace LearnDirectX.src
                 new PixelShader(ShaderBytecode.CompileFromFile($"{ShadersPath}PS.hlsl", "PSMain", "ps_5_0")),
             };
 
+            ShaderBufferUploader[] shadersUploaders = new ShaderBufferUploader[]
+            {
+                new FrameUploader(1),
+                new MaterialUploader(2),
+                new ObjectUploader(0),
+            };
+
+
             var grid = GridLoader.ReadGridFromFile(gridPath);
 
             _gridProperties = GridLoader.ReadPropsFromFile(grid.Size, gridPropsPath);
@@ -79,35 +89,40 @@ namespace LearnDirectX.src
             var gridGameObject = new GameObject();
 
             gridGameObject.Name = "Grid";
-            gridGameObject.AddComponent(new Transform(new Vector3(0, 0, 0)));
+            gridGameObject.AddComponent(new Transform());
+            gridGameObject.GetComponent<Transform>().Rotate(new Vector3(0f, 0f, 180f));
+            gridGameObject.GetComponent<Transform>().Scale(new Vector3(0.001f, 0.001f, 0.001f));
             gridGameObject.AddComponent(new Common.Components.GridTask.Grid(grid.Size));
             gridGameObject.AddComponent(new SliceRenderer(grid.Size));
+            gridGameObject.AddComponent(new Palette(new List<Vector4>() { new Vector4(1f, 0f, 0f, 1f), new Vector4(0f, 1f, 0f, 1f) , new Vector4(0f, 0f, 1f, 1f) }));
 
             foreach (var quad in grid.Quads)
             {
-                var propName = _gridProperties.Keys.Last();
+                var gridProperty = _gridProperties[0];
 
                 var gObj = new GameObject();
+
+                gridGameObject.AddChild(gObj);
 
                 gObj.Name = "Quad: " + quad.ToString();
                 gObj.IsEnabled = quad.IsActive;
 
-                gObj.AddComponent(new Transform(new Vector3(0, 0, 0), new Vector3(0, 0, 0), new Vector3(0.01f, 0.01f, 0.01f)));
-
+                gObj.AddComponent(new Transform());
                 gObj.AddComponent(new Material(new Vector4(0f, 0.6f, 0f, 1f)));
 
                 gObj.AddComponent(new QuadIndex(quad.I, quad.J, quad.K));
 
-                foreach (var prop in _gridProperties[propName])
-                {
-                    if (prop.Indexes.X == quad.I && prop.Indexes.Y == quad.J && prop.Indexes.Z == quad.K)
-                    {
-                        gObj.AddComponent(new FloatProperty(prop.Value));
-                    }
-                }
-                gObj.AddComponent(new MaterialUpdater());
-                gObj.GetComponent<MaterialUpdater>().Initialize();
+                //foreach (var prop in gridProperty.QuadProperties)
+                //{
+                //    if (prop.Indexes.X == quad.I && prop.Indexes.Y == quad.J && prop.Indexes.Z == quad.K)
+                //    {
+                //        gObj.AddComponent(new FloatProperty(prop.Value, gridProperty.MinValue, gridProperty.MaxValue));
+                //        break;
+                //    }
+                //}
 
+                gObj.AddComponent(new FloatProperty(quad.K, 0, 13));
+                gObj.AddComponent(new MaterialUpdater());
 
                 var vertexes = new List<Common.EngineSystem.Shaders.Vertex>();
 
@@ -140,11 +155,11 @@ namespace LearnDirectX.src
                         5,2,4,
                     }
                 ));
-                gObj.AddComponent(new MeshRenderer(shadersObjects));
-                gObj.GetComponent<MeshRenderer>().Initialize();
+                gObj.AddComponent(new MeshRenderer(shadersObjects, shadersUploaders));
 
                 var gObjGeometry = new GameObject();
-                gObjGeometry.AddComponent(new Transform(new Vector3(0f, 0f, 0f), new Vector3(0, 0, 0), new Vector3(0.01f, 0.01f, 0.01f)));
+                gObj.AddChild(gObjGeometry);
+                gObjGeometry.AddComponent(new Transform());
                 gObjGeometry.AddComponent(new Material(new Vector4(0f, 0f, 0f, 1f)));
                 gObjGeometry.AddComponent(new Mesh(
                     vertexes.ToArray(),
@@ -163,16 +178,11 @@ namespace LearnDirectX.src
                         1,3,
                         1,7,
                         3,5,
-                        5,7
-
+                        5,7,
                     },
                     SharpDX.Direct3D.PrimitiveTopology.LineList));
-                gObjGeometry.AddComponent(new MeshRenderer(shadersObjects));
-                gObjGeometry.GetComponent<MeshRenderer>().Initialize();
+                gObjGeometry.AddComponent(new MeshRenderer(shadersObjects, shadersUploaders));
 
-                gObj.AddChild(gObjGeometry);
-
-                gridGameObject.AddChild(gObj);
             }
 
             gridGameObject.GetComponent<SliceRenderer>().UpdateSlices();
@@ -226,7 +236,8 @@ namespace LearnDirectX.src
                 gObj = new GameObject();
 
                 gObj.Name = "Quad" + i;
-                gObj.AddComponent(new Transform(new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, 0f), new Vector3(0.005f, 0.005f, 0.005f)));
+                gObj.AddComponent(new Transform());
+                gObj.GetComponent<Transform>().Scale(new Vector3(0.005f, 0.005f, 0.005f));
 
                 gObj.AddComponent(
                     new Mesh()
@@ -235,11 +246,9 @@ namespace LearnDirectX.src
                         Indexes = indexes.ToArray(),
                     });
 
-                gObj.AddComponent(new MeshRenderer(shadersObjects));
-                gObj.GetComponent<MeshRenderer>().Initialize();
+                gObj.AddComponent(new MeshRenderer(shadersObjects, null));
 
                 gObj.AddComponent(new Material(new Vector4(0f, 0.6f, 0f, 1f)));
-                gObj.AddComponent(new FloatProperty(1f));
 
                 scene.AddObject(gObj);
             }
@@ -251,13 +260,15 @@ namespace LearnDirectX.src
             return scene;
         }
 
-        private static Scene InitializeScene()
+        private static Scene InitializeLightScene()
         {
             var scene = new Scene();
 
             string ShadersPath = "../../src/Shaders/";
 
             Shader[] shadersObjects;
+
+            ShaderBufferUploader[] shadersUploaders;
 
             GameObject gObj;
 
@@ -266,13 +277,22 @@ namespace LearnDirectX.src
             shadersObjects = new Shader[]
             {
                 new VertexShader(ShaderBytecode.CompileFromFile($"{ShadersPath}VS.hlsl", "VSMain", "vs_5_0")),
-                new PixelShader(ShaderBytecode.CompileFromFile($"{ShadersPath}PS.hlsl", "PSMain", "ps_5_0")),
+                new PixelShader(ShaderBytecode.CompileFromFile($"{ShadersPath}PSLight.hlsl", "PSMain", "ps_5_0")),
+            };
+
+            shadersUploaders = new ShaderBufferUploader[]
+            {
+                new PointLightsUploader(4, 3),
+                new FrameUploader(1),
+                new MaterialUploader(2),
+                new ObjectUploader(0),
             };
 
             gObj = new GameObject();
 
             gObj.Name = "Cube";
-            gObj.AddComponent(new Transform(new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, 0f), new Vector3(10f, 1f, 10f)));
+            gObj.AddComponent(new Transform());
+            gObj.GetComponent<Transform>().Scale(new Vector3(10f, 1f, 10f));
 
             gObj.AddComponent(
                 new Mesh()
@@ -280,25 +300,8 @@ namespace LearnDirectX.src
                     Vertexes = CubeMeshGenerator.GenerateVertexes(5, 1),
                     Indexes = CubeMeshGenerator.GenerateIndexes(5),
                 });
-            gObj.AddComponent(new MeshRenderer(shadersObjects));
-            gObj.GetComponent<MeshRenderer>().Initialize();
+            gObj.AddComponent(new MeshRenderer(shadersObjects, shadersUploaders));
             gObj.AddComponent(new Material(new Vector4(1f)));
-
-            var gObjGeometry = new GameObject();
-            gObjGeometry.AddComponent(new Transform(new Vector3(0f, 0f, 0f), new Vector3(0f, 0f, 0f), new Vector3(10f, 1f, 10f)));
-            gObjGeometry.AddComponent(new Material(new Vector4(0f, 0f, 0f, 1f)));
-            gObjGeometry.AddComponent(new Mesh(
-                CubeMeshGenerator.GenerateVertexes(5, 1),
-                new ushort[]
-                {
-                    0,1,
-                    2,3,
-                },
-                SharpDX.Direct3D.PrimitiveTopology.LineList));
-            gObjGeometry.AddComponent(new MeshRenderer(shadersObjects));
-            gObjGeometry.GetComponent<MeshRenderer>().Initialize();
-
-            gObj.AddChild(gObjGeometry);
 
             scene.AddObject(gObj);
 
@@ -310,45 +313,10 @@ namespace LearnDirectX.src
             //gObj.AddComponent(new DirectLight() { Color = new Vector4(1f), Direction = new Vector3(0f, -1f, 0f) });
             //scene.AddLight(gObj);
 
-            gObj = new GameObject();
-            gObj.AddComponent(new Transform(new Vector3(2f, 2f, 0f)));
-            gObj.AddComponent(
-                new PointLight()
-                {
-                    Color = new Vector4(0f, 1f, 0f, 1f),
-                    Attenuation = new Common.EngineSystem.Shaders.Structures.Lights.Attenuation(1f, 0.7f, 1.8f)
-                });
-            scene.AddLight(gObj);
-
-            gObj = new GameObject();
-            gObj.AddComponent(new Transform(new Vector3(-2f, 2f, 0f)));
-            gObj.AddComponent(
-                new PointLight()
-                {
-                    Color = new Vector4(1f, 0f, 0f, 1f),
-                    Attenuation = new Common.EngineSystem.Shaders.Structures.Lights.Attenuation(1f, 0.7f, 1.8f)
-                });
-            scene.AddLight(gObj);
-
-            gObj = new GameObject();
-            gObj.AddComponent(new Transform(new Vector3(0f, 2f, 2f)));
-            gObj.AddComponent(
-                new PointLight()
-                {
-                    Color = new Vector4(0f, 0f, 1f, 1f),
-                    Attenuation = new Common.EngineSystem.Shaders.Structures.Lights.Attenuation(1f, 0.7f, 1.8f)
-                });
-            scene.AddLight(gObj);
-
-            gObj = new GameObject();
-            gObj.AddComponent(new Transform(new Vector3(0f, 2f, -2f)));
-            gObj.AddComponent(
-                new PointLight()
-                {
-                    Color = new Vector4(1f),
-                    Attenuation = new Common.EngineSystem.Shaders.Structures.Lights.Attenuation(1f, 0.7f, 1.8f)
-                });
-            scene.AddLight(gObj);
+            scene.AddLight(CreatePointLight(new Vector3(2f, 2f, 0f), new Vector4(0f, 1f, 0f, 1f), new Common.EngineSystem.Shaders.Structures.Lights.Attenuation(1f, 0.7f, 1.8f)));
+            scene.AddLight(CreatePointLight(new Vector3(-2f, 2f, 0f), new Vector4(1f, 0f, 0f, 1f), new Common.EngineSystem.Shaders.Structures.Lights.Attenuation(1f, 0.7f, 1.8f)));
+            scene.AddLight(CreatePointLight(new Vector3(0f, 2f, 2f), new Vector4(0f, 0f, 1f, 1f), new Common.EngineSystem.Shaders.Structures.Lights.Attenuation(1f, 0.7f, 1.8f)));
+            scene.AddLight(CreatePointLight(new Vector3(0f, 2f, -2f), new Vector4(1f), new Common.EngineSystem.Shaders.Structures.Lights.Attenuation(1f, 0.7f, 1.8f)));
 
             #endregion
 
@@ -357,19 +325,30 @@ namespace LearnDirectX.src
             return scene;
         }
 
-
-        private void ChangeGridProperty(string prop)
-        {
-
-        }
-
         private static GameObject CreateCamera()
         {
             var gObj = new GameObject();
 
-            gObj.AddComponent(new Transform(new Vector3(0f, 3f, -4f)));
+            gObj.AddComponent(new Transform());
+            gObj.GetComponent<Transform>().Translate(new Vector3(0f, 3f, -4f));
             gObj.AddComponent(new Camera());
             gObj.AddComponent(new CameraController());
+
+            return gObj;
+        }
+
+        private static GameObject CreatePointLight(Vector3 position, Vector4 color, Common.EngineSystem.Shaders.Structures.Lights.Attenuation attenuation)
+        {
+            var gObj = new GameObject();
+
+            gObj.AddComponent(new Transform());
+            gObj.GetComponent<Transform>().Translate(position);
+            gObj.AddComponent(new Material(color));
+            gObj.AddComponent(
+                new PointLight()
+                {
+                    Attenuation = attenuation
+                });
 
             return gObj;
         }

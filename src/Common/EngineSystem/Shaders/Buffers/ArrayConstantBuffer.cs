@@ -8,9 +8,9 @@ namespace LearnDirectX.src.Common.EngineSystem.Shaders.Buffers
     {
         public SharpDX.Direct3D11.Buffer Buffer { get; }
 
-        public ArrayConstantBuffer(int countLigths)
+        public ArrayConstantBuffer(int arraySize)
         {
-            int size = Marshal.SizeOf(typeof(T)) * countLigths;
+            int size = Marshal.SizeOf(typeof(T)) * arraySize;
 
             Buffer = new SharpDX.Direct3D11.Buffer(
                 Window.Instance.Device,

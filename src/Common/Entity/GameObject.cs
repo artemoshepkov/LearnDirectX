@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DevExpress.XtraTabbedMdi;
+using System.Collections.Generic;
 
 namespace LearnDirectX.src.Common.Components
 {
@@ -18,22 +19,22 @@ namespace LearnDirectX.src.Common.Components
             ComponentManager = new ComponentManager();
         }
 
-
         public void AddChild(GameObject child)
         {
-            Children.Add(child);
             child.Parent = this;
+            Children.Add(child);
         }
 
         public void RemoveChild(GameObject child)
         {
-            Children.Remove(child);
             child.Parent = null;
+            Children.Remove(child);
         }
 
         public void AddComponent(Component component)
         {
             component.Owner = this;
+            component.Start();
             ComponentManager.AddComponent(component);
         }
 

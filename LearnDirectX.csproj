@@ -41,11 +41,13 @@
     <Reference Include="DevExpress.Utils.v22.2, Version=22.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraBars.v22.2, Version=22.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraEditors.v22.2, Version=22.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraGrid.v22.2, Version=22.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraLayout.v22.2, Version=22.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.XtraPrinting.v22.2, Version=22.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.XtraTreeList.v22.2, Version=22.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraTreeMap.v22.2, Version=22.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.XtraTreeMap.v22.2.UI, Version=22.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraVerticalGrid.v22.2, Version=22.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <HintPath>packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
     </Reference>
@@ -68,6 +70,7 @@
       <HintPath>packages\SharpDX.DXGI.4.2.0\lib\net45\SharpDX.DXGI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
@@ -85,12 +88,17 @@
     <Compile Include="src\Common\Components\GridTask\FloatProperty.cs" />
     <Compile Include="src\Common\Components\GridTask\Grid.cs" />
     <Compile Include="src\Common\Components\GridTask\MaterialUpdater.cs" />
-    <Compile Include="src\Common\Components\Light.cs" />
+    <Compile Include="src\Common\Components\GridTask\Palette.cs" />
     <Compile Include="src\Common\Components\ObjectMaterial.cs" />
     <Compile Include="src\Common\Components\PointLight.cs" />
     <Compile Include="src\Common\Components\GridTask\QuadIndex.cs" />
     <Compile Include="src\Common\Components\GridTask\SliceRenderer.cs" />
     <Compile Include="src\Common\EngineSystem\Shaders\Buffers\ArrayConstantBuffer.cs" />
+    <Compile Include="src\Common\EngineSystem\Shaders\Uploaders\FrameUploader.cs" />
+    <Compile Include="src\Common\EngineSystem\Shaders\Uploaders\MaterialUploader.cs" />
+    <Compile Include="src\Common\EngineSystem\Shaders\Uploaders\ObjectUploader.cs" />
+    <Compile Include="src\Common\EngineSystem\Shaders\Uploaders\PointLightsUploader.cs" />
+    <Compile Include="src\Common\EngineSystem\Shaders\Uploaders\ShaderBufferUploader.cs" />
     <Compile Include="src\Common\Geometry\CubeMeshGenerator.cs" />
     <Compile Include="src\Common\Geometry\GridProperty.cs" />
     <Compile Include="src\Common\Geometry\GridQuad.cs" />

@@ -7,10 +7,10 @@ namespace LearnDirectX.src.Common.Components.GridTask
     {
         private float _value;
 
-        private event Action <float> _valueChanged;
+        private event Action _valueChanged;
 
-        public readonly float MinValue = 0f;
-        public readonly float MaxValue = 10f;
+        public readonly float MinValue;
+        public readonly float MaxValue;
 
         public float Value 
         {
@@ -21,8 +21,8 @@ namespace LearnDirectX.src.Common.Components.GridTask
             set
             {
                 _value = value;
-                //_value = _value.Clamp(MinValue, MaxValue);
-                _valueChanged?.Invoke(_value);
+                _value = _value.Clamp(MinValue, MaxValue);
+                _valueChanged?.Invoke();
             }
         } 
 
@@ -31,12 +31,14 @@ namespace LearnDirectX.src.Common.Components.GridTask
             
         }
 
-        public FloatProperty(float val)
+        public FloatProperty(float val, float minValue, float maxValue)
         {
+            MinValue = minValue;
+            MaxValue = maxValue;
             Value = val;
         }
 
-        public void AddEventValueChanged(Action<float> handler)
+        public void AddEventValueChanged(Action handler)
         {
             _valueChanged += handler;
         }

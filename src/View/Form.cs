@@ -1,4 +1,6 @@
-﻿using DevExpress.XtraBars.Docking.Helpers;
+﻿using DevExpress.Utils.Extensions;
+using DevExpress.Utils.Layout;
+using DevExpress.XtraBars.Docking.Helpers;
 using DevExpress.XtraEditors;
 using LearnDirectX.src.Common.Components;
 using LearnDirectX.src.Common.Components.GridTask;
@@ -68,6 +70,39 @@ namespace LearnDirectX
             LoadTransformSelectedObjectToGUI();
 
             LoadGridOptions();
+
+            //var panel = new StackPanel();
+            //panel.Dock = DockStyle.Fill;
+            //panel.LayoutDirection = StackPanelLayoutDirection.TopDown;
+
+            foreach (var component in _selectedGameObject.ComponentManager.Components.Values)
+            {
+                var gui = component.GetGUI();
+                if (gui != null) Inspector.AddControl(gui);
+            }
+
+            
+
+            //var label = new Label();
+            //label.Text = "1234";
+            //label.Size = new System.Drawing.Size(50, 50);
+
+            //var textBox = new TextBox();
+            //label.Size = new System.Drawing.Size(50, 50);
+
+            //var layout = new TableLayoutPanel();
+
+            //layout.RowCount = 1;
+            //layout.ColumnCount = 2;
+
+
+            ////layout.RowStyles[0].SizeType = SizeType.AutoSize;
+            ////layout.ColumnStyles[0].SizeType = SizeType.AutoSize;
+
+
+            //layout.Controls.Add(label, 0, 0);
+            //layout.Controls.Add(textBox, 1, 0);
+
         }
 
         private void LoadGridOptions()
@@ -166,59 +201,6 @@ namespace LearnDirectX
                 e.Handled = true;
         }
        
-        private void TransformX_TextChanged(object sender, EventArgs e)
-        {
-            var textBox = (TextBox)sender;
-
-            if (textBox.Text == "" || textBox.Text == "-" || textBox.Text == ".")
-                return;
-
-            var transform = _selectedGameObject.GetComponent<Transform>();
-
-            transform.Translate(new System.Numerics.Vector3(float.Parse(textBox.Text), transform.Position.Y, transform.Position.Z));
-        }
-        private void TransformY_TextChanged(object sender, EventArgs e)
-        {
-            var textBox = (TextBox)sender;
-
-            var transform = _selectedGameObject.GetComponent<Transform>();
-
-            transform.Translate(new System.Numerics.Vector3(transform.Position.X, float.Parse(textBox.Text), transform.Position.Z));
-        }
-        private void TransformZ_TextChanged(object sender, EventArgs e)
-        {
-            var textBox = (TextBox)sender;
-
-            var transform = _selectedGameObject.GetComponent<Transform>();
-
-            transform.Translate(new System.Numerics.Vector3(transform.Position.X, transform.Position.Y, float.Parse(textBox.Text)));
-        }
-
-        private void RotationX_TextChanged(object sender, EventArgs e)
-        {
-            var textBox = (TextBox)sender;
-
-            var transform = _selectedGameObject.GetComponent<Transform>();
-
-            transform.Rotate(new System.Numerics.Vector3(float.Parse(textBox.Text), transform.Rotation.Y, transform.Rotation.Z));
-        }
-        private void RotationY_TextChanged(object sender, EventArgs e)
-        {
-            var textBox = (TextBox)sender;
-
-            var transform = _selectedGameObject.GetComponent<Transform>();
-
-            transform.Rotate(new System.Numerics.Vector3(transform.Rotation.X, float.Parse(textBox.Text), transform.Rotation.Z));
-        }
-        private void RotationZ_TextChanged(object sender, EventArgs e)
-        {
-            var textBox = (TextBox)sender;
-
-            var transform = _selectedGameObject.GetComponent<Transform>();
-
-            transform.Rotate(new System.Numerics.Vector3(transform.Rotation.X, transform.Rotation.Y, float.Parse(textBox.Text)));
-        }
-
         private void RotationX_KeyPress(object sender, KeyPressEventArgs e)
         {
             LimitTextBoxInputOfDigits(sender, e);

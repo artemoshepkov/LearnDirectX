@@ -2,7 +2,7 @@
 
 namespace LearnDirectX.src.Common.Components
 {
-    public class DirectLight : Light
+    public class DirectLight : Component
     {
         public Vector3 Direction;
 

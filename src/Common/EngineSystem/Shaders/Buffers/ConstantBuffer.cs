@@ -33,11 +33,6 @@ namespace LearnDirectX.src.Common.EngineSystem.Shaders.Buffers
             Window.Instance.Device.ImmediateContext.UpdateSubresource(ref value, Buffer);
         }
 
-        public void UpdateArray(T[] data)
-        {
-            Window.Instance.Device.ImmediateContext.UpdateSubresource(data, Buffer);
-        }
-
         public void Dispose()
         {
             Buffer?.Dispose();

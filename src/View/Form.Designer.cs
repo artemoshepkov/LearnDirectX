@@ -36,7 +36,6 @@
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             this.CheckBoxSliceI = new System.Windows.Forms.CheckBox();
             this.TrackBarSliceI = new System.Windows.Forms.TrackBar();
-            this.FloatPropLabel = new System.Windows.Forms.Label();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.labelControl6 = new DevExpress.XtraEditors.LabelControl();
             this.RotationZ = new System.Windows.Forms.TextBox();
@@ -54,12 +53,13 @@
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl3 = new DevExpress.XtraEditors.LabelControl();
             this.label2 = new System.Windows.Forms.Label();
-            this.TrackBarFloatProp = new System.Windows.Forms.TrackBar();
             this.CheckBoxAllGrid = new System.Windows.Forms.CheckBox();
+            this.TrackBarFloatProp = new System.Windows.Forms.TrackBar();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.CheckBoxSliceK = new System.Windows.Forms.CheckBox();
             this.TrackBarSliceK = new System.Windows.Forms.TrackBar();
-            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.FloatPropLabel = new System.Windows.Forms.Label();
+            this.Inspector = new DevExpress.XtraEditors.SidePanel();
             this.SidePanelGameObjects.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel6.SuspendLayout();
@@ -79,7 +79,7 @@
             this.SidePanelGameObjects.Dock = System.Windows.Forms.DockStyle.Left;
             this.SidePanelGameObjects.Location = new System.Drawing.Point(0, 0);
             this.SidePanelGameObjects.Name = "SidePanelGameObjects";
-            this.SidePanelGameObjects.Size = new System.Drawing.Size(205, 465);
+            this.SidePanelGameObjects.Size = new System.Drawing.Size(205, 545);
             this.SidePanelGameObjects.TabIndex = 0;
             this.SidePanelGameObjects.Text = "RotationX";
             // 
@@ -184,15 +184,6 @@
             this.TrackBarSliceI.TabIndex = 1;
             this.TrackBarSliceI.ValueChanged += new System.EventHandler(this.TrackBarSliceI_ValueChanged);
             // 
-            // FloatPropLabel
-            // 
-            this.FloatPropLabel.AutoSize = true;
-            this.FloatPropLabel.Location = new System.Drawing.Point(3, 364);
-            this.FloatPropLabel.Name = "FloatPropLabel";
-            this.FloatPropLabel.Size = new System.Drawing.Size(76, 13);
-            this.FloatPropLabel.TabIndex = 19;
-            this.FloatPropLabel.Text = "Float property";
-            // 
             // tableLayoutPanel3
             // 
             this.tableLayoutPanel3.ColumnCount = 3;
@@ -227,7 +218,6 @@
             this.RotationZ.Name = "RotationZ";
             this.RotationZ.Size = new System.Drawing.Size(60, 21);
             this.RotationZ.TabIndex = 15;
-            this.RotationZ.TextChanged += new System.EventHandler(this.RotationZ_TextChanged);
             this.RotationZ.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.RotationZ_KeyPress);
             // 
             // labelControl5
@@ -244,7 +234,6 @@
             this.RotationY.Name = "RotationY";
             this.RotationY.Size = new System.Drawing.Size(59, 21);
             this.RotationY.TabIndex = 14;
-            this.RotationY.TextChanged += new System.EventHandler(this.RotationY_TextChanged);
             this.RotationY.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.RotationY_KeyPress);
             // 
             // labelControl4
@@ -261,7 +250,6 @@
             this.RotationX.Name = "RotationX";
             this.RotationX.Size = new System.Drawing.Size(58, 21);
             this.RotationX.TabIndex = 13;
-            this.RotationX.TextChanged += new System.EventHandler(this.RotationX_TextChanged);
             this.RotationX.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.RotationX_KeyPress);
             // 
             // label1
@@ -308,7 +296,6 @@
             this.TransformX.Name = "TransformX";
             this.TransformX.Size = new System.Drawing.Size(58, 21);
             this.TransformX.TabIndex = 7;
-            this.TransformX.TextChanged += new System.EventHandler(this.TransformX_TextChanged);
             this.TransformX.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TransformX_KeyPress);
             // 
             // TransformY
@@ -317,7 +304,6 @@
             this.TransformY.Name = "TransformY";
             this.TransformY.Size = new System.Drawing.Size(59, 21);
             this.TransformY.TabIndex = 8;
-            this.TransformY.TextChanged += new System.EventHandler(this.TransformY_TextChanged);
             this.TransformY.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TransformY_KeyPress);
             // 
             // TransformZ
@@ -326,7 +312,6 @@
             this.TransformZ.Name = "TransformZ";
             this.TransformZ.Size = new System.Drawing.Size(60, 21);
             this.TransformZ.TabIndex = 9;
-            this.TransformZ.TextChanged += new System.EventHandler(this.TransformZ_TextChanged);
             this.TransformZ.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TransformZ_KeyPress);
             // 
             // labelControl1
@@ -362,14 +347,6 @@
             this.label2.TabIndex = 17;
             this.label2.Text = "Rotation";
             // 
-            // TrackBarFloatProp
-            // 
-            this.TrackBarFloatProp.Location = new System.Drawing.Point(3, 380);
-            this.TrackBarFloatProp.Name = "TrackBarFloatProp";
-            this.TrackBarFloatProp.Size = new System.Drawing.Size(192, 45);
-            this.TrackBarFloatProp.TabIndex = 21;
-            this.TrackBarFloatProp.ValueChanged += new System.EventHandler(this.TrackBarFloatProp_ValueChanged);
-            // 
             // CheckBoxAllGrid
             // 
             this.CheckBoxAllGrid.AutoSize = true;
@@ -380,6 +357,14 @@
             this.CheckBoxAllGrid.Text = "All grid";
             this.CheckBoxAllGrid.UseVisualStyleBackColor = true;
             this.CheckBoxAllGrid.CheckStateChanged += new System.EventHandler(this.CheckBoxAllGrid_CheckStateChanged);
+            // 
+            // TrackBarFloatProp
+            // 
+            this.TrackBarFloatProp.Location = new System.Drawing.Point(3, 380);
+            this.TrackBarFloatProp.Name = "TrackBarFloatProp";
+            this.TrackBarFloatProp.Size = new System.Drawing.Size(192, 45);
+            this.TrackBarFloatProp.TabIndex = 21;
+            this.TrackBarFloatProp.ValueChanged += new System.EventHandler(this.TrackBarFloatProp_ValueChanged);
             // 
             // tableLayoutPanel4
             // 
@@ -414,11 +399,31 @@
             this.TrackBarSliceK.TabIndex = 1;
             this.TrackBarSliceK.ValueChanged += new System.EventHandler(this.TrackBarSliceK_ValueChanged);
             // 
+            // FloatPropLabel
+            // 
+            this.FloatPropLabel.AutoSize = true;
+            this.FloatPropLabel.Location = new System.Drawing.Point(3, 364);
+            this.FloatPropLabel.Name = "FloatPropLabel";
+            this.FloatPropLabel.Size = new System.Drawing.Size(76, 13);
+            this.FloatPropLabel.TabIndex = 19;
+            this.FloatPropLabel.Text = "Float property";
+            // 
+            // Inspector
+            // 
+            this.Inspector.AutoScroll = true;
+            this.Inspector.Dock = System.Windows.Forms.DockStyle.Right;
+            this.Inspector.Location = new System.Drawing.Point(516, 0);
+            this.Inspector.Name = "Inspector";
+            this.Inspector.Size = new System.Drawing.Size(352, 545);
+            this.Inspector.TabIndex = 1;
+            this.Inspector.Text = "sidePanel1";
+            // 
             // Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(597, 465);
+            this.ClientSize = new System.Drawing.Size(868, 545);
+            this.Controls.Add(this.Inspector);
             this.Controls.Add(this.SidePanelGameObjects);
             this.Name = "Form";
             this.Text = "Form";
@@ -465,7 +470,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ListBox GameObjectList;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-        private System.Windows.Forms.ColorDialog colorDialog1;
         private System.Windows.Forms.Label FloatPropLabel;
         private System.Windows.Forms.TrackBar TrackBarFloatProp;
         private System.Windows.Forms.CheckBox CheckBoxAllGrid;
@@ -478,5 +482,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.CheckBox CheckBoxSliceK;
         private System.Windows.Forms.TrackBar TrackBarSliceK;
+        private DevExpress.XtraEditors.SidePanel Inspector;
     }
 }

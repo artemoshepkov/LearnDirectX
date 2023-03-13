@@ -67,20 +67,20 @@ float3 CaclPointLight(PointLight light, float3 normal, float3 viewDir, float3 pi
     float3 lightDir = normalize(light.position - pixelPosition);
     
     float ambientStrength = 0.3;
-    float3 ambient = light.color.xyz * ambientStrength * pixelColor;
+    float3 ambient = light.color.xyz * ambientStrength;
     
     float diff = max(dot(normal, lightDir), 0);
-    float3 diffuse = diff * light.color.xyz * pixelColor;
+    float3 diffuse = diff * light.color.xyz;
     
     float3 reflectDir = reflect(-lightDir, normal);
     float specularStrength = 0.5;
     float spec = pow(max(dot(viewDir, reflectDir), 0), 32);
-    float3 specular = specularStrength * spec * light.color.xyz * pixelColor;
+    float3 specular = specularStrength * spec * light.color.xyz;
     
     float dist = length(light.position - pixelPosition);
     float attenuation = 1 / (constant + linearc * dist + quadratic * (dist * dist));
     
-    return (ambient + diffuse + specular) * attenuation;
+    return (ambient + diffuse + specular) * attenuation * pixelColor;
 }
 
 float4 PSMain(PixelShaderInput pixel) : SV_Target

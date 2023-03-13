@@ -1,8 +1,6 @@
-﻿using LearnDirectX.src.Common.EngineSystem.Shaders.Buffers;
-using SharpDX.Direct3D11;
+﻿using SharpDX.Direct3D11;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
-using SharpDX.Windows;
 using System;
 using Device = SharpDX.Direct3D11.Device;
 using Device1 = SharpDX.Direct3D11.Device1;
@@ -94,6 +92,7 @@ namespace LearnDirectX.src.Common.EngineSystem
                     BindFlags = BindFlags.DepthStencil,
                     CpuAccessFlags = CpuAccessFlags.None,
                     OptionFlags = ResourceOptionFlags.None,
+
                 });
 
             Instance._depthView = new DepthStencilView(Instance.Device, Instance._depthBuffer);
@@ -102,7 +101,8 @@ namespace LearnDirectX.src.Common.EngineSystem
             {
                 CullMode = CullMode.None,
                 FillMode = FillMode.Solid,
-                IsFrontCounterClockwise = false,
+                IsAntialiasedLineEnabled = true,
+                IsMultisampleEnabled = true,
             });
             Instance.Device.ImmediateContext.Rasterizer.SetViewport(0, 0, Width, Height, 0f, 1f);
             Instance.Device.ImmediateContext.OutputMerger.SetTargets(Instance._depthView, Instance._renderTargetView);
