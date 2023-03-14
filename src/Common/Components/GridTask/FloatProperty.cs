@@ -60,10 +60,12 @@ namespace LearnDirectX.src.Common.Components.GridTask
 
             var basePanel = new StackPanel();
             basePanel.Dock = DockStyle.Fill;
+            basePanel.AutoSize = true;
             basePanel.LayoutDirection = StackPanelLayoutDirection.TopDown;
 
             {
                 var layout = new StackPanel();
+                layout.AutoSize = true;
                 layout.LayoutDirection = StackPanelLayoutDirection.LeftToRight;
                 basePanel.AddControl(layout);
 
@@ -91,7 +93,7 @@ namespace LearnDirectX.src.Common.Components.GridTask
 
             var groupBox = new GroupBox();
             groupBox.Text = "FloatProperty";
-            groupBox.Height = 600;
+            groupBox.AutoSize = true;
             groupBox.Dock = DockStyle.Top;
             groupBox.AddControl(basePanel);
 

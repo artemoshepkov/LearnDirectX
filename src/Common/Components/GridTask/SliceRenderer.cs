@@ -154,33 +154,6 @@ namespace LearnDirectX.src.Common.Components
             {
                 var gridSize = Owner.GetComponent<Grid>().Size;
 
-                #region All grid checkBox
-
-                {
-                    var layout = new StackPanel();
-                    layout.LayoutDirection = StackPanelLayoutDirection.LeftToRight;
-                    layout.AutoSize = true;
-                    basePanel.AddControl(layout);
-
-                    var checkBoxAllGrid = new CheckBox();
-                    checkBoxAllGrid.Text = "All grid";
-                    checkBoxAllGrid.Checked = !(IsSliceI && IsSliceJ && IsSliceK);
-                    checkBoxAllGrid.CheckStateChanged += (object sender, EventArgs e) =>
-                    {
-                        var checkBox = (CheckBox)sender;
-
-                        var newState = checkBox.Checked;
-
-                        if (newState)
-                        {
-                            IsSliceI = IsSliceJ = IsSliceK = false;
-                        }
-                    };
-                    layout.AddControl(checkBoxAllGrid);
-                }
-
-                #endregion
-
                 #region I slice
 
                 {

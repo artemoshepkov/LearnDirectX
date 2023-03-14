@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.SidePanelGameObjects = new DevExpress.XtraEditors.SidePanel();
+            this.TreeViewGameObjects = new System.Windows.Forms.TreeView();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.GameObjectList = new System.Windows.Forms.ListBox();
             this.ListBoxScenes = new System.Windows.Forms.ListBox();
             this.Inspector = new DevExpress.XtraEditors.SidePanel();
             this.SidePanelGameObjects.SuspendLayout();
@@ -39,9 +39,9 @@
             // 
             // SidePanelGameObjects
             // 
+            this.SidePanelGameObjects.Controls.Add(this.TreeViewGameObjects);
             this.SidePanelGameObjects.Controls.Add(this.label2);
             this.SidePanelGameObjects.Controls.Add(this.label1);
-            this.SidePanelGameObjects.Controls.Add(this.GameObjectList);
             this.SidePanelGameObjects.Controls.Add(this.ListBoxScenes);
             this.SidePanelGameObjects.Dock = System.Windows.Forms.DockStyle.Left;
             this.SidePanelGameObjects.Location = new System.Drawing.Point(0, 0);
@@ -49,6 +49,14 @@
             this.SidePanelGameObjects.Size = new System.Drawing.Size(205, 545);
             this.SidePanelGameObjects.TabIndex = 0;
             this.SidePanelGameObjects.Text = "RotationX";
+            // 
+            // TreeViewGameObjects
+            // 
+            this.TreeViewGameObjects.Location = new System.Drawing.Point(4, 138);
+            this.TreeViewGameObjects.Name = "TreeViewGameObjects";
+            this.TreeViewGameObjects.Size = new System.Drawing.Size(197, 97);
+            this.TreeViewGameObjects.TabIndex = 2;
+            this.TreeViewGameObjects.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeViewGameObjects_AfterSelect);
             // 
             // label2
             // 
@@ -68,15 +76,6 @@
             this.label1.TabIndex = 19;
             this.label1.Text = "Scenes";
             // 
-            // GameObjectList
-            // 
-            this.GameObjectList.FormattingEnabled = true;
-            this.GameObjectList.Location = new System.Drawing.Point(3, 138);
-            this.GameObjectList.Name = "GameObjectList";
-            this.GameObjectList.Size = new System.Drawing.Size(195, 69);
-            this.GameObjectList.TabIndex = 18;
-            this.GameObjectList.SelectedIndexChanged += new System.EventHandler(this.GameObjectList_SelectedIndexChanged);
-            // 
             // ListBoxScenes
             // 
             this.ListBoxScenes.FormattingEnabled = true;
@@ -90,9 +89,9 @@
             // 
             this.Inspector.AutoScroll = true;
             this.Inspector.Dock = System.Windows.Forms.DockStyle.Right;
-            this.Inspector.Location = new System.Drawing.Point(516, 0);
+            this.Inspector.Location = new System.Drawing.Point(580, 0);
             this.Inspector.Name = "Inspector";
-            this.Inspector.Size = new System.Drawing.Size(352, 545);
+            this.Inspector.Size = new System.Drawing.Size(288, 545);
             this.Inspector.TabIndex = 1;
             this.Inspector.Text = "sidePanel1";
             // 
@@ -115,10 +114,10 @@
         #endregion
 
         private DevExpress.XtraEditors.SidePanel SidePanelGameObjects;
-        private System.Windows.Forms.ListBox GameObjectList;
         private DevExpress.XtraEditors.SidePanel Inspector;
         private System.Windows.Forms.ListBox ListBoxScenes;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TreeView TreeViewGameObjects;
     }
 }

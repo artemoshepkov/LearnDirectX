@@ -46,6 +46,7 @@ namespace LearnDirectX.src.Common.EngineSystem
             set 
             { 
                 Instance._selectedScene = value;
+                SwitchCameraOnOff();
                 Instance._selectedSceneChanged?.Invoke();
             }
         }
@@ -115,7 +116,7 @@ namespace LearnDirectX.src.Common.EngineSystem
         {
             var cameraContoller = Instance._selectedScene.Camera.GetComponent<CameraController>();
 
-            cameraContoller.IsEnabled = !cameraContoller.IsEnabled;
+            cameraContoller.IsEnabled = Window.IsCursorHide;
         }
 
         #endregion

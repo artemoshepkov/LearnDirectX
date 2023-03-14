@@ -320,7 +320,7 @@ namespace LearnDirectX.src
 
             #endregion
 
-            scene.Camera = CreateCamera(0.3f);
+            scene.Camera = CreateCamera(0.5f);
 
             return scene;
         }

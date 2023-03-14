@@ -114,6 +114,7 @@
     <Compile Include="src\Common\EngineSystem\Shaders\Structures\Material.cs" />
     <Compile Include="src\Common\Geometry\Quad.cs" />
     <Compile Include="src\Common\Extensions\MathExtension.cs" />
+    <Compile Include="src\View\Controls\TreeNodeGameObject.cs" />
     <Compile Include="src\View\Form.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -167,8 +168,6 @@
       <DependentUpon>Form.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\View\Controls\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

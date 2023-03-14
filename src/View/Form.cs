@@ -2,8 +2,10 @@
 using DevExpress.Utils.Layout;
 using DevExpress.XtraBars.Docking.Helpers;
 using DevExpress.XtraEditors;
+using DevExpress.XtraEditors.Design;
 using LearnDirectX.src.Common.Components;
 using LearnDirectX.src.Common.EngineSystem;
+using LearnDirectX.src.View.Controls;
 using System;
 using System.Drawing;
 using System.Linq;
@@ -50,40 +52,38 @@ namespace LearnDirectX
 
         private void SetGameObjects()
         {
-            GameObjectList.Items.Clear();
+
+            TreeViewGameObjects.Nodes.Clear();
             foreach (var gObj in Engine.SelectedScene.GameObjects)
             {
-                GameObjectList.Items.Add(gObj);
+                TreeViewGameObjects.Nodes.Add(SetNodeGameObject(gObj));
             }
 
             foreach (var gObj in Engine.SelectedScene.Lights)
             {
-                GameObjectList.Items.Add(gObj);
+                TreeViewGameObjects.Nodes.Add(SetNodeGameObject(gObj));
             }
 
-            GameObjectList.SelectedItem = _selectedGameObject;
+            if (TreeViewGameObjects.Nodes.Count == 0)
+                return;
 
             LoadGameObjectInspector();
-
-
-            //TreeViewScenes.Nodes.Clear();
-            //foreach (var gObj in Engine.SelectedScene.GameObjects)
-            //{
-            //    if (gObj.Children != null)
-            //    {
-            //        TreeViewScenes.Nodes.Add(SetNodeGameObject(gObj));
-            //    }
-            //}
         }
 
-        //private TreeNode SetNodeGameObject(GameObject gObj)
-        //{
-        //    var parentNode = new TreeNode();
-        //    foreach (var node in gObj.Children)
-        //    {
+        private TreeNode SetNodeGameObject(GameObject gObj)
+        {
+            var parentNode = new TreeNodeGameObject(gObj);
 
-        //    }
-        //}
+            if (gObj.Children != null)
+            {
+                foreach (var child in gObj.Children)
+                {
+                    parentNode.Nodes.Add(SetNodeGameObject(child));
+                }
+            }
+
+            return parentNode;
+        }
 
         private void LoadGameObjectInspector()
         {
@@ -96,6 +96,15 @@ namespace LearnDirectX
             }
         }
 
+        private void TreeViewGameObjects_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            var selectedNode = TreeViewGameObjects.SelectedNode as TreeNodeGameObject;
+
+            _selectedGameObject = selectedNode.GameObjectItem;
+
+            LoadGameObjectInspector();
+        }
+
         private void ListBoxScenes_SelectedValueChanged(object sender, EventArgs e)
         {
             var selectedScene = ListBoxScenes.SelectedItem;
@@ -103,13 +112,6 @@ namespace LearnDirectX
             Engine.SelectedScene = selectedScene as Scene;
 
             ActiveControl = null;
-        }
-
-        private void GameObjectList_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            _selectedGameObject = GameObjectList.SelectedItem as GameObject;
-
-            LoadGameObjectInspector();
         }
 
         private void Form_MouseEnter(object sender, EventArgs e)
