@@ -1,12 +1,6 @@
-﻿using DevExpress.Utils.Drawing;
-using DevExpress.Utils.MVVM.Internal;
-using DevExpress.XtraEditors.Design;
-using LearnDirectX.src.Common.Components.GridTask;
-using LearnDirectX.src.Common.Geometry;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Numerics;
 
 namespace LearnDirectX.src.Common.Geometry
@@ -74,29 +68,29 @@ namespace LearnDirectX.src.Common.Geometry
 
                     gridProps.Add(new GridProperty(propName));
 
-                    for (int k = (int)gridSize.Z - 1; k >= 0; k--)
                     {
                         for (int i = 0; i < gridSize.X; i++)
                         {
                             for (int j = 0; j < gridSize.Y; j++)
-                            {
-                                if ((line = reader.ReadLine()) == null || !float.TryParse(line, out float res))
+                                for (int k = (int)gridSize.Z - 1; k >= 0; k--)
                                 {
-                                    throw new Exception("Grid size doesn`t correspond prop file");
-                                }
+                                    if ((line = reader.ReadLine()) == null || !float.TryParse(line, out float res))
+                                    {
+                                        throw new Exception("Grid size doesn`t correspond prop file");
+                                    }
 
-                                if (res > gridProps[props].MaxValue)
-                                {
-                                    gridProps[props].MaxValue = res;
-                                }
+                                    if (res > gridProps[props].MaxValue)
+                                    {
+                                        gridProps[props].MaxValue = res;
+                                    }
 
-                                if (res < gridProps[props].MinValue)
-                                {
-                                    gridProps[props].MinValue = res;
-                                }
+                                    if (res < gridProps[props].MinValue)
+                                    {
+                                        gridProps[props].MinValue = res;
+                                    }
 
-                                gridProps[props].QuadProperties.Add(new QuadProperty(new Vector3(i, j, k), res));
-                            }
+                                    gridProps[props].QuadProperties.Add(new QuadProperty(new Vector3(i, j, k), res));
+                                }
                         }
                     }
                 }

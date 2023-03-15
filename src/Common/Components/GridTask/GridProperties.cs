@@ -18,7 +18,8 @@ namespace LearnDirectX.src.Common.Components.GridTask
         public GridProperties(List<GridProperty> gridProperties)
         {
             _gridProperties = gridProperties;
-            _selectedProperty = _gridProperties.Last();
+            var prop = _gridProperties.Where(p => p.Name == "Imported_RHOB").FirstOrDefault();
+            _selectedProperty = prop;
         }
 
         public void UpdateProps()

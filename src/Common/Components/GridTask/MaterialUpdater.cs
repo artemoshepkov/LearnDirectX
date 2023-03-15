@@ -23,37 +23,56 @@ namespace LearnDirectX.src.Common.Components.GridTask
 
             var palette = Owner.Parent.GetComponent<Palette>();
 
-            var absolutePosOnPalette = (prop.Value - prop.MinValue) / prop.MaxValue;
+            if (prop.MaxValue == prop.MinValue)
+            {
+                var color = palette.Colors.First().Color;
+                material.Color = new Vector4(color.X, color.Y, color.Z, 1f);
+                return;
+            }
 
-            var colorStep = (1f / (float)(palette.Colors.Count - 1));
+            var absolutePosOnPalette = (prop.Value - prop.MinValue) / (prop.MaxValue - prop.MinValue);
 
-            Tuple<int, Vector4> leftColor = new Tuple<int, Vector4>(0, palette.Colors.First()); 
-            Tuple<int, Vector4> rightColor = new Tuple<int, Vector4>(0, palette.Colors.First());
+            var leftBound = palette.Colors.First().ValueOnPalette;
+            var rightBound = palette.Colors.Last().ValueOnPalette;
+
+            if (absolutePosOnPalette <= leftBound)
+            {
+                var color = palette.Colors.First().Color;
+                material.Color = new Vector4(color.X, color.Y, color.Z, 1f);
+                return;
+            }
+            else if (absolutePosOnPalette >= rightBound)
+            {
+                var color = palette.Colors.Last().Color;
+                material.Color = new Vector4(color.X, color.Y, color.Z, 1f);
+                return;
+            }
+
+            var leftColor = new PaletteColor(palette.Colors[0].ValueOnPalette, palette.Colors[0].Color);
+            var rightColor = new PaletteColor(palette.Colors[1].ValueOnPalette, palette.Colors[1].Color);
             for (int i = 1; i < palette.Colors.Count; i++)
             {
-                if (absolutePosOnPalette < i * colorStep)
+                if (absolutePosOnPalette < palette.Colors[i].ValueOnPalette)
                 {
-                    leftColor = new Tuple<int, Vector4>(i - 1, palette.Colors[i - 1]);
-                    rightColor = new Tuple<int, Vector4>(i, palette.Colors[i]);
+                    leftColor = new PaletteColor(palette.Colors[i - 1].ValueOnPalette, palette.Colors[i - 1].Color);
+                    rightColor = new PaletteColor(palette.Colors[i].ValueOnPalette, palette.Colors[i].Color);
                     break;
                 }
             }
 
-            var relativePosOnPalette = (absolutePosOnPalette - leftColor.Item1 * colorStep) / (rightColor.Item1 * colorStep - leftColor.Item1 * colorStep);
+            var relativePos = (absolutePosOnPalette - leftColor.ValueOnPalette) / (rightColor.ValueOnPalette - leftColor.ValueOnPalette);
 
-            var leftR = leftColor.Item2.X;
-            var leftG = leftColor.Item2.Y;
-            var leftB = leftColor.Item2.Z;
+            var leftR = leftColor.Color.X;
+            var leftG = leftColor.Color.Y;
+            var leftB = leftColor.Color.Z;
 
-            var rightR = rightColor.Item2.X;
-            var rightG = rightColor.Item2.Y;
-            var rightB = rightColor.Item2.Z;
+            var rightR = rightColor.Color.X;
+            var rightG = rightColor.Color.Y;
+            var rightB = rightColor.Color.Z;
 
-            // Find general equation for two points (red of left and right color) and substitute y (relativePos)
-
-            float redComp = (rightR - leftR) == 0 ? 0 : (relativePosOnPalette - leftR) / (rightR - leftR);
-            var greenComp = (rightG - leftG) == 0 ? 0 : (relativePosOnPalette - leftG) / (rightG - leftG);
-            var blueComp = (rightB - leftB) == 0 ? 0 : (relativePosOnPalette - leftB) / (rightB - leftB);
+            float redComp = (rightR == leftR) ? rightR : Math.Abs(relativePos - leftR) / Math.Abs(rightR - leftR);
+            var greenComp = (rightG == leftG) ? rightG : Math.Abs(relativePos - leftG) / Math.Abs(rightG - leftG);
+            var blueComp = (rightB == leftB) ? rightB : Math.Abs(relativePos - leftB) / Math.Abs(rightB - leftB);
 
             material.Color = new Vector4(redComp, greenComp, blueComp, 1f);
         }

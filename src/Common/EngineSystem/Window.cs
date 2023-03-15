@@ -85,8 +85,8 @@ namespace LearnDirectX.src.Common.EngineSystem
                     Format = Format.D32_Float_S8X24_UInt,
                     ArraySize = 1,
                     MipLevels = 1,
-                    Width = Instance.RenderForm.Width,
-                    Height = Instance.RenderForm.Height,
+                    Width = Width,
+                    Height = Height,
                     SampleDescription = Instance._sampleDescription,
                     Usage = ResourceUsage.Default,
                     BindFlags = BindFlags.DepthStencil,
@@ -104,20 +104,20 @@ namespace LearnDirectX.src.Common.EngineSystem
                 IsAntialiasedLineEnabled = true,
                 IsMultisampleEnabled = true,
             });
-            Instance.Device.ImmediateContext.Rasterizer.SetViewport(0, 0, Width, Height, 0f, 1f);
+            Instance.Device.ImmediateContext.Rasterizer.SetViewport(0, 0, Width, Height);
             Instance.Device.ImmediateContext.OutputMerger.SetTargets(Instance._depthView, Instance._renderTargetView);
 
             IsCursorHide = false;
             ChangeCursorMode();
 
-            Engine.AddEventUpdate(Update); // Create another class for event
+            Engine.AddEventUpdate(Update);
         }
 
         public static void UpdateWindow()
         {
             if (Instance._updateViewport)
             {
-                Instance.Device.ImmediateContext.Rasterizer.SetViewport(0, 0, Instance._renderForm.Width, Instance._renderForm.Height, 0f, 1f);
+                Instance.Device.ImmediateContext.Rasterizer.SetViewport(0, 0, Width, Height);
                 Instance._updateViewport = false;
             }
         }
@@ -129,7 +129,7 @@ namespace LearnDirectX.src.Common.EngineSystem
 
         public static void Clear()
         {
-            Instance.Device.ImmediateContext.ClearDepthStencilView(Instance._depthView, DepthStencilClearFlags.Depth, 1f, 0);
+            Instance.Device.ImmediateContext.ClearDepthStencilView(Instance._depthView, DepthStencilClearFlags.Depth | DepthStencilClearFlags.Stencil, 1f, 0);
             Instance.Device.ImmediateContext.ClearRenderTargetView(Instance._renderTargetView, Instance.BackGroundColor);
         }
 

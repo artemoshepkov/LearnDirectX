@@ -9,13 +9,24 @@ using System.Windows.Forms;
 
 namespace LearnDirectX.src.Common.Components.GridTask
 {
+    public class PaletteColor
+    {
+        public float ValueOnPalette;
+        public Vector4 Color;
+
+        public PaletteColor(float value, Vector4 color)
+        {
+            ValueOnPalette = value;
+            Color = color;
+        }
+    }
     public class Palette : Component
     {
-        public List<Vector4> Colors;
+        public List<PaletteColor> Colors;
 
         public Palette() { }
 
-        public Palette(List<Vector4> colors) 
+        public Palette(List<PaletteColor> colors) 
         {
             Colors = colors;
         }
@@ -31,7 +42,7 @@ namespace LearnDirectX.src.Common.Components.GridTask
                 for (int i = 0; i < Colors.Count; i++)
                 {
                     var colorPicker = new ColorPickEdit();
-                    colorPicker.Color = System.Drawing.Color.FromArgb((int)Colors[i].W * 255, (int)Colors[i].X * 255, (int)Colors[i].Y * 255, (int)Colors[i].Z * 255);
+                    colorPicker.Color = System.Drawing.Color.FromArgb((int)Colors[i].Color.W * 255, (int)Colors[i].Color.X * 255, (int)Colors[i].Color.Y * 255, (int)Colors[i].Color.Z * 255);
                     var index = i;
                     colorPicker.ColorChanged += (object sender, EventArgs e) =>
                     {
@@ -40,7 +51,7 @@ namespace LearnDirectX.src.Common.Components.GridTask
                         var b = colorPicker.Color.B / 255f;
                         var a = colorPicker.Color.A / 255f;
                         
-                        Colors[index] = new Vector4(r, g, b, a);
+                        Colors[index].Color = new Vector4(r, g, b, a);
 
                         Owner.GetComponent<GridProperties>().UpdateProps();
                     };

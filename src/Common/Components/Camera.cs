@@ -1,4 +1,5 @@
 ﻿using DevExpress.Data.Linq.Helpers;
+using LearnDirectX.src.Common.EngineSystem;
 using LearnDirectX.src.Common.Extensions;
 using SharpDX.DirectWrite;
 using System;
@@ -10,11 +11,11 @@ namespace LearnDirectX.src.Common.Components
     public class Camera : Component
     {
 
-        private float _fov = 60f;
+        private float _fov = 45f;
         private float _pitch = 0f;
 
-        public readonly float MinFov = 30f;
-        public readonly float MaxFov = 120f;
+        public readonly float MinFov = 1f;
+        public readonly float MaxFov = 45f;
 
         public readonly float MinPitch = -89f;
         public readonly float MaxPitch = 89f;
@@ -22,7 +23,6 @@ namespace LearnDirectX.src.Common.Components
         public Vector3 Front { get; private set; }
         public Vector3 Right { get; private set; }
         public Vector3 Up { get; private set; }
-        public float AspectRatio { get; set; } = 1f;
         public float Yaw { get; set; } = 90f;
         public float Pitch
         {
@@ -81,7 +81,7 @@ namespace LearnDirectX.src.Common.Components
 
         public Matrix4x4 GetProjectionMatrix()
         {
-            return Matrix4x4.CreatePerspectiveFieldOfView(Fov.ConvertToRadians(), AspectRatio, 0.1f, 1000f); ;
+            return Matrix4x4.CreatePerspectiveFieldOfView(Fov.ConvertToRadians(), Window.Width / (float)Window.Height, 0.1f, 1000f); ;
         }
     }
 }

@@ -39,6 +39,8 @@ namespace LearnDirectX.src
 
         private void SetPoligonMode()
         {
+            _isPoligon = !_isPoligon;
+
             var context = Window.Instance.Device.ImmediateContext;
             var rasterDesc = context.Rasterizer.State.Description;
 
@@ -50,12 +52,11 @@ namespace LearnDirectX.src
                 };
             }
 
-            rasterDesc.FillMode = _isPoligon ? FillMode.Solid : FillMode.Wireframe;
-            rasterDesc.IsMultisampleEnabled = _isPoligon;
-            rasterDesc.IsAntialiasedLineEnabled = _isPoligon;
+            rasterDesc.FillMode = _isPoligon ? FillMode.Wireframe : FillMode.Solid;
+            rasterDesc.IsMultisampleEnabled = !_isPoligon;
+            rasterDesc.IsAntialiasedLineEnabled = !_isPoligon;
 
             context.Rasterizer.State = new RasterizerState(context.Device, rasterDesc);
-            _isPoligon = !_isPoligon;
         }
 
         private Scene InitializeGridScene()
@@ -66,7 +67,7 @@ namespace LearnDirectX.src
 
             var scene = new Scene("Grid");
 
-            scene.Camera = CreateCamera(0.01f);
+            scene.Camera = CreateCamera(new Vector3(0f, 3f, -4f), 0.01f);
 
             #region Add grid
 
@@ -104,7 +105,7 @@ namespace LearnDirectX.src
             gridGameObject.AddComponent(new GridProperties(gridProperties));
             gridGameObject.AddComponent(new Common.Components.GridTask.Grid(grid.Size));
             gridGameObject.AddComponent(new SliceRenderer());
-            gridGameObject.AddComponent(new Palette(new List<Vector4>() { new Vector4(1f, 0f, 0f, 1f), new Vector4(0f, 1f, 0f, 1f) , new Vector4(0f, 0f, 1f, 1f) }));
+            gridGameObject.AddComponent(new Palette(new List<PaletteColor>() { new PaletteColor(0, new Vector4(1f, 0f, 0f, 1f)), new PaletteColor(0.5f, new Vector4(0f, 1f, 0f, 1f)), new PaletteColor(1f, new Vector4(0f, 0f, 1f, 1f)) }));
 
             foreach (var quad in grid.Quads)
             {
@@ -255,7 +256,7 @@ namespace LearnDirectX.src
 
             #endregion
 
-            scene.Camera = CreateCamera(0.01f);
+            scene.Camera = CreateCamera(new Vector3(0f, 3f, -4f), 0.01f);
 
             return scene;
         }
@@ -297,8 +298,8 @@ namespace LearnDirectX.src
             gObj.AddComponent(
                 new Mesh()
                 {
-                    Vertexes = CubeMeshGenerator.GenerateVertexes(5, 1),
-                    Indexes = CubeMeshGenerator.GenerateIndexes(5),
+                    Vertexes = CubeMeshGenerator.GenerateVertexes(2, 1),
+                    Indexes = CubeMeshGenerator.GenerateIndexes(2),
                 });
             gObj.AddComponent(new MeshRenderer(shadersObjects, shadersUploaders));
             gObj.AddComponent(new Material(new Vector4(1f)));
@@ -320,17 +321,17 @@ namespace LearnDirectX.src
 
             #endregion
 
-            scene.Camera = CreateCamera(0.5f);
+            scene.Camera = CreateCamera(new Vector3(0f, 2f, 0f), 0.5f);
 
             return scene;
         }
 
-        private static GameObject CreateCamera(float mouseSensitivity)
+        private static GameObject CreateCamera(Vector3 position, float mouseSensitivity)
         {
             var gObj = new GameObject();
 
             gObj.AddComponent(new Transform());
-            gObj.GetComponent<Transform>().Translate(new Vector3(0f, 3f, -4f));
+            gObj.GetComponent<Transform>().Translate(position);
             gObj.AddComponent(new Camera());
             gObj.AddComponent(new CameraController());
             gObj.GetComponent<CameraController>().MouseSensitivity = mouseSensitivity;
